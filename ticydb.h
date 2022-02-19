@@ -129,9 +129,9 @@ bool_t ticylist_remrange(struct TicyList *list, const size_t start, size_t n) {
   struct TicyList *new_list = ticylist_new(list->used-n);
   if (!new_list) { return F; }
   for (size_t index = 0; index < start; ++index)
-  { list_push(new_list, list->array[index]); }
+  { ticylist_push(new_list, list->array[index]); }
   for (size_t index = start+n; index < list->used; ++index)
-  { list_push(new_list, list->array[index]); }
+  { ticylist_push(new_list, list->array[index]); }
   list->used = new_list->used;
   list->size = new_list->size;
   free(list->array);
@@ -152,7 +152,7 @@ struct TicyList *ticylist_slice(struct TicyList *list, size_t start, size_t n) {
   if (n > list->used-start) { n = list->used; }
   struct TicyList* slice = ticylist_new(n);
   if (!slice) { return NULL; }
-  for (; n >= 0; --n) { list_push(slice, list->array[start++]); }
+  for (; n >= 0; --n) { ticylist_push(slice, list->array[start++]); }
   return slice;
 }
 
