@@ -40,6 +40,18 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+// Version of TicyDB.
+#define TICYDB_VERSION "0.0.1"
+// Release channel of TicyDB.
+#define TICYDB_CHANNEL "preview"
+
+#ifdef TICY_FAILURE_ALLOC
+// Exit code of TicyDB for failures.
+volatile int ticy_exit_code_failure = 1;
+
+#define TICY_ERROR_FAIL_ALLOC "allocation is failed"
+#endif // #ifdef TICY_FAILURE_ALLOC
+
 typedef   enum bool_t {F = 0, T = !F}   bool_t    ; // Boolean type.
 typedef   __INT8_TYPE__                 i8_t      ; // Signed 8-bit integer type.
 typedef   __INT16_TYPE__                i16_t     ; // Signed 16-bit integer type.
@@ -87,9 +99,6 @@ typedef   size_t                        sz_t      ; // Size type.
   default:     "other"                 \
 )
 
-// Length of TicyFile's lines.
-sz_t TicyFile_Line_Length = 1024;
-
 // Dynamic list implementation of TicyDB.
 typedef struct TicyList {
   // Element buffer.
@@ -103,13 +112,17 @@ typedef struct TicyList {
 // Create new TicyList instance allocated from heap by specified size.
 //
 // Special case is:
-//  ticylist_new(size) -> NULL if allocation is failed
+//  ticylist_new(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticylist_new(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 //  ticylist_new(size) -> accept size as 1 if size < 1
 struct TicyList *ticylist_new(sz_t size);
 // Free TicyList instance allocated from heap.
 void ticylist_free(struct TicyList *list);
 // Appends item to TicyList.
 // Returns true if success, returns false if failed.
+//
+// Special case is;
+//  ticylist_push(list, item) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 bool_t ticylist_push(struct TicyList *list, any_t item);
 // Removes n elements starts at specified index.
 // If n greater than size, uses size instead of n.
@@ -119,6 +132,7 @@ bool_t ticylist_push(struct TicyList *list, any_t item);
 //  ticylist_remrange(list, start, n) -> F if n < 1
 //  ticylist_remrange(list, start, n) -> F if start < 0
 //  ticylist_remrange(list, start, n) -> F if start > size
+//  ticylist_remrange(list, start, n) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 bool_t ticylist_remrange(struct TicyList* list, const sz_t start, sz_t n);
 // Returns new TicyList from source list by specified index and n.
 // If n greater than size, uses size instead of n.
@@ -129,14 +143,29 @@ bool_t ticylist_remrange(struct TicyList* list, const sz_t start, sz_t n);
 //  ticylist_slice(list, start, n) -> NULL if n < 1
 //  ticylist_slice(list, start, n) -> NULL if start < 0
 //  ticylist_slice(list, start, n) -> NULL if start > size
+//  ticylist_slice(list, start, n) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 struct TicyList *ticylist_slice(struct TicyList *list, sz_t start, sz_t n);
 
 struct TicyList *ticylist_new(sz_t size) {
   struct TicyList *list = (struct TicyList*)(malloc(sizeof(struct TicyList)));
-  if (!list) { return NULL; }
+  if (!list) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
   size = size < 1 ? 1 : size;
   list->buffer = (void**)(malloc(size*sizeof(any_t)));
-  if (!list->buffer) { return NULL; }
+  if (!list->buffer) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
   list->used = 0;
   list->size = size;
   return list;
@@ -156,7 +185,14 @@ bool_t ticylist_push(struct TicyList* list, any_t item) {
   if (list->size <= list->used) {
     list->size *= 2;
     list->buffer = realloc(list->buffer, list->size*sizeof(any_t));
-    if (!list->buffer) { return F; }
+    if (!list->buffer) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return F;
+#endif // #ifdef TICY_FAILURE_ALLOC
+    }
   }
   list->buffer[list->used++] = item;
   return T;
@@ -168,7 +204,9 @@ bool_t ticylist_remrange(struct TicyList *list, const sz_t start, sz_t n) {
   else if (n < 1)              { return F; }
   if (n > list->used-start) { n = list->used; }
   struct TicyList *new_list = ticylist_new(list->used-n);
+#ifndef TICY_FAILURE_ALLOC
   if (!new_list) { return F; }
+#endif // #ifndef TICY_FAILURE_ALLOC
   for (sz_t index = 0; index < start; ++index)
   { ticylist_push(new_list, list->buffer[index]); }
   for (sz_t index = start+n; index < list->used; ++index)
@@ -192,15 +230,20 @@ struct TicyList *ticylist_slice(struct TicyList *list, sz_t start, sz_t n) {
   else if (n < 1)     { return NULL; }
   if (n > list->used-start) { n = list->used; }
   struct TicyList* slice = ticylist_new(n);
+#ifndef TICY_FAILURE_ALLOC
   if (!slice) { return NULL; }
+#endif // #ifdef TICY_FAILURE_ALLOC
   for (; n >= 0; --n) { ticylist_push(slice, list->buffer[start++]); }
   return slice;
 }
 
+// Length of TicyFile's lines.
+volatile sz_t TicyFile_line_length = 1024;
+
 // File instance of TicyDB.
 typedef struct TicyFile {
   // Path of file.
-  str_t     path;
+  str_t           path;
   // File content line-by-line.
   // Lines are heap-allocated.
   struct TicyList *lines;
@@ -210,7 +253,8 @@ typedef struct TicyFile {
 //
 // Special cases are;
 //  ticyfile_open(path) -> NULL if path == NULL
-//  ticyfile_open(path) -> NULL if allocation is failed
+//  ticyfile_open(path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticyfile_open(path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 struct TicyFile *ticyfile_open(const str_t path);
 // Closes and frees heap-allocated TicyFile instance.
 void ticyfile_close(struct TicyFile *tf);
@@ -221,23 +265,38 @@ struct TicyFile *ticyfile_open(const str_t path) {
   if (!f) { return NULL; }
   struct TicyFile *tf = (struct TicyFile*)(malloc(sizeof(struct TicyFile)));
   if (!tf) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
     fclose(f);
     return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
   }
   tf->path = path;
   tf->lines = ticylist_new(1);
   if (!tf->lines) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
     fclose(f);
     ticyfile_close(tf);
     return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
   }
-  const sz_t size_line = TicyFile_Line_Length*sizeof(str_t);
+  const sz_t size_line = TicyFile_line_length*sizeof(str_t);
   while (T) {
     str_t line = (str_t)(malloc(size_line));
     if (!line) {
+#ifdef TICY_FAILURE_ALLOC
+      printf(TICY_ERROR_FAIL_ALLOC "\n");
+      exit(ticy_exit_code_failure);
+#else
       fclose(f);
       ticyfile_close(tf);
       return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
     }
     if (!fgets(line, size_line, f)) {
       free(line);
@@ -272,14 +331,22 @@ typedef struct TicyDB {
 // Returns heap-allocated TicyDB instance.
 //
 // Special case is;
-//  ticydb_new(path) -> NULL if allocation is failed
+//  ticydb_new(path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydb_new(path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 struct TicyDB *ticydb_new(const str_t path);
 // Frees heap-allocated TicyDB instance.
 void ticydb_free(struct TicyDB *db);
 
 struct TicyDB *ticydb_new(const str_t path) {
   struct TicyDB *db = (struct TicyDB*)(malloc(sizeof(struct TicyDB)));
-  if (!db) { return NULL; }
+  if (!db) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
   db->path = path;
   return db;
 }
