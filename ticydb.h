@@ -49,6 +49,7 @@ extern "C" {
 // Exit code of TicyDB for failures.
 volatile int ticy_exit_code_failure = 1;
 
+// Error message of allocation failures.
 #define TICY_ERROR_FAIL_ALLOC "allocation is failed"
 #endif // #ifdef TICY_FAILURE_ALLOC
 
@@ -232,7 +233,7 @@ struct TicyList *ticylist_slice(struct TicyList *list, sz_t start, sz_t n) {
   struct TicyList* slice = ticylist_new(n);
 #ifndef TICY_FAILURE_ALLOC
   if (!slice) { return NULL; }
-#endif // #ifdef TICY_FAILURE_ALLOC
+#endif // #ifndef TICY_FAILURE_ALLOC
   for (; n >= 0; --n) { ticylist_push(slice, list->buffer[start++]); }
   return slice;
 }
