@@ -16,9 +16,9 @@
 // Example: ticy_typename(x) -> U32_T
 //
 // Special cases are;
-//  ticy_typename(x) -> U32_T if x is bool_t
-//  ticy_typename(x) -> U8_T if x is byte_t
-//  ticy_typename(x) -> I8_T if x is sbyte_t
-//  ticy_typename(x) -> U32_T if x is sz_t
-#define ticy_typename(x)
+//  ticy_typecode(x) -> U32_T if x is bool_t
+//  ticy_typecode(x) -> U8_T if x is byte_t
+//  ticy_typecode(x) -> I8_T if x is sbyte_t
+//  ticy_typecode(x) -> U32_T if x is sz_t
+#define ticy_typecode(x)
 ```

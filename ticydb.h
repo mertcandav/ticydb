@@ -96,11 +96,11 @@ enum TicyTypeCode {
 // Example: ticy_typename(x) -> U32_T
 //
 // Special cases are;
-//  ticy_typename(x) -> U32_T if x is bool_t
-//  ticy_typename(x) -> U8_T if x is byte_t
-//  ticy_typename(x) -> I8_T if x is sbyte_t
-//  ticy_typename(x) -> U32_T if x is sz_t
-#define ticy_typename(x) _Generic((x), \
+//  ticy_typecode(x) -> U32_T if x is bool_t
+//  ticy_typecode(x) -> U8_T if x is byte_t
+//  ticy_typecode(x) -> I8_T if x is sbyte_t
+//  ticy_typecode(x) -> U32_T if x is sz_t
+#define ticy_typecode(x) _Generic((x), \
   i8_t:        I8_T,                   \
   i16_t:       I16_T,                  \
   i32_t:       I32_T,                  \
@@ -116,7 +116,7 @@ enum TicyTypeCode {
   any_t:       ANY_T,                  \
   TicyList:    TICYLIST,               \
   TicyList*:   TICYLIST_PTR,           \
-  default:     OTHER_T,                \
+  default:     OTHER_T                 \
 )
 
 // Dynamic list implementation of TicyDB.
