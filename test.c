@@ -3,5 +3,9 @@
 #include "ticydb.h"
 
 int main() {
+  struct TicyFile *tf = ticyfile_open("db.tcy");
+  for (sz_t index = 0; index < tf->lines->used; ++index)
+  { printf("%s\n", tf->lines->buffer[index]); }
+  ticyfile_close(tf);
   return EXIT_SUCCESS;
 }
