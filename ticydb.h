@@ -40,21 +40,50 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-typedef   enum bool_t {F = 0, T = !F}   bool_t   ; // Boolean type.
-typedef   __INT8_TYPE__                 i8_t     ; // Signed 8-bit integer type.
-typedef   __INT16_TYPE__                i16_t    ; // Signed 16-bit integer type.
-typedef   __INT32_TYPE__                i32_t    ; // Signed 32-bit integer type.
-typedef   __INT64_TYPE__                i64_t    ; // Signed 64-bit integer type.
-typedef   __UINT8_TYPE__                u8_t     ; // Unsigned 8-bit integer type.
-typedef   __UINT16_TYPE__               u16_t    ; // Unsigned 16-bit integer type.
-typedef   __UINT32_TYPE__               u32_t    ; // Unsigned 32-bit integer type.
-typedef   __UINT64_TYPE__               u64_t    ; // Unsigned 65-bit integer type.
-typedef   float                         f32_t    ; // 32-bit float type.
-typedef   double                        f64_t    ; // 64-bit float type.
-typedef   char                          char_t;  ; // Character type.
-typedef   char_t                        *str_t   ; // String type.
-typedef   void                          *any_t   ; // Any type for any data.
-typedef   size_t                        sz_t     ; // Size type.
+typedef   enum bool_t {F = 0, T = !F}   bool_t    ; // Boolean type.
+typedef   __INT8_TYPE__                 i8_t      ; // Signed 8-bit integer type.
+typedef   __INT16_TYPE__                i16_t     ; // Signed 16-bit integer type.
+typedef   __INT32_TYPE__                i32_t     ; // Signed 32-bit integer type.
+typedef   __INT64_TYPE__                i64_t     ; // Signed 64-bit integer type.
+typedef   __UINT8_TYPE__                u8_t      ; // Unsigned 8-bit integer type.
+typedef   __UINT16_TYPE__               u16_t     ; // Unsigned 16-bit integer type.
+typedef   __UINT32_TYPE__               u32_t     ; // Unsigned 32-bit integer type.
+typedef   __UINT64_TYPE__               u64_t     ; // Unsigned 64-bit integer type.
+typedef   unsigned char                 byte_t    ; // Byte integer type.
+typedef   signed char                   sbyte_t   ; // SByte integer type.
+typedef   float                         f32_t     ; // 32-bit float type.
+typedef   double                        f64_t     ; // 64-bit float type.
+typedef   char                          char_t;   ; // Character type.
+typedef   char_t                        *str_t    ; // String type.
+typedef   void                          *any_t    ; // Any type for any data.
+typedef   size_t                        sz_t      ; // Size type.
+
+// Returns TicyDB data-type name of specified data.
+// The return value is str_t and value is directly
+// data-type name of specified data.
+// Example: ticy_typename(x) -> "u32_t"
+//
+// Special cases are;
+//  ticy_typename(x) -> "u32_t" if x is bool_t
+//  ticy_typename(x) -> "u8_t" if x is byte_t
+//  ticy_typename(x) -> "i8_t" if x is sbyte_t
+//  ticy_typename(x) -> "u32_t" if x is sz_t
+#define ticy_typename(x) _Generic((x), \
+  i8_t:      "i8_t",                   \
+  i16_t:     "i16_t",                  \
+  i32_t:     "i32_t",                  \
+  i64_t:     "i64_t",                  \
+  u8_t:      "u8_t",                   \
+  u16_t:     "u16_t",                  \
+  u32_t:     "u32_t",                  \
+  u64_t:     "u64_t",                  \
+  f32_t:     "f32_t",                  \
+  f64_t:     "f64_t",                  \
+  char_t:    "char_t",                 \
+  str_t:     "str_t",                  \
+  any_t:     "any_t",                  \
+  default:   "other"                   \
+)
 
 // Length of TicyFile's lines.
 sz_t TicyFile_Line_Length = 1024;
