@@ -1,4 +1,4 @@
-# TicyDB - Defines
+# TicyDB - Custom Defines
 
 If you define these defines before include the TicyDB, you can manuplation somewhere of TicyDB.
 
