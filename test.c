@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #define TICY_FAILURE_ALLOC
-
 #include "ticydb.h"
 
 int main() {
