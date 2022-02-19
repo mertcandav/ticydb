@@ -69,20 +69,22 @@ typedef   size_t                        sz_t      ; // Size type.
 //  ticy_typename(x) -> "i8_t" if x is sbyte_t
 //  ticy_typename(x) -> "u32_t" if x is sz_t
 #define ticy_typename(x) _Generic((x), \
-  i8_t:      "i8_t",                   \
-  i16_t:     "i16_t",                  \
-  i32_t:     "i32_t",                  \
-  i64_t:     "i64_t",                  \
-  u8_t:      "u8_t",                   \
-  u16_t:     "u16_t",                  \
-  u32_t:     "u32_t",                  \
-  u64_t:     "u64_t",                  \
-  f32_t:     "f32_t",                  \
-  f64_t:     "f64_t",                  \
-  char_t:    "char_t",                 \
-  str_t:     "str_t",                  \
-  any_t:     "any_t",                  \
-  default:   "other"                   \
+  i8_t:        "i8_t",                 \
+  i16_t:       "i16_t",                \
+  i32_t:       "i32_t",                \
+  i64_t:       "i64_t",                \
+  u8_t:        "u8_t",                 \
+  u16_t:       "u16_t",                \
+  u32_t:       "u32_t",                \
+  u64_t:       "u64_t",                \
+  f32_t:       "f32_t",                \
+  f64_t:       "f64_t",                \
+  char_t:      "char_t",               \
+  str_t:       "str_t",                \
+  any_t:       "any_t",                \
+  TicyList:    "TicyList",             \
+  TicyList*:   "TicyList*",            \
+  default:     "other"                 \
 )
 
 // Length of TicyFile's lines.
