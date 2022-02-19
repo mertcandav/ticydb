@@ -1,7 +1,5 @@
 # TicyDB - TicyFile
 
-File instance of TicyDB.
-
 ## Define
 ```c
 // File instance of TicyDB.
