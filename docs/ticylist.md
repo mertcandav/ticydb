@@ -1,14 +1,17 @@
 # TicyDB - TicyList
 
-Dynamic list implementation of TicyDB.
-
-## Fields
-+ ``any_t *buffer`` <br>
-  Element buffer.
-+ ``sz_t used`` <br>
-  Allocated element count.
-+ ``sz_t size`` <br>
-  Total element count.
+## Define
+```c
+// Dynamic list implementation of TicyDB.
+typedef struct TicyList {
+  // Element buffer.
+  any_t *buffer;
+  // Allocated element count.
+  sz_t  used;
+  // Total element count.
+  sz_t  size;
+} TicyList;
+```
 
 ## Related Functions
 ```c
@@ -21,14 +24,10 @@ Dynamic list implementation of TicyDB.
 struct TicyList *ticylist_new(sz_t size);
 ```
 
-# 
-
 ```c
 // Free TicyList instance allocated from heap.
 void ticylist_free(struct TicyList *list);
 ```
-
-# 
 
 ```c
 // Appends item to TicyList.
@@ -38,8 +37,6 @@ void ticylist_free(struct TicyList *list);
 //  ticylist_push(list, item) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 bool_t ticylist_push(struct TicyList *list, any_t item);
 ```
-
-# 
 
 ```c
 // Removes n elements starts at specified index.
@@ -53,8 +50,6 @@ bool_t ticylist_push(struct TicyList *list, any_t item);
 //  ticylist_remrange(list, start, n) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 bool_t ticylist_remrange(struct TicyList* list, const sz_t start, sz_t n);
 ```
-
-# 
 
 ```c
 // Returns new TicyList from source list by specified index and n.
