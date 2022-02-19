@@ -11,8 +11,8 @@ typedef struct TicyFile {
   struct TicyList *lines;
 } TicyFile;
 ```
-  
-## Releated Variables
+
+## Releated Defines
 ```c
 // Length of TicyFile's lines.
 volatile sz_t TicyFile_line_length = 1024;
@@ -27,7 +27,7 @@ volatile sz_t TicyFile_line_length = 1024;
 //  ticyfile_open(path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticyfile_open(path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 struct TicyFile *ticyfile_open(const str_t path);
-``` 
+```
 
 ```c
 // Closes and frees heap-allocated TicyFile instance.

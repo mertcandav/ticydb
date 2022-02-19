@@ -1,17 +1,17 @@
-# TicyDB - Custom Defines
+# TicyDB - Custom Preprocessor Defines
 
 If you define these defines before include the TicyDB, you can manuplation somewhere of TicyDB.
 
 ## ``TICY_FAILURE_ALLOC``
 TicyDB, exits program with exit code if any allocation is failed.
 
-### Related Global Variables
+### Related Defines
 ```c
 // Exit code of TicyDB for failures.
 volatile int ticy_exit_code_failure;
 ```
 
-### Related Defines
+### Related Preprocessor Defines
 ```c
 // Error message of allocation failures.
 #define TICY_ERROR_FAIL_ALLOC

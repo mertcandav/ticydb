@@ -71,43 +71,62 @@ typedef   char_t                        *str_t    ; // String type.
 typedef   void                          *any_t    ; // Any type for any data.
 typedef   size_t                        sz_t      ; // Size type.
 
-// Returns TicyDB data-type name of specified data.
-// The return value is str_t and value is directly
-// data-type name of specified data.
-// Example: ticy_typename(x) -> "u32_t"
+// Ticy data-type codes.
+enum TicyTypeCode {
+  I8_T         = 0,  // Signed 8-bit integer type code.
+  I16_T        = 1,  // Signed 16-bit integer type code.
+  I32_T        = 2,  // Signed 32-bit integer type code.
+  I64_T        = 3,  // Signed 64-bit integer type code.
+  U8_T         = 4,  // Unsigned 8-bit integer type code.
+  U16_T        = 5,  // Unsigned 16-bit integer type code.
+  U32_T        = 6,  // Unsigned 32-bit integer type code.
+  U64_T        = 7,  // Unsigned 64-bit integer type code.
+  F32_T        = 8,  // 32-bit float type code.
+  F64_T        = 9,  // 64-bit float type code.
+  CHAR_T       = 10, // Character type code.
+  STR_T        = 11, // String type code.
+  ANY_T        = 12, // Any type code.
+  TICYLIST     = 13, // TicyList instance code.
+  TICYLIST_PTR = 14, // TicyList instance pointer code.
+  OTHER_T      = 15  // Code of other data-types.
+};
+
+// Returns TicyDB data-type code of specified data.
+// The return value is TicyTypeCode.
+// Example: ticy_typename(x) -> U32_T
 //
 // Special cases are;
-//  ticy_typename(x) -> "u32_t" if x is bool_t
-//  ticy_typename(x) -> "u8_t" if x is byte_t
-//  ticy_typename(x) -> "i8_t" if x is sbyte_t
-//  ticy_typename(x) -> "u32_t" if x is sz_t
+//  ticy_typename(x) -> U32_T if x is bool_t
+//  ticy_typename(x) -> U8_T if x is byte_t
+//  ticy_typename(x) -> I8_T if x is sbyte_t
+//  ticy_typename(x) -> U32_T if x is sz_t
 #define ticy_typename(x) _Generic((x), \
-  i8_t:        "i8_t",                 \
-  i16_t:       "i16_t",                \
-  i32_t:       "i32_t",                \
-  i64_t:       "i64_t",                \
-  u8_t:        "u8_t",                 \
-  u16_t:       "u16_t",                \
-  u32_t:       "u32_t",                \
-  u64_t:       "u64_t",                \
-  f32_t:       "f32_t",                \
-  f64_t:       "f64_t",                \
-  char_t:      "char_t",               \
-  str_t:       "str_t",                \
-  any_t:       "any_t",                \
-  TicyList:    "TicyList",             \
-  TicyList*:   "TicyList*",            \
-  default:     "other"                 \
+  i8_t:        I8_T,                   \
+  i16_t:       I16_T,                  \
+  i32_t:       I32_T,                  \
+  i64_t:       I64_T,                  \
+  u8_t:        U8_T,                   \
+  u16_t:       U16_T,                  \
+  u32_t:       U32_T,                  \
+  u64_t:       U64_T,                  \
+  f32_t:       F32_T,                  \
+  f64_t:       F64_T,                  \
+  char_t:      CHAR_T,                 \
+  str_t:       STR_T,                  \
+  any_t:       ANY_T,                  \
+  TicyList:    TICYLIST,               \
+  TicyList*:   TICYLIST_PTR,           \
+  default:     OTHER_T,                \
 )
 
 // Dynamic list implementation of TicyDB.
 typedef struct TicyList {
   // Element buffer.
-  any_t  *buffer;
+  any_t *buffer;
   // Allocated element count.
-  sz_t used;
+  sz_t  used;
   // Total element count.
-  sz_t size;
+  sz_t  size;
 } TicyList;
 
 // Create new TicyList instance allocated from heap by specified size.
