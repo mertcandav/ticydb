@@ -3,9 +3,9 @@
 File instance of TicyDB.
 
 ## Fields
-+ ``path`` <br>
++ ``str_t path`` <br>
   Path of file.
-+ ``lines`` <br>
++ ``struct TicyList *lines`` <br>
   File content line-by-line.
   Lines are heap-allocated.
 
