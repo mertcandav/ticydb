@@ -99,99 +99,231 @@ typedef enum TicyTypeCode {
 sz_t Ticy_Buffer_Size = 128;
 
 // Returns string (heap-allocated) value of i8_t.
+//
+// Special cases are;
+//  ticy_i8s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_i8s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_i8s(const i8_t hi);
 // Returns string (heap-allocated) value of i16_t.
+//
+// Special cases are;
+//  ticy_i16s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_i16s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_i16s(const i16_t d);
 // Returns string (heap-allocated) value of i32_t.
+//
+// Special cases are;
+//  ticy_i32s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_i32s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_i32s(const i32_t d);
 // Returns string (heap-allocated) value of i64_t.
+//
+// Special cases are;
+//  ticy_i64s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_i64s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_i64s(const i64_t lld);
 // Returns string (heap-allocated) value of u8_t.
+//
+// Special cases are;
+//  ticy_u8s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_u8s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_u8s(const u8_t hu);
 // Returns string (heap-allocated) value of u16_t.
+//
+// Special cases are;
+//  ticy_u16s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_u16s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_u16s(const u16_t u);
 // Returns string (heap-allocated) value of u32_t.
+//
+// Special cases are;
+//  ticy_u32s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_u32s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_u32s(const u32_t u);
 // Returns string (heap-allocated) value of u64_t.
+//
+// Special cases are;
+//  ticy_u64s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_u64s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_u64s(const u64_t llu);
 // Returns string (heap-allocated) value of f32_t.
+//
+// Special cases are;
+//  ticy_f32s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_f32s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_f32s(const f32_t f);
 // Returns string (heap-allocated) value of f64_t.
-const str_t ticy_f64s(const f64_t f);
+//
+// Special cases are;
+//  ticy_f64s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_f64s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_f64s(const f64_t lf);
 // Returns string (heap-allocated) value of char_t.
+//
+// Special cases are;
+//  ticy_cs(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_cs(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_cs(const char_t c);
 // Returns string (heap-allocated) value of bool_t.
+//
+// Special cases are;
+//  ticy_bs(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_bs(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_bs(const bool_t d);
 // Returns string (heap-allocated) value of sz_t.
+//
+// Special cases are;
+//  ticy_szs(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_szs(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_szs(const sz_t zu);
 
 const str_t ticy_i8s(const i8_t hi) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%hi", hi);
-  return s;
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%hi", hi);
+  return str;
 }
 
 const str_t ticy_i16s(const i16_t d) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%d", d);
-  return s;
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%d", d);
+  return str;
 }
 
 const str_t ticy_i32s(const i32_t d)
 { return ticy_i16s(d); }
 
 const str_t ticy_i64s(const i64_t lld) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%lld", lld);
-  return s;
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%lld", lld);
+  return str;
 }
 
 const str_t ticy_u8s(const u8_t hu) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%hu", hu);
-  return s;
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%hu", hu);
+  return str;
 }
 
 const str_t ticy_u16s(const u16_t u) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%u", u);
-  return s;
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%u", u);
+  return str;
 }
 
 const str_t ticy_u32s(const u32_t u)
 { return ticy_u16s(u); }
 
 const str_t ticy_u64s(const u64_t llu) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%llu", llu);
-  return s;
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%llu", llu);
+  return str;
 }
 
 const str_t ticy_f32s(const f32_t f) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%f", f);
-  return s;
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%f", f);
+  return str;
 }
 
-const str_t ticy_f64s(const f64_t f) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%lf", f);
-  return s;
+const str_t ticy_f64s(const f64_t lf) {
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%lf", lf);
+  return str;
 }
 
 const str_t ticy_cs(const char_t c) {
-  str_t s = (str_t)(malloc(sizeof(char_t)));
-  sprintf(s, "%c", c);
-  return s;
+  str_t str = (str_t)(malloc(sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%c", c);
+  return str;
 }
 
 const str_t ticy_bs(const bool_t d)
 { return ticy_i32s(d); }
 
 const str_t ticy_szs(const sz_t zu) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%zu", zu);
-  return s;
+  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  sprintf(str, "%zu", zu);
+  return str;
 }
 
 // Data representation of TicyDB.
