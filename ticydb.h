@@ -388,14 +388,9 @@ struct TicyFile *ticyfile_open(const str_t path) {
   tf->path = path;
   tf->lines = ticylist_new(1);
   if (!tf->lines) {
-#ifdef TICY_FAILURE_ALLOC
-    printf(TICY_ERROR_FAIL_ALLOC "\n");
-    exit(ticy_exit_code_failure);
-#else
     fclose(f);
     ticyfile_close(tf);
     return NULL;
-#endif // #ifdef TICY_FAILURE_ALLOC
   }
   const sz_t size_line = TicyFile_line_length*sizeof(str_t);
   while (T) {
@@ -431,6 +426,118 @@ void ticyfile_close(struct TicyFile *tf) {
   }
   free(tf);
   tf = NULL;
+}
+
+// Key-Value store of TicyDB.
+// Don't touch fields if you not sure that.
+typedef struct TicyStore {
+  // Keys of store.
+  struct TicyList *keys;
+  // Values of keys.
+  struct TicyList *values;
+} TicyStore;
+
+// Returns heap-allocated TicyStore instance.
+//
+// Special case is;
+//  ticystore_new(void) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticytore_new(void) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyStore *ticystore_new(void);
+// Set value o specified key.
+// Creates a new key-value node if key is not exist.
+// Returns true if created a new key-value node, returns false if not.
+//
+// Special cases are;
+//  ticystore_set(store, key, value) -> F if key is can't pushed
+//  ticystore_set(store, key, value) -> F if value is can't pushed
+//  ticystore_set(store, key, value) -> F if store is NULL
+const bool_t ticystore_set(struct TicyStore *store, const any_t key, const any_t value);
+// Returns value o specified key.
+//
+// Special case is;
+//  ticystore_get(store, key) -> NULL if store is NULL
+//  ticystore_get(store, key) -> NULL if key is not exist
+const any_t ticystore_get(const struct TicyStore *store, const any_t key);
+// Reports specified TicyStore is have any key-value node or not.
+//
+// Special case is;
+//  ticystore_any(store) -> F if store is NULL
+const bool_t ticystore_any(const struct TicyStore *store);
+// Returns index of key if key is exist, returns -1 if not in specified TicyStore.
+//
+// Special case is;
+//  ticystore_existk(store, key) -> -1 if store is NULL
+const sz_t ticystore_findk(const struct TicyStore *store, const any_t key);
+// Returns index of key if value is exist, returns -1 if not in specified TicyStore.
+//
+// Special case is;
+//  ticystore_existk(store, key) -> -1 if store is NULL
+const sz_t ticystore_findv(const struct TicyStore *store, const any_t value);
+
+struct TicyStore *ticystore_new(void) {
+  struct TicyStore *store = (struct TicyStore*)(malloc(sizeof(struct TicyStore)));
+  if (!store) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  store->keys = ticylist_new(1);
+  if (!store->keys) {
+    free(store);
+    store = NULL;
+    return NULL;
+  }
+  store->values = ticylist_new(1);
+  if (!store->values) {
+    free(store);
+    store = NULL;
+    return NULL;
+  }
+  return store;
+}
+
+const bool_t ticystore_set(struct TicyStore *store, const any_t key, const any_t value) {
+  if (!store) { return F; }
+  const sz_t index = ticystore_findk(store, key);
+  if (index != -1) {
+    store->values->buffer[index] = value;
+    return F;
+  }
+  if (!ticylist_push(store->keys, key)) { return F; }
+  if (!ticylist_push(store->values, value)) {
+    store->keys->buffer[store->keys->used--] = NULL;
+    return F;
+  }
+  return T;
+}
+
+const any_t ticystore_get(const struct TicyStore *store, const any_t key) {
+  const sz_t index = ticystore_findk(store, key);
+  return index == -1 ? NULL : store->values->buffer[index];
+}
+
+const bool_t ticystore_any(const struct TicyStore *store)
+{ return store && store->keys->used > 0; }
+
+const sz_t ticystore_findk(const struct TicyStore *store, const any_t key) {
+  if (!store) { return -1; }
+  for (sz_t index = 0; index < store->keys->used; ++index) {
+    const any_t current_key = store->keys->buffer[index];
+    if (key == current_key) { return index; }
+  }
+  return -1;
+}
+
+const sz_t ticystore_findv(const struct TicyStore *store, const any_t value) {
+  if (!store) { return -1; }
+  for (sz_t index = 0; index < store->values->used; ++index) {
+    const any_t current_value = store->values->buffer[index];
+    if (value == current_value) { return index; }
+  }
+  return -1;
 }
 
 // TicyDB connection instance.
