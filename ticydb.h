@@ -37,11 +37,6 @@
 #include <wchar.h>
 
 #ifdef __cplusplus
-#include <iostream>
-#include <typeinfo>
-#endif // #ifdef __cplusplus
-
-#ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
@@ -78,12 +73,15 @@ typedef   size_t                        sz_t      ; // Size type.
 
 // Ticy data-type codes.
 enum TicyTypeCode {
+  SBYTE_T      = 0,  // SByte data type code.
   I8_T         = 0,  // Signed 8-bit integer type code.
   I16_T        = 1,  // Signed 16-bit integer type code.
   I32_T        = 2,  // Signed 32-bit integer type code.
   I64_T        = 3,  // Signed 64-bit integer type code.
+  BYTE_T       = 3,  // Byte data type code.
   U8_T         = 4,  // Unsigned 8-bit integer type code.
   U16_T        = 5,  // Unsigned 16-bit integer type code.
+  BOOL_T       = 6,  // Boolean type code.
   U32_T        = 6,  // Unsigned 32-bit integer type code.
   U64_T        = 7,  // Unsigned 64-bit integer type code.
   F32_T        = 8,  // 32-bit float type code.
@@ -93,158 +91,112 @@ enum TicyTypeCode {
   ANY_T        = 12, // Any type code.
   TICYLIST     = 13, // TicyList instance code.
   TICYLIST_PTR = 14, // TicyList instance pointer code.
-  OTHER_T      = 15  // Code of other data-types.
+  SZ_T         = 15, // Size type code.
+  OTHER_T      = 16  // Code of other data-types.
 };
-
-#ifdef __cplusplus
-}
-#endif // #ifdef __cplusplus
-
-// Returns TicyDB data-type code of specified data.
-// The return value is TicyTypeCode.
-// Example: ticy_typename(x) -> U32_T
-//
-// Special cases are;
-//  ticy_typecode(x) -> U32_T if x is bool_t
-//  ticy_typecode(x) -> U8_T if x is byte_t
-//  ticy_typecode(x) -> I8_T if x is sbyte_t
-//  ticy_typecode(x) -> U32_T if x is sz_t
-#ifndef __cplusplus
-#define ticy_typecode(x) _Generic((x), \
-  i8_t:        I8_T,                   \
-  i16_t:       I16_T,                  \
-  i32_t:       I32_T,                  \
-  i64_t:       I64_T,                  \
-  u8_t:        U8_T,                   \
-  u16_t:       U16_T,                  \
-  u32_t:       U32_T,                  \
-  u64_t:       U64_T,                  \
-  f32_t:       F32_T,                  \
-  f64_t:       F64_T,                  \
-  char_t:      CHAR_T,                 \
-  str_t:       STR_T,                  \
-  any_t:       ANY_T,                  \
-  TicyList:    TICYLIST,               \
-  TicyList*:   TICYLIST_PTR,           \
-  default:     OTHER_T                 \
-)
-#else
-template <typename Ticy_T>
-TicyTypeCode ticy_typecode(const Ticy_T x) {
-  const std::string name = typeid(x).name();
-  return name == "a"          ? I8_T         :
-         name == "s"          ? I16_T        :
-         name == "i"          ? I32_T        :
-         name == "x"          ? I64_T        :
-         name == "h"          ? U8_T         :
-         name == "t"          ? U16_T        :
-         name == "j"          ? U32_T        :
-         name == "y"          ? U64_T        :
-         name == "f"          ? F32_T        :
-         name == "d"          ? F64_T        :
-         name == "c"          ? CHAR_T       :
-         name == "Pc"         ? STR_T        :
-         name == "Pv"         ? ANY_T        :
-         name == "8TicyList"  ? TICYLIST     :
-         name == "P8TicyList" ? TICYLIST_PTR : OTHER_T;
-}
-#endif // # ifndef __cplusplus
-
-#ifdef __cplusplus
-extern "C" {
-#endif // #ifdef __cplusplus
 
 // Buffer size of various operations of TicyDB.
 sz_t Ticy_Buffer_Size = 128;
 
 // Returns string (heap-allocated) value of i8_t.
-str_t ticy_i8s(const i8_t hi);
+const str_t ticy_i8s(const i8_t hi);
 // Returns string (heap-allocated) value of i16_t.
-str_t ticy_i16s(const i16_t d);
+const str_t ticy_i16s(const i16_t d);
 // Returns string (heap-allocated) value of i32_t.
-str_t ticy_i32s(const i32_t d);
+const str_t ticy_i32s(const i32_t d);
 // Returns string (heap-allocated) value of i64_t.
-str_t ticy_i64s(const i64_t lld);
+const str_t ticy_i64s(const i64_t lld);
 // Returns string (heap-allocated) value of u8_t.
-str_t ticy_u8s(const u8_t hu);
+const str_t ticy_u8s(const u8_t hu);
 // Returns string (heap-allocated) value of u16_t.
-str_t ticy_u16s(const u16_t u);
+const str_t ticy_u16s(const u16_t u);
 // Returns string (heap-allocated) value of u32_t.
-str_t ticy_u32s(const u32_t u);
+const str_t ticy_u32s(const u32_t u);
 // Returns string (heap-allocated) value of u64_t.
-str_t ticy_u64s(const u64_t llu);
+const str_t ticy_u64s(const u64_t llu);
 // Returns string (heap-allocated) value of f32_t.
-str_t ticy_f32s(const f32_t f);
+const str_t ticy_f32s(const f32_t f);
 // Returns string (heap-allocated) value of f64_t.
-str_t ticy_f64s(const f64_t f);
+const str_t ticy_f64s(const f64_t f);
 // Returns string (heap-allocated) value of char_t.
-str_t ticy_cs(const char_t c);
+const str_t ticy_cs(const char_t c);
+// Returns string (heap-allocated) value of bool_t.
+const str_t ticy_bs(const bool_t d);
+// Returns string (heap-allocated) value of sz_t.
+const str_t ticy_szs(const sz_t zu);
 
-str_t ticy_i8s(const i8_t hi) {
+const str_t ticy_i8s(const i8_t hi) {
   str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   sprintf(s, "%hi", hi);
   return s;
 }
 
-str_t ticy_i16s(const i16_t d) {
+const str_t ticy_i16s(const i16_t d) {
   str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   sprintf(s, "%d", d);
   return s;
 }
 
-str_t ticy_i32s(const i32_t d) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%d", d);
-  return s;
-}
+const str_t ticy_i32s(const i32_t d)
+{ return ticy_i16s(d); }
 
-str_t ticy_i64s(const i64_t lld) {
+const str_t ticy_i64s(const i64_t lld) {
   str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   sprintf(s, "%lld", lld);
   return s;
 }
 
-str_t ticy_u8s(const u8_t hu) {
+const str_t ticy_u8s(const u8_t hu) {
   str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   sprintf(s, "%hu", hu);
   return s;
 }
 
-str_t ticy_u16s(const u16_t u) {
+const str_t ticy_u16s(const u16_t u) {
   str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   sprintf(s, "%u", u);
   return s;
 }
 
-str_t ticy_u32s(const u32_t u) {
-  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  sprintf(s, "%u", u);
-  return s;
-}
+const str_t ticy_u32s(const u32_t u)
+{ return ticy_u16s(u); }
 
-str_t ticy_u64s(const u64_t llu) {
+const str_t ticy_u64s(const u64_t llu) {
   str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   sprintf(s, "%llu", llu);
   return s;
 }
 
-str_t ticy_f32s(const f32_t f) {
+const str_t ticy_f32s(const f32_t f) {
   str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   sprintf(s, "%f", f);
   return s;
 }
 
-str_t ticy_f64s(const f64_t f) {
+const str_t ticy_f64s(const f64_t f) {
   str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   sprintf(s, "%lf", f);
   return s;
 }
 
-str_t ticy_cs(const char_t c) {
+const str_t ticy_cs(const char_t c) {
   str_t s = (str_t)(malloc(sizeof(char_t)));
   sprintf(s, "%c", c);
   return s;
 }
+
+const str_t ticy_bs(const bool_t d)
+{ return ticy_i32s(d); }
+
+const str_t ticy_szs(const sz_t zu) {
+  str_t s = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  sprintf(s, "%zu", zu);
+  return s;
+}
+
+typedef struct TicyData {
+  str_t fmt;
+} TicyData;
 
 // Dynamic list implementation of TicyDB.
 typedef struct TicyList {
