@@ -2,7 +2,7 @@
 
 ```c
 // Ticy data-type codes.
-enum TicyTypeCode {
+typedef enum TicyTypeCode {
   SBYTE_T,
   I8_T,
   I16_T,
@@ -23,5 +23,5 @@ enum TicyTypeCode {
   TICYLIST_PTR,
   SZ_T,
   OTHER_T,
-};
+} TicyTypeCode;
 ```

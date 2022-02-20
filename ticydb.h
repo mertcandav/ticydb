@@ -72,7 +72,7 @@ typedef   void                          *any_t    ; // Any type for any data.
 typedef   size_t                        sz_t      ; // Size type.
 
 // Ticy data-type codes.
-enum TicyTypeCode {
+typedef enum TicyTypeCode {
   SBYTE_T      = 0,  // SByte data type code.
   I8_T         = 0,  // Signed 8-bit integer type code.
   I16_T        = 1,  // Signed 16-bit integer type code.
@@ -93,7 +93,7 @@ enum TicyTypeCode {
   TICYLIST_PTR = 14, // TicyList instance pointer code.
   SZ_T         = 15, // Size type code.
   OTHER_T      = 16  // Code of other data-types.
-};
+} TicyTypeCode;
 
 // Buffer size of various operations of TicyDB.
 sz_t Ticy_Buffer_Size = 128;
@@ -194,9 +194,45 @@ const str_t ticy_szs(const sz_t zu) {
   return s;
 }
 
+// Data representation of TicyDB.
 typedef struct TicyData {
-  str_t fmt;
+  // Type code of data.
+  // This type code is important because
+  // TicyDB process datas by this type code.
+  TicyTypeCode type;
+  // Data.
+  any_t        data;
 } TicyData;
+
+// Returns new TicyData instance heap-allocated by data and type code.
+//
+// Special case is:
+//  ticydata_new(void) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_new(void) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyData *ticydata_new(const any_t data, const TicyTypeCode type);
+// Frees TicyData instance allocated from heap.
+// This is not frees data.
+void ticydata_free(struct TicyData *data);
+
+struct TicyData *ticydata_new(const any_t data, const TicyTypeCode type) {
+  struct TicyData *td = (struct TicyData*)(malloc(sizeof(struct TicyData)));
+  if (!td) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(ticy_exit_code_failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  td->data = data;
+  td->type = type;
+  return data;
+}
+
+void ticydata_free(struct TicyData *data) {
+  free(data);
+  data = NULL;
+}
 
 // Dynamic list implementation of TicyDB.
 typedef struct TicyList {
@@ -208,14 +244,14 @@ typedef struct TicyList {
   sz_t  size;
 } TicyList;
 
-// Create new TicyList instance allocated from heap by specified size.
+// Returns new TicyList instance heap-allocated by specified size.
 //
 // Special case is:
 //  ticylist_new(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticylist_new(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 //  ticylist_new(size) -> accept size as 1 if size < 1
 struct TicyList *ticylist_new(sz_t size);
-// Free TicyList instance allocated from heap.
+// Frees TicyList instance allocated from heap.
 void ticylist_free(struct TicyList *list);
 // Appends item to TicyList.
 // Returns true if success, returns false if failed.

@@ -15,7 +15,7 @@ typedef struct TicyList {
 
 ## Related Functions
 ```c
-// Create new TicyList instance allocated from heap by specified size.
+// Returns new TicyList instance heap-allocated by specified size.
 //
 // Special case is:
 //  ticylist_new(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
@@ -25,7 +25,7 @@ struct TicyList *ticylist_new(sz_t size);
 ```
 
 ```c
-// Free TicyList instance allocated from heap.
+// Frees TicyList instance allocated from heap.
 void ticylist_free(struct TicyList *list);
 ```
 
