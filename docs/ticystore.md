@@ -25,6 +25,12 @@ struct TicyStore *ticystore_new(void);
 ```
 
 ```c
+// Frees heap-allocated TicyStore instance.
+// It's frees key and value lists but not frees these elements.
+void ticystore_free(struct TicyStore *store);
+```
+
+```c
 // Set value o specified key.
 // Creates a new key-value node if key is not exist.
 // Returns true if created a new key-value node, returns false if not.

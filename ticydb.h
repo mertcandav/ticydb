@@ -478,6 +478,9 @@ typedef struct TicyStore {
 //  ticystore_new(void) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticytore_new(void) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 struct TicyStore *ticystore_new(void);
+// Frees heap-allocated TicyStore instance.
+// It's frees key and value lists but not frees these elements.
+void ticystore_free(struct TicyStore *store);
 // Set value o specified key.
 // Creates a new key-value node if key is not exist.
 // Returns true if created a new key-value node, returns false if not.
@@ -532,6 +535,20 @@ struct TicyStore *ticystore_new(void) {
     return NULL;
   }
   return store;
+}
+
+void ticystore_free(struct TicyStore *store) {
+  if (!store) { return; }
+  if (store->keys) {
+    ticylist_free(store->keys);
+    store->keys = NULL;
+  }
+  if (store->values) {
+    ticylist_free(store->values);
+    store->values = NULL;
+  }
+  free(store);
+  store = NULL;
 }
 
 const bool_t ticystore_set(struct TicyStore *store, const any_t key, const any_t value) {
