@@ -37,6 +37,11 @@
 #include <wchar.h>
 
 #ifdef __cplusplus
+#include <iostream>
+#include <typeinfo>
+#endif // #ifdef __cplusplus
+
+#ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
@@ -91,6 +96,10 @@ enum TicyTypeCode {
   OTHER_T      = 15  // Code of other data-types.
 };
 
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
+
 // Returns TicyDB data-type code of specified data.
 // The return value is TicyTypeCode.
 // Example: ticy_typename(x) -> U32_T
@@ -100,6 +109,7 @@ enum TicyTypeCode {
 //  ticy_typecode(x) -> U8_T if x is byte_t
 //  ticy_typecode(x) -> I8_T if x is sbyte_t
 //  ticy_typecode(x) -> U32_T if x is sz_t
+#ifndef __cplusplus
 #define ticy_typecode(x) _Generic((x), \
   i8_t:        I8_T,                   \
   i16_t:       I16_T,                  \
@@ -118,6 +128,31 @@ enum TicyTypeCode {
   TicyList*:   TICYLIST_PTR,           \
   default:     OTHER_T                 \
 )
+#else
+template <typename Ticy_T>
+TicyTypeCode ticy_typecode(const Ticy_T x) {
+  const std::string name = typeid(x).name();
+  return name == "a"          ? I8_T         :
+         name == "s"          ? I16_T        :
+         name == "i"          ? I32_T        :
+         name == "x"          ? I64_T        :
+         name == "h"          ? U8_T         :
+         name == "t"          ? U16_T        :
+         name == "j"          ? U32_T        :
+         name == "y"          ? U64_T        :
+         name == "f"          ? F32_T        :
+         name == "d"          ? F64_T        :
+         name == "c"          ? CHAR_T       :
+         name == "Pc"         ? STR_T        :
+         name == "Pv"         ? ANY_T        :
+         name == "8TicyList"  ? TICYLIST     :
+         name == "P8TicyList" ? TICYLIST_PTR : OTHER_T;
+}
+#endif // # ifndef __cplusplus
+
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 // Buffer size of various operations of TicyDB.
 sz_t Ticy_Buffer_Size = 128;
@@ -296,7 +331,7 @@ void ticylist_free(struct TicyList *list) {
 bool_t ticylist_push(struct TicyList* list, any_t item) {
   if (list->size <= list->used) {
     list->size *= 2;
-    list->buffer = realloc(list->buffer, list->size*sizeof(any_t));
+    list->buffer = (any_t*)(realloc(list->buffer, list->size*sizeof(any_t)));
     if (!list->buffer) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
@@ -520,7 +555,7 @@ const any_t ticystore_get(const struct TicyStore *store, const any_t key) {
 }
 
 const bool_t ticystore_any(const struct TicyStore *store)
-{ return store && store->keys->used > 0; }
+{ return (const bool_t)(store && store->keys->used > 0); }
 
 const sz_t ticystore_findk(const struct TicyStore *store, const any_t key) {
   if (!store) { return -1; }
