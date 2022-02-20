@@ -270,7 +270,7 @@ void ticylist_free(struct TicyList *list);
 //
 // Special case is;
 //  ticylist_push(list, item) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-bool_t ticylist_push(struct TicyList *list, any_t item);
+const bool_t ticylist_push(struct TicyList *list, any_t item);
 // Removes n elements starts at specified index.
 // If n greater than size, uses size instead of n.
 // Returns true if success, returns false is not.
@@ -280,7 +280,7 @@ bool_t ticylist_push(struct TicyList *list, any_t item);
 //  ticylist_remrange(list, start, n) -> F if start < 0
 //  ticylist_remrange(list, start, n) -> F if start > size
 //  ticylist_remrange(list, start, n) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-bool_t ticylist_remrange(struct TicyList* list, const sz_t start, sz_t n);
+const bool_t ticylist_remrange(struct TicyList* list, const sz_t start, sz_t n);
 // Returns new TicyList from source list by specified index and n.
 // If n greater than size, uses size instead of n.
 //
@@ -328,7 +328,7 @@ void ticylist_free(struct TicyList *list) {
   list = NULL;
 }
 
-bool_t ticylist_push(struct TicyList* list, any_t item) {
+const bool_t ticylist_push(struct TicyList* list, any_t item) {
   if (list->size <= list->used) {
     list->size *= 2;
     list->buffer = (any_t*)(realloc(list->buffer, list->size*sizeof(any_t)));
@@ -345,7 +345,7 @@ bool_t ticylist_push(struct TicyList* list, any_t item) {
   return T;
 }
 
-bool_t ticylist_remrange(struct TicyList *list, const sz_t start, sz_t n) {
+const bool_t ticylist_remrange(struct TicyList *list, const sz_t start, sz_t n) {
        if (start < 0)          { return F; }
   else if (start > list->used) { return F; }
   else if (n < 1)              { return F; }

@@ -35,7 +35,7 @@ void ticylist_free(struct TicyList *list);
 //
 // Special case is;
 //  ticylist_push(list, item) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-bool_t ticylist_push(struct TicyList *list, any_t item);
+const bool_t ticylist_push(struct TicyList *list, any_t item);
 ```
 
 ```c
@@ -48,7 +48,7 @@ bool_t ticylist_push(struct TicyList *list, any_t item);
 //  ticylist_remrange(list, start, n) -> F if start < 0
 //  ticylist_remrange(list, start, n) -> F if start > size
 //  ticylist_remrange(list, start, n) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-bool_t ticylist_remrange(struct TicyList* list, const sz_t start, sz_t n);
+const bool_t ticylist_remrange(struct TicyList* list, const sz_t start, sz_t n);
 ```
 
 ```c
