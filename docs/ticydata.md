@@ -30,3 +30,14 @@ struct TicyData *ticydata_new(const any_t data, const TicyTypeCode type);
 // This is not frees data.
 void ticydata_free(struct TicyData *data);
 ```
+
+```c
+// Returns string (heap-allocated) value of specified TicyData.
+//
+// Special cases are;
+//  ticydata_s(data) -> NULL if data is NULL
+//  ticydata_s(data) -> NULL if type code is not supported
+//  ticydata_s(data) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_s(data) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticydata_s(const struct TicyData *data);
+```
