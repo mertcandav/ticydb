@@ -590,9 +590,9 @@ void ticyfile_close(struct TicyFile *tf) {
 // Key-Value store of TicyDB.
 // Don't touch fields if you not sure that.
 typedef struct TicyStore {
-  // Keys of store.
+  // Keys of store, stores any_t type.
   struct TicyList *keys;
-  // Values of keys.
+  // Values of keys, stores TicyData* type.
   struct TicyList *values;
 } TicyStore;
 
@@ -613,13 +613,13 @@ void ticystore_free(struct TicyStore *store);
 //  ticystore_set(store, key, value) -> F if key is can't pushed
 //  ticystore_set(store, key, value) -> F if value is can't pushed
 //  ticystore_set(store, key, value) -> F if store is NULL
-const bool_t ticystore_set(struct TicyStore *store, const any_t key, const any_t value);
+const bool_t ticystore_set(struct TicyStore *store, const any_t key, const TicyData *value);
 // Returns value o specified key.
 //
 // Special case is;
 //  ticystore_get(store, key) -> NULL if store is NULL
 //  ticystore_get(store, key) -> NULL if key is not exist
-const any_t ticystore_get(const struct TicyStore *store, const any_t key);
+const TicyData *ticystore_get(const struct TicyStore *store, const any_t key);
 // Reports specified TicyStore is have any key-value node or not.
 //
 // Special case is;
@@ -634,7 +634,7 @@ const sz_t ticystore_findk(const struct TicyStore *store, const any_t key);
 //
 // Special case is;
 //  ticystore_existk(store, key) -> -1 if store is NULL
-const sz_t ticystore_findv(const struct TicyStore *store, const any_t value);
+const sz_t ticystore_findv(const struct TicyStore *store, const TicyData *value);
 
 struct TicyStore *ticystore_new(void) {
   struct TicyStore *store = (struct TicyStore*)(malloc(sizeof(struct TicyStore)));
@@ -675,7 +675,7 @@ void ticystore_free(struct TicyStore *store) {
   store = NULL;
 }
 
-const bool_t ticystore_set(struct TicyStore *store, const any_t key, const any_t value) {
+const bool_t ticystore_set(struct TicyStore *store, const any_t key, const TicyData *value) {
   if (!store) { return F; }
   const sz_t index = ticystore_findk(store, key);
   if (index != -1) {
@@ -690,9 +690,9 @@ const bool_t ticystore_set(struct TicyStore *store, const any_t key, const any_t
   return T;
 }
 
-const any_t ticystore_get(const struct TicyStore *store, const any_t key) {
+const TicyData *ticystore_get(const struct TicyStore *store, const any_t key) {
   const sz_t index = ticystore_findk(store, key);
-  return index == -1 ? NULL : store->values->buffer[index];
+  return index == -1 ? NULL : (TicyData*)(store->values->buffer[index]);
 }
 
 const bool_t ticystore_any(const struct TicyStore *store)
@@ -707,7 +707,7 @@ const sz_t ticystore_findk(const struct TicyStore *store, const any_t key) {
   return -1;
 }
 
-const sz_t ticystore_findv(const struct TicyStore *store, const any_t value) {
+const sz_t ticystore_findv(const struct TicyStore *store, const TicyData *value) {
   if (!store) { return -1; }
   for (sz_t index = 0; index < store->values->used; ++index) {
     const any_t current_value = store->values->buffer[index];

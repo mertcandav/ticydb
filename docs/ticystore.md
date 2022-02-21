@@ -6,9 +6,9 @@
 // Key-Value store of TicyDB.
 // Don't touch fields if you not sure that.
 typedef struct TicyStore {
-  // Keys of store.
+  // Keys of store, stores any_t type.
   struct TicyList *keys;
-  // Values of keys.
+  // Values of keys, stores TicyData* type.
   struct TicyList *values;
 } TicyStore;
 ```
@@ -39,7 +39,7 @@ void ticystore_free(struct TicyStore *store);
 //  ticystore_set(store, key, value) -> F if key is can't pushed
 //  ticystore_set(store, key, value) -> F if value is can't pushed
 //  ticystore_set(store, key, value) -> F if store is NULL
-const bool_t ticystore_set(struct TicyStore *store, const any_t key, const any_t value);
+const bool_t ticystore_set(struct TicyStore *store, const any_t key, const TicyData *value);
 ```
 
 ```c
@@ -48,7 +48,7 @@ const bool_t ticystore_set(struct TicyStore *store, const any_t key, const any_t
 // Special case is;
 //  ticystore_get(store, key) -> NULL if store is NULL
 //  ticystore_get(store, key) -> NULL if key is not exist
-const any_t ticystore_get(const struct TicyStore *store, const any_t key);
+const TicyData *ticystore_get(const struct TicyStore *store, const any_t key);
 ```
 
 ```c
@@ -72,5 +72,5 @@ const sz_t ticystore_findk(const struct TicyStore *store, const any_t key);
 //
 // Special case is;
 //  ticystore_existk(store, key) -> -1 if store is NULL
-const sz_t ticystore_findv(const struct TicyStore *store, const any_t value);
+const sz_t ticystore_findv(const struct TicyStore *store, const TicyData *value);
 ```
