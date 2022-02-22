@@ -101,67 +101,67 @@ volatile sz_t Ticy_Buffer_Size = 128;
 // Returns specified any_t as string (heap-allocated) with i8_t type format.
 //
 // Special cases are;
-//  ticy_i8s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_i8s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_his(const any_t hi);
+//  ticy_i8s(_Hi) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_i8s(_Hi) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_his(const any_t _Hi);
 // Returns specified any_t as string (heap-allocated) with i16_t, i32_t, bool_t type formats.
 //
 // Special cases are;
-//  ticy_ds(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_ds(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_ds(const any_t d);
+//  ticy_ds(_D) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_ds(_D) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_ds(const any_t _D);
 // Returns specified any_t as string (heap-allocated) with i64_t type format.
 //
 // Special cases are;
-//  ticy_i64s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_i64s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_llds(const any_t lld);
+//  ticy_i64s(_Lld) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_i64s(_Lld) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_llds(const any_t _Lld);
 // Returns specified any_t as string (heap-allocated) with u8_t type format.
 //
 // Special cases are;
-//  ticy_u8s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_u8s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_hus(const any_t hu);
+//  ticy_u8s(_Hu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_u8s(_Hu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_hus(const any_t _Hu);
 // Returns specified any_t as string (heap-allocated) with u16_t, u32_t type format.
 //
 // Special cases are;
-//  ticy_u16s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_u16s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_us(const any_t u);
+//  ticy_u16s(_U) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_u16s(_U) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_us(const any_t _U);
 // Returns specified any_t as string (heap-allocated) with u64_t type format.
 //
 // Special cases are;
-//  ticy_u64s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_u64s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_llus(const any_t llu);
+//  ticy_u64s(_Llu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_u64s(_Llu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_llus(const any_t _Llu);
 // Returns specified any_t as string (heap-allocated) with f32_t type format.
 //
 // Special cases are;
-//  ticy_f32s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_f32s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_fs(const any_t f);
+//  ticy_f32s(_F) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_f32s(_F) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_fs(const any_t _F);
 // Returns specified any_t as string (heap-allocated) with f64_t type format.
 //
 // Special cases are;
-//  ticy_f64s(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_f64s(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_lfs(const any_t lf);
+//  ticy_f64s(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_f64s(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_lfs(const any_t _Lf);
 // Returns specified any_t as string (heap-allocated) with char_t type format.
 //
 // Special cases are;
-//  ticy_cs(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_cs(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_cs(const any_t c);
+//  ticy_cs(_C) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_cs(_C) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_cs(const any_t _C);
 // Returns specified any_t as string (heap-allocated) with sz_t type format.
 //
 // Special cases are;
-//  ticy_szs(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_szs(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_zus(const any_t zu);
+//  ticy_zus(_Zu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_zus(_Zu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_zus(const any_t _Zu);
 
-const str_t ticy_his(const any_t hi) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_his(const any_t _Hi) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -169,13 +169,13 @@ const str_t ticy_his(const any_t hi) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%hi", hi);
-  return str;
+  sprintf(_str, "%hi", _Hi);
+  return _str;
 }
 
-const str_t ticy_ds(const any_t d) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_ds(const any_t _D) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -183,13 +183,13 @@ const str_t ticy_ds(const any_t d) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%d", d);
-  return str;
+  sprintf(_str, "%d", _D);
+  return _str;
 }
 
-const str_t ticy_llds(const any_t lld) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_llds(const any_t _Lld) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -197,13 +197,13 @@ const str_t ticy_llds(const any_t lld) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%lld", lld);
-  return str;
+  sprintf(_str, "%lld", _Lld);
+  return _str;
 }
 
-const str_t ticy_hus(const any_t hu) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_hus(const any_t _Hu) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -211,13 +211,13 @@ const str_t ticy_hus(const any_t hu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%hu", hu);
-  return str;
+  sprintf(_str, "%hu", _Hu);
+  return _str;
 }
 
-const str_t ticy_us(const any_t u) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_us(const any_t _U) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -225,13 +225,13 @@ const str_t ticy_us(const any_t u) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%u", u);
-  return str;
+  sprintf(_str, "%u", _U);
+  return _str;
 }
 
-const str_t ticy_llus(const any_t llu) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_llus(const any_t _Llu) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -239,13 +239,13 @@ const str_t ticy_llus(const any_t llu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%llu", llu);
-  return str;
+  sprintf(_str, "%llu", _Llu);
+  return _str;
 }
 
-const str_t ticy_fs(const any_t f) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_fs(const any_t _F) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -253,13 +253,13 @@ const str_t ticy_fs(const any_t f) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%f", f);
-  return str;
+  sprintf(_str, "%f", _F);
+  return _str;
 }
 
-const str_t ticy_lfs(const any_t lf) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_lfs(const any_t _Lf) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -267,13 +267,13 @@ const str_t ticy_lfs(const any_t lf) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%lf", lf);
-  return str;
+  sprintf(_str, "%lf", _Lf);
+  return _str;
 }
 
-const str_t ticy_cs(const any_t c) {
-  str_t str = (str_t)(malloc(sizeof(char_t)));
-  if (!str) {
+const str_t ticy_cs(const any_t _C) {
+  str_t _str = (str_t)(malloc(sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -281,13 +281,13 @@ const str_t ticy_cs(const any_t c) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%c", c);
-  return str;
+  sprintf(_str, "%c", _C);
+  return _str;
 }
 
-const str_t ticy_zus(const any_t zu) {
-  str_t str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
-  if (!str) {
+const str_t ticy_zus(const any_t _Zu) {
+  str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -295,8 +295,8 @@ const str_t ticy_zus(const any_t zu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(str, "%zu", zu);
-  return str;
+  sprintf(_str, "%zu", _Zu);
+  return _str;
 }
 
 // Data representation of TicyDB.
@@ -304,32 +304,33 @@ typedef struct TicyData {
   // Type code of data.
   // This type code is important because
   // TicyDB process datas by this type code.
-  TicyTypeCode type;
+  TicyTypeCode _type;
   // Data.
-  any_t        data;
+  // If you change here, you must chage the "type" field for success operations.
+  any_t        _data;
 } TicyData;
 
 // Returns new TicyData instance heap-allocated by data and type code.
 //
 // Special case is:
-//  ticydata_new(void) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_new(void) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyData *ticydata_new(const any_t data, const TicyTypeCode type);
+//  ticydata_new(_Data, _Ticytc) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_new(_Data, _Ticytc) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc);
 // Frees TicyData instance allocated from heap.
 // This is not frees data.
-void ticydata_free(struct TicyData *data);
+void ticydata_free(struct TicyData *_Ticyd);
 // Returns string (heap-allocated) value of specified TicyData.
 //
 // Special cases are;
-//  ticydata_s(data) -> NULL if data is NULL
-//  ticydata_s(data) -> "" if type code is not supported
-//  ticydata_s(data) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_s(data) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticydata_s(const struct TicyData *data);
+//  ticydata_s(_Ticyd) -> NULL if data is NULL
+//  ticydata_s(_Ticyd) -> "" if type code is not supported
+//  ticydata_s(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_s(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticydata_s(const struct TicyData *_Ticyd);
 
-struct TicyData *ticydata_new(const any_t data, const TicyTypeCode type) {
-  struct TicyData *td = (struct TicyData*)(malloc(sizeof(struct TicyData)));
-  if (!td) {
+struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc) {
+  struct TicyData *_ticyd = (struct TicyData*)(malloc(sizeof(struct TicyData)));
+  if (!_ticyd) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -337,21 +338,21 @@ struct TicyData *ticydata_new(const any_t data, const TicyTypeCode type) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  td->data = data;
-  td->type = type;
-  return td;
+  _ticyd->_data = _Data;
+  _ticyd->_type = _Ticytc;
+  return _ticyd;
 }
 
-void ticydata_free(struct TicyData *data) {
-  free(data);
-  data = NULL;
+void ticydata_free(struct TicyData *_Ticyd) {
+  free(_Ticyd);
+  _Ticyd = NULL;
 }
 
-const str_t ticydata_s(const struct TicyData *data) {
-  if (!data) { return NULL; }
-  if (data->type == STR_T) {
-    str_t str = (str_t)(malloc(2*sizeof(char_t)));
-    if (!str) {
+const str_t ticydata_s(const struct TicyData *_Ticyd) {
+  if (!_Ticyd) { return NULL; }
+  if (_Ticyd->_type == STR_T) {
+    str_t _str = (str_t)(malloc(2*sizeof(char_t)));
+    if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
       printf(TICY_ERROR_FAIL_ALLOC "\n");
       exit(Ticy_Exit_Code_Failure);
@@ -359,32 +360,32 @@ const str_t ticydata_s(const struct TicyData *data) {
       return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
     }
-    str[0] = '"';
-    str[1] = '\0';
-    const str_t data_str = strdup((const char*)(data->data));
-    strcat(str, data_str);
-    strcat(str, "\"\0");
-    return str;
+    _str[0] = '"';
+    _str[1] = '\0';
+    const str_t _data_str = strdup((const char*)(_Ticyd->_data));
+    strcat(_str, _data_str);
+    strcat(_str, "\"\0");
+    return _str;
   }
-  switch (data->type) {
+  switch (_Ticyd->_type) {
   // case SBYTE_T:
-  case I8_T:   return ticy_his(data->data);
-  case I16_T:  return ticy_ds(data->data);
-  case I32_T:  return ticy_ds(data->data);
-  case I64_T:  return ticy_llds(data->data);
+  case I8_T:   return ticy_his(_Ticyd->_data);
+  case I16_T:  return ticy_ds(_Ticyd->_data);
+  case I32_T:  return ticy_ds(_Ticyd->_data);
+  case I64_T:  return ticy_llds(_Ticyd->_data);
   // case BYTE_T:
-  case U8_T:   return ticy_hus(data->data);
-  case U16_T:  return ticy_us(data->data);
+  case U8_T:   return ticy_hus(_Ticyd->_data);
+  case U16_T:  return ticy_us(_Ticyd->_data);
   // case BOOL_T:
-  case U32_T:  return ticy_us(data->data);
-  case U64_T:  return ticy_llus(data->data);
-  case F32_T:  return ticy_fs(data->data);
-  case F64_T:  return ticy_lfs(data->data);
-  case CHAR_T: return ticy_cs(data->data);
-  case SZ_T:   return ticy_zus(data->data);
+  case U32_T:  return ticy_us(_Ticyd->_data);
+  case U64_T:  return ticy_llus(_Ticyd->_data);
+  case F32_T:  return ticy_fs(_Ticyd->_data);
+  case F64_T:  return ticy_lfs(_Ticyd->_data);
+  case CHAR_T: return ticy_cs(_Ticyd->_data);
+  case SZ_T:   return ticy_zus(_Ticyd->_data);
   }
-  str_t str = (str_t)(malloc(2*sizeof(char_t)));
-  if (!str) {
+  str_t _str = (str_t)(malloc(2*sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -392,63 +393,69 @@ const str_t ticydata_s(const struct TicyData *data) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  str[0] = '"';
-  str[1] = '\0';
-  strcat(str, "\"\0");
-  return str;
+  _str[0] = '"';
+  _str[1] = '\0';
+  strcat(_str, "\"\0");
+  return _str;
 }
 
 // Dynamic list implementation of TicyDB.
 typedef struct TicyList {
   // Element buffer.
-  any_t *buffer;
+  // Don't change if you not sure that.
+  any_t *_buffer;
   // Allocated element count.
-  sz_t  used;
+  // Don't change if you not sure that.
+  sz_t  _used;
   // Total element count.
-  sz_t  size;
+  // Don't change if you not sure that.
+  sz_t  _size;
 } TicyList;
 
 // Returns new TicyList instance heap-allocated by specified size.
 //
 // Special case is:
-//  ticylist_new(size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticylist_new(size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-//  ticylist_new(size) -> accept size as 1 if size < 1
-struct TicyList *ticylist_new(sz_t size);
+//  ticylist_new(_Size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticylist_new(_Size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+//  ticylist_new(_Size) -> accept size as 1 if size < 1
+struct TicyList *ticylist_new(sz_t _Size);
 // Frees TicyList instance allocated from heap.
-void ticylist_free(struct TicyList *list);
+void ticylist_free(struct TicyList *_Ticyl);
 // Appends item to TicyList.
 // Returns true if success, returns false if failed.
 //
 // Special case is;
-//  ticylist_push(list, item) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const bool_t ticylist_push(struct TicyList *list, any_t item);
+//  ticylist_push(_Ticyl, _Item) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const bool_t ticylist_push(struct TicyList *_Ticyl, any_t _Item);
 // Removes n elements starts at specified index.
 // If n greater than size, uses size instead of n.
 // Returns true if success, returns false is not.
 //
 // Special cases are:
-//  ticylist_remrange(list, start, n) -> F if n < 1
-//  ticylist_remrange(list, start, n) -> F if start < 0
-//  ticylist_remrange(list, start, n) -> F if start > size
-//  ticylist_remrange(list, start, n) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const bool_t ticylist_remrange(struct TicyList* list,
-                               const sz_t start, sz_t n);
+//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if n < 1
+//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if start < 0
+//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if start > size
+//  ticylist_remrange(_Ticyl, _Start, _Count) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const bool_t ticylist_remrange(struct TicyList* _Ticyl,
+                               const sz_t _Start,
+                               sz_t _Count);
 // Returns new TicyList from source list by specified index and n.
 // If n greater than size, uses size instead of n.
 //
 // Special cases are:
-//  ticylist_slice(list, start, n) -> NULL if failed
-//  ticylist_slice(list, start, n) -> NULL if list == NULL
-//  ticylist_slice(list, start, n) -> NULL if n < 1
-//  ticylist_slice(list, start, n) -> NULL if start < 0
-//  ticylist_slice(list, start, n) -> NULL if start > size
-//  ticylist_slice(list, start, n) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyList *ticylist_slice(struct TicyList *list, sz_t start, sz_t n);
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if failed
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if list == NULL
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if n < 1
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if start < 0
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if start > size
+//  ticylist_slice(_Ticyl, _Start, _Count) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyList *ticylist_slice(const struct TicyList *_List,
+                                sz_t _Start,
+                                sz_t _Count);
 
-struct TicyList *ticylist_new(sz_t size) {
-  struct TicyList *list = (struct TicyList*)(malloc(sizeof(struct TicyList)));
-  if (!list) {
+struct TicyList *ticylist_new(sz_t _Size) {
+  struct TicyList *_ticyl = (struct TicyList*)(malloc(sizeof(struct TicyList)));
+  if (!_ticyl) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -456,9 +463,9 @@ struct TicyList *ticylist_new(sz_t size) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  size = size < 1 ? 1 : size;
-  list->buffer = (void**)(malloc(size*sizeof(any_t)));
-  if (!list->buffer) {
+  _Size = _Size < 1 ? 1 : _Size;
+  _ticyl->_buffer = (void**)(malloc(_Size*sizeof(any_t)));
+  if (!_ticyl->_buffer) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -466,26 +473,26 @@ struct TicyList *ticylist_new(sz_t size) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  list->used = 0;
-  list->size = size;
-  return list;
+  _ticyl->_used = 0;
+  _ticyl->_size = _Size;
+  return _ticyl;
 }
 
-void ticylist_free(struct TicyList *list) {
-  if (!list) { return; }
-  free(list->buffer);
-  list->buffer = NULL;
-  list->used = 0;
-  list->size = 0;
-  free(list);
-  list = NULL;
+void ticylist_free(struct TicyList *_Ticyl) {
+  if (!_Ticyl) { return; }
+  free(_Ticyl->_buffer);
+  _Ticyl->_buffer = NULL;
+  _Ticyl->_used = 0;
+  _Ticyl->_size = 0;
+  free(_Ticyl);
+  _Ticyl = NULL;
 }
 
-const bool_t ticylist_push(struct TicyList* list, any_t item) {
-  if (list->size <= list->used) {
-    list->size *= 2;
-    list->buffer = (any_t*)(realloc(list->buffer, list->size*sizeof(any_t)));
-    if (!list->buffer) {
+const bool_t ticylist_push(struct TicyList* _Ticyl, any_t _Item) {
+  if (_Ticyl->_size <= _Ticyl->_used) {
+    _Ticyl->_size *= 2;
+    _Ticyl->_buffer = (any_t*)(realloc(_Ticyl->_buffer, _Ticyl->_size*sizeof(any_t)));
+    if (!_Ticyl->_buffer) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -494,48 +501,52 @@ const bool_t ticylist_push(struct TicyList* list, any_t item) {
 #endif // #ifdef TICY_FAILURE_ALLOC
     }
   }
-  list->buffer[list->used++] = item;
+  _Ticyl->_buffer[_Ticyl->_used++] = _Item;
   return T;
 }
 
-const bool_t ticylist_remrange(struct TicyList *list,
-                               const sz_t start, sz_t n) {
-       if (start < 0)          { return F; }
-  else if (start > list->used) { return F; }
-  else if (n < 1)              { return F; }
-  if (n > list->used-start) { n = list->used; }
-  struct TicyList *new_list = ticylist_new(list->used-n);
+const bool_t ticylist_remrange(struct TicyList *_Ticyl,
+                               const sz_t _Start,
+                               sz_t _Count) {
+       if (_Start < 0)            { return F; }
+  else if (_Start > _Ticyl->_used) { return F; }
+  else if (_Count < 1)            { return F; }
+  if (_Count > _Ticyl->_used-_Start) { _Count = _Ticyl->_used; }
+  struct TicyList *_new_list = ticylist_new(_Ticyl->_used-_Count);
 #ifndef TICY_FAILURE_ALLOC
-  if (!new_list) { return F; }
+  if (!_new_list) { return F; }
 #endif // #ifndef TICY_FAILURE_ALLOC
-  for (sz_t index = 0; index < start; ++index)
-  { ticylist_push(new_list, list->buffer[index]); }
-  for (sz_t index = start+n; index < list->used; ++index)
-  { ticylist_push(new_list, list->buffer[index]); }
-  list->used = new_list->used;
-  list->size = new_list->size;
-  free(list->buffer);
-  list->buffer = NULL;
-  *list = *new_list;
-  new_list->size = 0;
-  new_list->used = 0;
-  new_list->buffer = NULL;
-  free(new_list);
-  new_list = NULL;
+  for (sz_t _index = 0; _index < _Start; ++_index)
+  { ticylist_push(_new_list, _Ticyl->_buffer[_index]); }
+  for (sz_t _index = _Start+_Count; _index < _Ticyl->_used; ++_index)
+  { ticylist_push(_new_list, _Ticyl->_buffer[_index]); }
+  _Ticyl->_used = _new_list->_used;
+  _Ticyl->_size = _new_list->_size;
+  free(_Ticyl->_buffer);
+  _Ticyl->_buffer = NULL;
+  *_Ticyl = *_new_list;
+  _new_list->_size = 0;
+  _new_list->_used = 0;
+  _new_list->_buffer = NULL;
+  free(_new_list);
+  _new_list = NULL;
   return T;
 }
 
-struct TicyList *ticylist_slice(struct TicyList *list, sz_t start, sz_t n) {
-       if (!list)     { return NULL; }
-  else if (start < 0) { return NULL; }
-  else if (n < 1)     { return NULL; }
-  if (n > list->used-start) { n = list->used; }
-  struct TicyList* slice = ticylist_new(n);
+struct TicyList *ticylist_slice(const struct TicyList *_Ticyl,
+                                sz_t _Start,
+                                sz_t _Count) {
+       if (!_Ticyl)     { return NULL; }
+  else if (_Start < 0) { return NULL; }
+  else if (_Count < 1) { return NULL; }
+  if (_Count > _Ticyl->_used-_Start) { _Count = _Ticyl->_used; }
+  struct TicyList* _slice = ticylist_new(_Count);
 #ifndef TICY_FAILURE_ALLOC
-  if (!slice) { return NULL; }
+  if (!_slice) { return NULL; }
 #endif // #ifndef TICY_FAILURE_ALLOC
-  for (; n >= 0; --n) { ticylist_push(slice, list->buffer[start++]); }
-  return slice;
+  for (; _Count >= 0; --_Count)
+  { ticylist_push(_slice, _Ticyl->_buffer[_Start++]); }
+  return _slice;
 }
 
 // Length of TicyFile's lines.
@@ -544,86 +555,89 @@ volatile sz_t TicyFile_Line_Length = 1024;
 // File instance of TicyDB.
 typedef struct TicyFile {
   // Path of file.
-  str_t           path;
+  str_t           _path;
   // File content line-by-line.
   // Lines are heap-allocated.
-  struct TicyList *lines;
+  // Don't change if you not sure that.
+  struct TicyList *_lines;
 } TicyFile;
 
 // Returns heap-allocated TicyFile instance by specified path.
 //
 // Special cases are;
-//  ticyfile_open(path) -> NULL if path == NULL
-//  ticyfile_open(path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticyfile_open(path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyFile *ticyfile_open(const str_t path);
+//  ticyfile_open(_Path) -> NULL if path == NULL
+//  ticyfile_open(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticyfile_open(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyFile *ticyfile_open(const str_t _Path);
 // Closes and frees heap-allocated TicyFile instance.
-void ticyfile_close(struct TicyFile *tf);
+void ticyfile_close(struct TicyFile * _Ticyf);
 
-struct TicyFile *ticyfile_open(const str_t path) {
-  if (!path) { return NULL; }
-  FILE *f = fopen(path, "r");
-  if (!f) { return NULL; }
-  struct TicyFile *tf = (struct TicyFile*)(malloc(sizeof(struct TicyFile)));
-  if (!tf) {
+struct TicyFile *ticyfile_open(const str_t _Path) {
+  if (!_Path) { return NULL; }
+  FILE *_file = fopen(_Path, "r");
+  if (!_file) { return NULL; }
+  struct TicyFile *_ticyf = (struct TicyFile*)(malloc(sizeof(struct TicyFile)));
+  if (!_ticyf) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
 #else
-    fclose(f);
+    fclose(_file);
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  tf->path = path;
-  tf->lines = ticylist_new(1);
-  if (!tf->lines) {
-    fclose(f);
-    ticyfile_close(tf);
+  _ticyf->_path = _Path;
+  _ticyf->_lines = ticylist_new(1);
+  if (!_ticyf->_lines) {
+    fclose(_file);
+    ticyfile_close(_ticyf);
     return NULL;
   }
-  const sz_t size_line = TicyFile_Line_Length*sizeof(str_t);
+  const sz_t _line_length = TicyFile_Line_Length*sizeof(str_t);
   while (T) {
-    str_t line = (str_t)(malloc(size_line));
-    if (!line) {
+    str_t _line = (str_t)(malloc(_line_length));
+    if (!_line) {
 #ifdef TICY_FAILURE_ALLOC
       printf(TICY_ERROR_FAIL_ALLOC "\n");
       exit(Ticy_Exit_Code_Failure);
 #else
-      fclose(f);
-      ticyfile_close(tf);
+      fclose(_file);
+      ticyfile_close(_ticyf);
       return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
     }
-    if (!fgets(line, size_line, f)) {
-      free(line);
-      line = NULL;
+    if (!fgets(_line, _line_length, _file)) {
+      free(_line);
+      _line = NULL;
       break;
     }
-    line[strlen(line)-1] = '\0';
-    ticylist_push(tf->lines, line);
+    _line[strlen(_line)-1] = '\0';
+    ticylist_push(_ticyf->_lines, _line);
   }
-  return tf;
+  return _ticyf;
 }
 
-void ticyfile_close(struct TicyFile *tf) {
-  if (!tf) { return; }
-  if (tf->lines) {
-    for (sz_t index = 0; index < tf->lines->used; )
-    { free((str_t)(tf->lines->buffer[index++])); }
-    ticylist_free(tf->lines);
-    tf->lines = NULL;
+void ticyfile_close(struct TicyFile *_Ticyf) {
+  if (!_Ticyf) { return; }
+  if (_Ticyf->_lines) {
+    for (sz_t _index = 0; _index < _Ticyf->_lines->_used; )
+    { free((str_t)(_Ticyf->_lines->_buffer[_index++])); }
+    ticylist_free(_Ticyf->_lines);
+    _Ticyf->_lines = NULL;
   }
-  free(tf);
-  tf = NULL;
+  free(_Ticyf);
+  _Ticyf = NULL;
 }
 
 // Key-Value store of TicyDB.
 // Don't touch fields if you not sure that.
 typedef struct TicyStore {
   // Keys of store, stores any_t type.
-  struct TicyList *keys;
+  // Don't change if you not sure that.
+  struct TicyList *_keys;
   // Values of keys, stores TicyData* type.
-  struct TicyList *values;
+  // Don't change if you not sure that.
+  struct TicyList *_values;
 } TicyStore;
 
 // Returns heap-allocated TicyStore instance.
@@ -634,50 +648,51 @@ typedef struct TicyStore {
 struct TicyStore *ticystore_new(void);
 // Frees heap-allocated TicyStore instance.
 // It's frees key and value lists but not frees these elements.
-void ticystore_free(struct TicyStore *store);
+void ticystore_free(struct TicyStore *_Ticys);
 // Set value o specified key.
 // Creates a new key-value node if key is not exist.
 // Returns true if created a new key-value node, returns false if not.
 //
 // Special cases are;
-//  ticystore_set(store, key, value) -> F if key is can't pushed
-//  ticystore_set(store, key, value) -> F if value is can't pushed
-//  ticystore_set(store, key, value) -> F if store is NULL
-const bool_t ticystore_set(struct TicyStore *store,
-                           const TicyData *key,
-                           const TicyData *value);
+//  ticystore_set(_Ticys, _Key, _Value) -> F if key is can't pushed
+//  ticystore_set(_Ticys, _Key, _Value) -> F if value is can't pushed
+//  ticystore_set(_Ticys, _Key, _Value) -> F if store is NULL
+const bool_t ticystore_set(struct TicyStore *_Ticys,
+                           const TicyData *_Key,
+                           const TicyData *_Value);
 // Returns value o specified key value.
 //
 // Special case is;
-//  ticystore_get(store, key) -> NULL if store is NULL
-//  ticystore_get(store, key) -> NULL if key is not exist
-const TicyData *ticystore_get(const struct TicyStore *store, const any_t *key);
+//  ticystore_get(_Ticys, _Key) -> NULL if store is NULL
+//  ticystore_get(_Ticys, _Key) -> NULL if key is not exist
+const TicyData *ticystore_get(const struct TicyStore *_Ticys, const any_t *_Key);
 // Reports specified TicyStore is have any key-value node or not.
 //
 // Special case is;
-//  ticystore_any(store) -> F if store is NULL
-const bool_t ticystore_any(const struct TicyStore *store);
+//  ticystore_any(_Ticys) -> F if store is NULL
+const bool_t ticystore_any(const struct TicyStore *_Ticys);
 // Returns index of key value if key value is exist, returns -1 if not in specified TicyStore.
 //
 // Special case is;
-//  ticystore_existk(store, key) -> -1 if store is NULL
-const sz_t ticystore_findk(const struct TicyStore *store, const any_t *key);
-// Returns index of key if value is exist, returns -1 if not in specified TicyStore.
+//  ticystore_existk(_Ticys, _Key) -> -1 if store is NULL
+const sz_t ticystore_findk(const struct TicyStore *_Ticys, const any_t *_Key);
+// Returns index of key of value if value is exist, returns -1 if not in specified TicyStore.
 //
 // Special case is;
-//  ticystore_existk(store, key) -> -1 if store is NULL
-const sz_t ticystore_findv(const struct TicyStore *store, const TicyData *value);
+//  ticystore_existk(_Ticys, _Key) -> -1 if store is NULL
+const sz_t ticystore_findv(const struct TicyStore *_Ticys,
+                           const any_t _Value);
 // Returns serialize TicyStore as string (heap-allocated).
 //
 // Special cases are;
-//  ticystore_serialize(store) -> NULL if store is NULL
-//  ticystore_serialize(store) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticystore_serialize(store) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticystore_serialize(const struct TicyStore *store);
+//  ticystore_serialize(_Ticys) -> NULL if store is NULL
+//  ticystore_serialize(_Ticys) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticystore_serialize(_Ticys) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticystore_serialize(const struct TicyStore *_Ticys);
 
 struct TicyStore *ticystore_new(void) {
-  struct TicyStore *store = (struct TicyStore*)(malloc(sizeof(struct TicyStore)));
-  if (!store) {
+  struct TicyStore *_ticys = (struct TicyStore*)(malloc(sizeof(struct TicyStore)));
+  if (!_ticys) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -685,85 +700,85 @@ struct TicyStore *ticystore_new(void) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  store->keys = ticylist_new(1);
-  if (!store->keys) {
-    free(store);
-    store = NULL;
+  _ticys->_keys = ticylist_new(1);
+  if (!_ticys->_keys) {
+    free(_ticys);
+    _ticys = NULL;
     return NULL;
   }
-  store->values = ticylist_new(1);
-  if (!store->values) {
-    free(store);
-    store = NULL;
+  _ticys->_values = ticylist_new(1);
+  if (!_ticys->_values) {
+    free(_ticys);
+    _ticys = NULL;
     return NULL;
   }
-  return store;
+  return _ticys;
 }
 
-void ticystore_free(struct TicyStore *store) {
-  if (!store) { return; }
-  if (store->keys) {
-    ticylist_free(store->keys);
-    store->keys = NULL;
+void ticystore_free(struct TicyStore *_Ticys) {
+  if (!_Ticys) { return; }
+  if (_Ticys->_keys) {
+    ticylist_free(_Ticys->_keys);
+    _Ticys->_keys = NULL;
   }
-  if (store->values) {
-    ticylist_free(store->values);
-    store->values = NULL;
+  if (_Ticys->_values) {
+    ticylist_free(_Ticys->_values);
+    _Ticys->_values = NULL;
   }
-  free(store);
-  store = NULL;
+  free(_Ticys);
+  _Ticys = NULL;
 }
 
-const bool_t ticystore_set(struct TicyStore *store,
-                           const TicyData *key,
-                           const TicyData *value) {
-  if (!store) { return F; }
-  const sz_t index = ticystore_findk(store, key);
-  if (index != -1) {
-    store->values->buffer[index] = value;
+const bool_t ticystore_set(struct TicyStore *_Ticys,
+                           const TicyData *_Key,
+                           const TicyData *_Value) {
+  if (!_Ticys) { return F; }
+  const sz_t _index = ticystore_findk(_Ticys, _Key);
+  if (_index != -1) {
+    _Ticys->_values->_buffer[_index] = _Value;
     return F;
   }
-  if (!ticylist_push(store->keys, key)) { return F; }
-  if (!ticylist_push(store->values, value)) {
-    store->keys->buffer[store->keys->used--] = NULL;
+  if (!ticylist_push(_Ticys->_keys, _Key)) { return F; }
+  if (!ticylist_push(_Ticys->_values, _Value)) {
+    _Ticys->_keys->_buffer[_Ticys->_keys->_used--] = NULL;
     return F;
   }
   return T;
 }
 
-const TicyData *ticystore_get(const struct TicyStore *store,
-                              const any_t *key) {
-  const sz_t index = ticystore_findk(store, key);
-  return index == -1 ? NULL : (TicyData*)(store->values->buffer[index]);
+const TicyData *ticystore_get(const struct TicyStore *_Ticys,
+                              const any_t *_Key) {
+  const sz_t _index = ticystore_findk(_Ticys, _Key);
+  return _index == -1 ? NULL : (TicyData*)(_Ticys->_values->_buffer[_index]);
 }
 
-const bool_t ticystore_any(const struct TicyStore *store)
-{ return (const bool_t)(store && store->keys->used > 0); }
+const bool_t ticystore_any(const struct TicyStore *_Ticys)
+{ return (const bool_t)(_Ticys && _Ticys->_keys->_used > 0); }
 
-const sz_t ticystore_findk(const struct TicyStore *store,
-                           const any_t *key) {
-  if (!store) { return -1; }
-  for (sz_t index = 0; index < store->keys->used; ++index) {
-    const TicyData *current_key = (TicyData*)(store->keys->buffer[index]);
-    if (key == current_key->data) { return index; }
+const sz_t ticystore_findk(const struct TicyStore *_Ticys,
+                           const any_t *_Key) {
+  if (!_Ticys) { return -1; }
+  for (sz_t _index = 0; _index < _Ticys->_keys->_used; ++_index) {
+    const TicyData *_key = (TicyData*)(_Ticys->_keys->_buffer[_index]);
+    if (_Key == _key->_data) { return _index; }
   }
   return -1;
 }
 
-const sz_t ticystore_findv(const struct TicyStore *store,
-                           const TicyData *value) {
-  if (!store) { return -1; }
-  for (sz_t index = 0; index < store->values->used; ++index) {
-    const TicyData *current_value = (TicyData*)(store->values->buffer[index]);
-    if (value->data == current_value->data) { return index; }
+const sz_t ticystore_findv(const struct TicyStore *_Ticys,
+                           const any_t _Value) {
+  if (!_Value) { return -1; }
+  for (sz_t _index = 0; _index < _Ticys->_values->_used; ++_index) {
+    const TicyData *_value = (TicyData*)(_Ticys->_values->_buffer[_index]);
+    if (_Value == _value->_data) { return _index; }
   }
   return -1;
 }
 
-const str_t ticystore_serialize(const struct TicyStore *store) {
-  if (!store) { return NULL; }
-  str_t str = (str_t)(malloc(sizeof(char_t)));
-  if (!str) {
+const str_t ticystore_serialize(const struct TicyStore *_Ticys) {
+  if (!_Ticys) { return NULL; }
+  str_t _str = (str_t)(malloc(sizeof(char_t)));
+  if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -771,55 +786,55 @@ const str_t ticystore_serialize(const struct TicyStore *store) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  str[0] = '\0';
-  for (sz_t index = 0; index < store->keys->used; ++index) {
-    const TicyData *key = (TicyData*)(store->keys->buffer[index]);
-    str_t key_str = ticydata_s(key);
-    if (!key_str) {
+  _str[0] = '\0';
+  for (sz_t _index = 0; _index < _Ticys->_keys->_used; ++_index) {
+    const TicyData *_key = (TicyData*)(_Ticys->_keys->_buffer[_index]);
+    const str_t _key_str = ticydata_s(_key);
+    if (!_key_str) {
 #ifndef TICY_FAILURE_ALLOC
-      free(str);
-      str = NULL;
+      free(_str);
+      _str = NULL;
       return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
     }
-    const TicyData *value = (TicyData*)(store->values->buffer[index]);
-    str_t value_str = ticydata_s(value);
-    if (!key_str) {
+    const TicyData *_value = (TicyData*)(_Ticys->_values->_buffer[_index]);
+    const str_t _value_str = ticydata_s(_value);
+    if (!_key_str) {
 #ifndef TICY_FAILURE_ALLOC
-      free(key_str);
-      key_str = NULL;
-      free(str);
-      str = NULL;
+      free(_key_str);
+      _key_str = NULL;
+      free(_str);
+      _str = NULL;
       return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
     }
-    strcat(str, key_str);
-    strcat(str, " ");
-    strcat(str, value_str);
-    strcat(str, "\n\0");
+    strcat(_str, _key_str);
+    strcat(_str, " ");
+    strcat(_str, _value_str);
+    strcat(_str, "\n\0");
   }
-  return str;
+  return _str;
 }
 
 // TicyDB connection instance.
 typedef struct TicyDB {
   // This is a path of your TicyDB store file.
   // Don't touch this if you not sure that.
-  str_t path;
+  str_t _path;
 } TicyDB;
 
 // Returns heap-allocated TicyDB instance.
 //
 // Special case is;
-//  ticydb_new(path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydb_new(path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyDB *ticydb_new(const str_t path);
+//  ticydb_new(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydb_new(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyDB *ticydb_new(const str_t _Path);
 // Frees heap-allocated TicyDB instance.
-void ticydb_free(struct TicyDB *db);
+void ticydb_free(struct TicyDB *_Ticydb);
 
-struct TicyDB *ticydb_new(const str_t path) {
-  struct TicyDB *db = (struct TicyDB*)(malloc(sizeof(struct TicyDB)));
-  if (!db) {
+struct TicyDB *ticydb_new(const str_t _Path) {
+  struct TicyDB *_Ticydb = (struct TicyDB*)(malloc(sizeof(struct TicyDB)));
+  if (!_Ticydb) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -827,13 +842,13 @@ struct TicyDB *ticydb_new(const str_t path) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  db->path = path;
-  return db;
+  _Ticydb->_path = _Path;
+  return _Ticydb;
 }
 
-void ticydb_free(struct TicyDB *db) {
-  free(db);
-  db = NULL;
+void ticydb_free(struct TicyDB *_Ticydb) {
+  free(_Ticydb);
+  _Ticydb = NULL;
 }
 
 #ifdef __cplusplus
