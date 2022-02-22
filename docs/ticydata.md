@@ -8,9 +8,10 @@ typedef struct TicyData {
   // Type code of data.
   // This type code is important because
   // TicyDB process datas by this type code.
-  TicyTypeCode type;
+  TicyTypeCode _type;
   // Data.
-  any_t        data;
+  // If you change here, you must chage the "type" field for success operations.
+  any_t        _data;
 } TicyData;
 ```
 
@@ -20,24 +21,24 @@ typedef struct TicyData {
 // Returns new TicyData instance heap-allocated by data and type code.
 //
 // Special case is:
-//  ticydata_new(void) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_new(void) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyData *ticydata_new(const any_t data, const TicyTypeCode type);
+//  ticydata_new(_Data, _Ticytc) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_new(_Data, _Ticytc) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc);
 ```
 
 ```c
 // Frees TicyData instance allocated from heap.
 // This is not frees data.
-void ticydata_free(struct TicyData *data);
+void ticydata_free(struct TicyData *_Ticyd);
 ```
 
 ```c
 // Returns string (heap-allocated) value of specified TicyData.
 //
 // Special cases are;
-//  ticydata_s(data) -> NULL if data is NULL
-//  ticydata_s(data) -> "" if type code is not supported
-//  ticydata_s(data) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_s(data) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticydata_s(const struct TicyData *data);
+//  ticydata_s(_Ticyd) -> NULL if data is NULL
+//  ticydata_s(_Ticyd) -> "" if type code is not supported
+//  ticydata_s(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_s(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticydata_s(const struct TicyData *_Ticyd);
 ```

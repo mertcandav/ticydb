@@ -11,7 +11,7 @@ int main() {
   return 0x0;
   struct TicyFile *tf = ticyfile_open("db.tcy");
   for (sz_t index = 0; index < tf->_lines->_used; ++index)
-  { printf("%s\n", tf->_lines->_buffer[index]); }
+  { printf("%s\n", (char*)(tf->_lines->_buffer[index])); }
   ticyfile_close(tf);
   return EXIT_SUCCESS;
 }

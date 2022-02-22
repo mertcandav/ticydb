@@ -5,10 +5,11 @@
 // File instance of TicyDB.
 typedef struct TicyFile {
   // Path of file.
-  str_t           path;
+  str_t           _path;
   // File content line-by-line.
   // Lines are heap-allocated.
-  struct TicyList *lines;
+  // Don't change if you not sure that.
+  struct TicyList *_lines;
 } TicyFile;
 ```
 
@@ -23,13 +24,13 @@ volatile sz_t TicyFile_Line_Length;
 // Returns heap-allocated TicyFile instance by specified path.
 //
 // Special cases are;
-//  ticyfile_open(path) -> NULL if path == NULL
-//  ticyfile_open(path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticyfile_open(path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyFile *ticyfile_open(const str_t path);
+//  ticyfile_open(_Path) -> NULL if path == NULL
+//  ticyfile_open(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticyfile_open(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyFile *ticyfile_open(const str_t _Path);
 ```
 
 ```c
 // Closes and frees heap-allocated TicyFile instance.
-void ticyfile_close(struct TicyFile *tf);
+void ticyfile_close(struct TicyFile * _Ticyf);
 ```
