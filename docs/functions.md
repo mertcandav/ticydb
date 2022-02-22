@@ -49,8 +49,8 @@ const str_t ticy_us(const any_t _U);
 // Returns specified any_t as string (heap-allocated) with u64_t type format.
 //
 // Special cases are;
-//  ticy_u64s(_Llu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_u64s(_Llu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+//  ticy_llus(_Llu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_llus(_Llu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_llus(const any_t _Llu);
 ```
 
@@ -58,8 +58,8 @@ const str_t ticy_llus(const any_t _Llu);
 // Returns specified any_t as string (heap-allocated) with f32_t type format.
 //
 // Special cases are;
-//  ticy_f32s(_F) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_f32s(_F) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+//  ticy_fs(_F) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_fs(_F) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_fs(const any_t _F);
 ```
 
@@ -67,8 +67,8 @@ const str_t ticy_fs(const any_t _F);
 // Returns specified any_t as string (heap-allocated) with f64_t type format.
 //
 // Special cases are;
-//  ticy_f64s(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_f64s(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+//  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_lfs(const any_t _Lf);
 ```
 
