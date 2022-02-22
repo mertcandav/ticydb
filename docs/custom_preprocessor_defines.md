@@ -8,7 +8,7 @@ TicyDB, exits program with exit code if any allocation is failed.
 ### Related Defines
 ```c
 // Exit code of TicyDB for failures.
-volatile int ticy_exit_code_failure;
+volatile i32_t Ticy_Exit_Code_Failure;
 ```
 
 ### Related Preprocessor Defines

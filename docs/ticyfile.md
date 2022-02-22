@@ -15,7 +15,7 @@ typedef struct TicyFile {
 ## Releated Defines
 ```c
 // Length of TicyFile's lines.
-volatile sz_t TicyFile_line_length = 1024;
+volatile sz_t TicyFile_Line_Length;
 ```
 
 ## Related Functions

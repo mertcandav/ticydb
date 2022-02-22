@@ -36,7 +36,7 @@ void ticydata_free(struct TicyData *data);
 //
 // Special cases are;
 //  ticydata_s(data) -> NULL if data is NULL
-//  ticydata_s(data) -> NULL if type code is not supported
+//  ticydata_s(data) -> "" if type code is not supported
 //  ticydata_s(data) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticydata_s(data) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticydata_s(const struct TicyData *data);
