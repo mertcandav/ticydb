@@ -13,5 +13,7 @@ int main() {
   //for (sz_t index = 0; index < tf->_lines->_used; ++index)
   //{ printf("%s\n", (char*)(tf->_lines->_buffer[index])); }
   //printf("%s", tf->_text);
-
+  struct TicyStore *ticys = ticystore_deserialize(tf->_text);
+  ticyfile_close(tf);
+  return EXIT_SUCCESS;
 }

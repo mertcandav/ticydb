@@ -33,12 +33,12 @@ void ticydata_free(struct TicyData *_Ticyd);
 ```
 
 ```c
-// Returns string (heap-allocated) value of specified TicyData.
+// Returns serialized string (heap-allocated) value of specified TicyData.
 //
 // Special cases are;
-//  ticydata_s(_Ticyd) -> "" if data is NULL
-//  ticydata_s(_Ticyd) -> "" if type code is not supported
-//  ticydata_s(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_s(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticydata_s(const struct TicyData *_Ticyd);
+//  ticydata_serialize(_Ticyd) -> "" if data is NULL
+//  ticydata_serialize(_Ticyd) -> "" if type code is not supported
+//  ticydata_serialize(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_serialize(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticydata_serialize(const struct TicyData *_Ticyd);
 ```

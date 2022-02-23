@@ -99,90 +99,90 @@ volatile i32_t Ticy_Exit_Code_Failure = 1;
 volatile sz_t Ticy_Buffer_Size = 128;
 
 // TicyDB format of %hi
-#define TICY_FMT_HI "%hi hi"
+#define TICY_FMT_HI "hi %hi"
 // TicyDB format of %d
-#define TICY_FMT_D "%d d"
+#define TICY_FMT_D "d %d"
 // TicyDB format of %lld
-#define TICY_FMT_LLD "%lld lld"
+#define TICY_FMT_LLD "lld %lld"
 // TicyDB format of %hu
-#define TICY_FMT_HU "%hu hu"
+#define TICY_FMT_HU "hu %hu"
 // TicyDB format of %u
-#define TICY_FMT_U "%u u"
+#define TICY_FMT_U "u %u"
 // TicyDB format of %llu
-#define TICY_FMT_LLU "%llu llu"
+#define TICY_FMT_LLU "llu %llu"
 // TicyDB format of %f
-#define TICY_FMT_F "%f f"
+#define TICY_FMT_F "f %f"
 // TicyDB format of %lf
-#define TICY_FMT_LF "%lf lf"
+#define TICY_FMT_LF "lf %lf"
 // TicyDB format of %s
 #define TICY_FMT_S "\"%s\""
 // TicyDB format of %c
 #define TICY_FMT_C "'%c'"
 
-// Returns specified any_t as string (heap-allocated) with i8_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with i8_t type format.
 //
 // Special cases are;
 //  ticy_his(_Hi) -> NULL if _Hi is NULL
 //  ticy_his(_Hi) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_his(_Hi) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_his(const any_t _Hi);
-// Returns specified any_t as string (heap-allocated) with i16_t, i32_t, bool_t type formats.
+// Returns specified any_t as serialized string (heap-allocated) with i16_t, i32_t, bool_t type formats.
 //
 // Special cases are;
 //  ticy_ds(_D) -> NULL if _D is NULL
 //  ticy_ds(_D) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_ds(_D) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_ds(const any_t _D);
-// Returns specified any_t as string (heap-allocated) with i64_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with i64_t type format.
 //
 // Special cases are;
 //  ticy_llds(_Lld) -> NULL if _Lld is NULL
 //  ticy_llds(_Lld) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_llds(_Lld) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_llds(const any_t _Lld);
-// Returns specified any_t as string (heap-allocated) with u8_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with u8_t type format.
 //
 // Special cases are;
 //  ticy_hus(_Hu) -> NULL if _Hu is NULL
 //  ticy_hus(_Hu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_hus(_Hu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_hus(const any_t _Hu);
-// Returns specified any_t as string (heap-allocated) with u16_t, u32_t, sz_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with u16_t, u32_t, sz_t type format.
 //
 // Special cases are;
 //  ticy_us(_U) -> NULL if _U is NULL
 //  ticy_us(_U) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_us(_U) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_us(const any_t _U);
-// Returns specified any_t as string (heap-allocated) with u64_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with u64_t type format.
 //
 // Special cases are;
 //  ticy_llus(_Llu) -> NULL if _Llu is NULL
 //  ticy_llus(_Llu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_llus(_Llu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_llus(const any_t _Llu);
-// Returns specified any_t as string (heap-allocated) with f32_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with f32_t type format.
 //
 // Special cases are;
 //  ticy_fs(_F) -> NULL if _F is NULL
 //  ticy_fs(_F) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_fs(_F) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_fs(const any_t _F);
-// Returns specified any_t as string (heap-allocated) with f64_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with f64_t type format.
 //
 // Special cases are;
 //  ticy_lfs(_Lf) -> NULL if _Lf is NULL
 //  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_lfs(const any_t _Lf);
-// Returns specified any_t as string (heap-allocated) with str_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with str_t type format.
 //
 // Special cases are;
 //  ticy_lfs(_Lf) -> NULL if _S is NULL
 //  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_ss(const any_t _S);
-// Returns specified any_t as string (heap-allocated) with char_t type format.
+// Returns specified any_t as serialized string (heap-allocated) with char_t type format.
 //
 // Special cases are;
 //  ticy_lfs(_Lf) -> NULL if _C is NULL
@@ -313,7 +313,8 @@ const str_t ticy_lfs(const any_t _Lf) {
 const str_t ticy_ss(const any_t _S) {
   if (!_S) { return NULL; }
   const str_t _data_str = (str_t)(_S);
-  str_t _str = (str_t)(malloc((2+strlen(_data_str))*sizeof(char_t)));
+  sz_t _str_length = 1;
+  str_t _str = (str_t)(malloc((_str_length*Ticy_Buffer_Size)*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
@@ -322,13 +323,36 @@ const str_t ticy_ss(const any_t _S) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_S, _data_str);
+  _str[0] = '"';
+  _str[1] = '\0';
+  const sz_t _data_length = strlen(_data_str);
+  for (sz_t _index = 0; _index < _data_length; ++_index) {
+    str_t _cstr = ticy_cs(_data_str[_index]);
+    const sz_t _cstr_length = strlen(_cstr);
+    if (_str_length < (_str_length += _cstr_length-2)) {
+      _str = (str_t)(realloc(_str, (_str_length*Ticy_Buffer_Size)*sizeof(char_t)));
+      if (!_str) {
+#ifdef TICY_FAILURE_ALLOC
+        printf(TICY_ERROR_FAIL_ALLOC "\n");
+        exit(Ticy_Exit_Code_Failure);
+#else
+        free(_cstr);
+        _cstr = NULL;
+        return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+      }
+    }
+    strncat(_str, ++_cstr, _cstr_length-2);
+    free(_cstr);
+    _cstr = NULL;
+  }
+  strcat(_str, "\"");
   return _str;
 }
 
 const str_t ticy_cs(const any_t _C) {
   if (!_C) { return NULL; }
-  str_t _str = (str_t)(malloc(3*sizeof(char_t)));
+  str_t _str = (str_t)(malloc(4*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
@@ -337,7 +361,38 @@ const str_t ticy_cs(const any_t _C) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_C, _C);
+  switch ((char_t)(_C)) {
+  case 7:
+    sprintf(_str, "'\\%c'", 'a');
+    break;
+  case 8:
+    sprintf(_str, "'\\%c'", 'b');
+    break;
+  case 9:
+    sprintf(_str, "'\\%c'", 't');
+    break;
+  case 10:
+    sprintf(_str, "'\\%c'", 'n');
+    break;
+  case 11:
+    sprintf(_str, "'\\%c'", 'v');
+    break;
+  case 12:
+    sprintf(_str, "'\\%c'", 'f');
+    break;
+  case 13:
+    sprintf(_str, "'\\%c'", 'r');
+    break;
+  case 34:
+    sprintf(_str, "'\\%c'", '"');
+    break;
+  case 39:
+    sprintf(_str, "'\\%c'", '\'');
+    break;
+  default:
+    sprintf(_str, TICY_FMT_C, _C);
+    break;
+  }
   return _str;
 }
 
@@ -361,14 +416,14 @@ struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc);
 // Frees TicyData instance allocated from heap.
 // This is not frees data.
 void ticydata_free(struct TicyData *_Ticyd);
-// Returns string (heap-allocated) value of specified TicyData.
+// Returns serialized string (heap-allocated) value of specified TicyData.
 //
 // Special cases are;
-//  ticydata_s(_Ticyd) -> "" if data is NULL
-//  ticydata_s(_Ticyd) -> "" if type code is not supported
-//  ticydata_s(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_s(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticydata_s(const struct TicyData *_Ticyd);
+//  ticydata_serialize(_Ticyd) -> "" if data is NULL
+//  ticydata_serialize(_Ticyd) -> "" if type code is not supported
+//  ticydata_serialize(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_serialize(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticydata_serialize(const struct TicyData *_Ticyd);
 
 struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc) {
   struct TicyData *_ticyd = (struct TicyData*)(malloc(sizeof(struct TicyData)));
@@ -390,7 +445,7 @@ void ticydata_free(struct TicyData *_Ticyd) {
   _Ticyd = NULL;
 }
 
-const str_t ticydata_s(const struct TicyData *_Ticyd) {
+const str_t ticydata_serialize(const struct TicyData *_Ticyd) {
   if (!_Ticyd) { return NULL; }
   str_t _str = NULL;
   switch (_Ticyd->_type) {
@@ -782,7 +837,6 @@ const sz_t ticystore_findv(const struct TicyStore *_Ticys,
 //  ticystore_serialize(_Ticys) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticystore_serialize(const struct TicyStore *_Ticys);
 
-
 struct TicyStore *ticystore_new(void) {
   struct TicyStore *_ticys = (struct TicyStore*)(malloc(sizeof(struct TicyStore)));
   if (!_ticys) {
@@ -882,7 +936,7 @@ const str_t ticystore_serialize(const struct TicyStore *_Ticys) {
   _str[0] = '\0';
   for (sz_t _index = 0; _index < _Ticys->_keys->_used; ++_index) {
     const TicyData *_key = (TicyData*)(_Ticys->_keys->_buffer[_index]);
-    const str_t _key_str = ticydata_s(_key);
+    const str_t _key_str = ticydata_serialize(_key);
 #ifndef TICY_FAILURE_ALLOC
     if (!_key_str) {
       free(_str);
@@ -891,7 +945,7 @@ const str_t ticystore_serialize(const struct TicyStore *_Ticys) {
     }
 #endif // #ifdef TICY_FAILURE_ALLOC
     const TicyData *_value = (TicyData*)(_Ticys->_values->_buffer[_index]);
-    const str_t _value_str = ticydata_s(_value);
+    const str_t _value_str = ticydata_serialize(_value);
 #ifndef TICY_FAILURE_ALLOC
     if (!_value_str) {
       free(_key_str);
