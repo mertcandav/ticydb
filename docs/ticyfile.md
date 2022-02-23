@@ -5,11 +5,16 @@
 // File instance of TicyDB.
 typedef struct TicyFile {
   // Path of file.
+  // Don't change if you not sure that.
   str_t           _path;
   // File content line-by-line.
   // Lines are heap-allocated.
   // Don't change if you not sure that.
   struct TicyList *_lines;
+  // Text content of file.
+  // This field is heap-allocated.
+  // Don't change if you not sure that.
+  str_t           _text;
 } TicyFile;
 ```
 

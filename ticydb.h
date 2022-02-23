@@ -543,11 +543,16 @@ volatile sz_t TicyFile_Line_Length = 1024;
 // File instance of TicyDB.
 typedef struct TicyFile {
   // Path of file.
+  // Don't change if you not sure that.
   str_t           _path;
   // File content line-by-line.
   // Lines are heap-allocated.
   // Don't change if you not sure that.
   struct TicyList *_lines;
+  // Text content of file.
+  // This field is heap-allocated.
+  // Don't change if you not sure that.
+  str_t           _text;
 } TicyFile;
 
 // Returns heap-allocated TicyFile instance by specified path.
@@ -574,16 +579,31 @@ struct TicyFile *ticyfile_open(const str_t _Path) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  _ticyf->_path = _Path;
   _ticyf->_lines = ticylist_new(1);
+#ifndef TICY_FAILURE_ALLOC
   if (!_ticyf->_lines) {
     fclose(_file);
     ticyfile_close(_ticyf);
     return NULL;
   }
-  const sz_t _line_length = TicyFile_Line_Length*sizeof(str_t);
+#endif // #ifdef TICY_FAILURE_ALLOC
+  sz_t _text_length = 1;
+  _ticyf->_text = (str_t)(malloc((_text_length*Ticy_Buffer_Size)*sizeof(char_t)));
+  _ticyf->_text[0] = '\0';
+  if (!_ticyf->_text) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(Ticy_Exit_Code_Failure);
+#else
+    fclose(_file);
+    ticyfile_close(_ticyf);
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  _ticyf->_path = _Path;
+  const sz_t _line_size = TicyFile_Line_Length*sizeof(char_t);
   while (T) {
-    str_t _line = (str_t)(malloc(_line_length));
+    str_t _line = (str_t)(malloc(_line_size));
     if (!_line) {
 #ifdef TICY_FAILURE_ALLOC
       printf(TICY_ERROR_FAIL_ALLOC "\n");
@@ -594,12 +614,29 @@ struct TicyFile *ticyfile_open(const str_t _Path) {
       return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
     }
-    if (!fgets(_line, _line_length, _file)) {
+    if (!fgets(_line, _line_size, _file)) {
       free(_line);
       _line = NULL;
       break;
     }
-    _line[strlen(_line)-1] = '\0';
+    const sz_t _line_length = strlen(_line);
+    if ((_text_length*Ticy_Buffer_Size) < strlen(_ticyf->_text)+_line_length) {
+      _ticyf->_text = (str_t)(realloc(_ticyf->_text, (_text_length*=2)*Ticy_Buffer_Size));
+      if (!_ticyf->_text) {
+#ifdef TICY_FAILURE_ALLOC
+        printf(TICY_ERROR_FAIL_ALLOC "\n");
+        exit(Ticy_Exit_Code_Failure);
+#else
+        fclose(_file);
+        ticyfile_close(_ticyf);
+        free(_line);
+        _line = NULL;
+        return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+      }
+    }
+    strcat(_ticyf->_text, _line);
+    _line[_line_length-1] = '\0';
     ticylist_push(_ticyf->_lines, _line);
   }
   return _ticyf;
@@ -613,6 +650,8 @@ void ticyfile_close(struct TicyFile *_Ticyf) {
     ticylist_free(_Ticyf->_lines);
     _Ticyf->_lines = NULL;
   }
+  free(_Ticyf->_text);
+  _Ticyf->_text = NULL;
   free(_Ticyf);
   _Ticyf = NULL;
 }
@@ -778,24 +817,24 @@ const str_t ticystore_serialize(const struct TicyStore *_Ticys) {
   for (sz_t _index = 0; _index < _Ticys->_keys->_used; ++_index) {
     const TicyData *_key = (TicyData*)(_Ticys->_keys->_buffer[_index]);
     const str_t _key_str = ticydata_s(_key);
-    if (!_key_str) {
 #ifndef TICY_FAILURE_ALLOC
+    if (!_key_str) {
       free(_str);
       _str = NULL;
       return NULL;
-#endif // #ifdef TICY_FAILURE_ALLOC
     }
+#endif // #ifdef TICY_FAILURE_ALLOC
     const TicyData *_value = (TicyData*)(_Ticys->_values->_buffer[_index]);
     const str_t _value_str = ticydata_s(_value);
-    if (!_key_str) {
 #ifndef TICY_FAILURE_ALLOC
+    if (!_value_str) {
       free(_key_str);
       _key_str = NULL;
       free(_str);
       _str = NULL;
       return NULL;
-#endif // #ifdef TICY_FAILURE_ALLOC
     }
+#endif // #ifdef TICY_FAILURE_ALLOC
     strcat(_str, _key_str);
     strcat(_str, " ");
     strcat(_str, _value_str);
@@ -843,11 +882,9 @@ struct TicyDB *ticydb_new(const str_t _Path) {
   }
   _Ticydb->_path = _Path;
   _Ticydb->_Store = ticystore_new();
-  if (!_Ticydb->_Store) {
 #ifndef TICY_FAILURE_ALLOC
-    return NULL;
+  if (!_Ticydb->_Store) { return NULL; }
 #endif // #ifdef TICY_FAILURE_ALLOC
-  }
   return _Ticydb;
 }
 
