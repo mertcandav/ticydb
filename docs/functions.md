@@ -99,3 +99,13 @@ const str_t ticy_ss(const any_t _S);
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_cs(const any_t _C);
 ```
+
+```c
+// Returns deserialized char_t from specified serialized string.
+//
+// Special case is;
+//  ticy_cds(_Str) -> 0 if _Str is NULL
+//  ticy_cds(_Str) -> 0 if _Str length is 0
+//  ticy_cds(_Str) -> 0 if any parse error
+const char_t ticy_cds(const str_t _Str);
+```

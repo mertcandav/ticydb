@@ -66,7 +66,7 @@
     </tr>
     <tr>
       <td>str_t</td>
-      <td>String, Esape Sequences: \a \b \t \n \v \f \r \" \'</td>
+      <td>String, Esape Sequences: \0 \a \b \t \n \v \f \r \" \' \\</td>
     </tr>
     <tr>
       <td>any_t</td>

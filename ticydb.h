@@ -189,6 +189,13 @@ const str_t ticy_ss(const any_t _S);
 //  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_cs(const any_t _C);
+// Returns deserialized char_t from specified serialized string.
+//
+// Special case is;
+//  ticy_cds(_Str) -> 0 if _Str is NULL
+//  ticy_cds(_Str) -> 0 if _Str length is 0
+//  ticy_cds(_Str) -> 0 if any parse error
+const char_t ticy_cds(const str_t _Str);
 
 const str_t ticy_his(const any_t _Hi) {
   if (!_Hi) { return NULL; }
@@ -323,8 +330,8 @@ const str_t ticy_ss(const any_t _S) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  _str[0] = '"';
-  _str[1] = '\0';
+  _str[0] = 34;
+  _str[1] = 0;
   const sz_t _data_length = strlen(_data_str);
   for (sz_t _index = 0; _index < _data_length; ++_index) {
     str_t _cstr = ticy_cs(_data_str[_index]);
@@ -362,38 +369,68 @@ const str_t ticy_cs(const any_t _C) {
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
   switch ((char_t)(_C)) {
+  case 0:
+    sprintf(_str, "'\\%c'", 48);
+    break;
   case 7:
-    sprintf(_str, "'\\%c'", 'a');
+    sprintf(_str, "'\\%c'", 97);
     break;
   case 8:
-    sprintf(_str, "'\\%c'", 'b');
+    sprintf(_str, "'\\%c'", 98);
     break;
   case 9:
-    sprintf(_str, "'\\%c'", 't');
+    sprintf(_str, "'\\%c'", 116);
     break;
   case 10:
-    sprintf(_str, "'\\%c'", 'n');
+    sprintf(_str, "'\\%c'", 110);
     break;
   case 11:
-    sprintf(_str, "'\\%c'", 'v');
+    sprintf(_str, "'\\%c'", 118);
     break;
   case 12:
-    sprintf(_str, "'\\%c'", 'f');
+    sprintf(_str, "'\\%c'", 102);
     break;
   case 13:
-    sprintf(_str, "'\\%c'", 'r');
+    sprintf(_str, "'\\%c'", 114);
     break;
   case 34:
-    sprintf(_str, "'\\%c'", '"');
+    sprintf(_str, "'\\%c'", 34);
     break;
   case 39:
-    sprintf(_str, "'\\%c'", '\'');
+    sprintf(_str, "'\\%c'", 39);
+    break;
+  case 92:
+    sprintf(_str, "'\\%c'", 92);
     break;
   default:
     sprintf(_str, TICY_FMT_C, _C);
     break;
   }
   return _str;
+}
+
+const char_t ticy_cds(const str_t _Str) {
+  if (!_Str) { return 0; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0; }
+  if (_Str[1] == 92) {
+    if (_Str_length != 4) { return 0; }
+    switch (_Str[2]) {
+    case 48 : return 0;
+    case 97 : return 7;
+    case 98 : return 8;
+    case 116: return 9;
+    case 110: return 10;
+    case 118: return 11;
+    case 102: return 12;
+    case 114: return 13;
+    case 34 : return 34;
+    case 39 : return 39;
+    case 92 : return 92;
+    }
+    return 0;
+  }
+  return _Str_length != 3 ? 0 : _Str[1];
 }
 
 // Data representation of TicyDB.
