@@ -36,7 +36,7 @@ void ticydata_free(struct TicyData *_Ticyd);
 // Returns string (heap-allocated) value of specified TicyData.
 //
 // Special cases are;
-//  ticydata_s(_Ticyd) -> NULL if data is NULL
+//  ticydata_s(_Ticyd) -> "" if data is NULL
 //  ticydata_s(_Ticyd) -> "" if type code is not supported
 //  ticydata_s(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticydata_s(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
