@@ -41,9 +41,9 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 // Version of TicyDB.
-#define TICYDB_VERSION "0.0.1"
+#define TICY_VERSION "0.0.1"
 // Release channel of TicyDB.
-#define TICYDB_CHANNEL "preview"
+#define TICY_CHANNEL "preview"
 
 typedef   enum bool_t {F = 0, T = !F}   bool_t    ; // Boolean type.
 typedef   __INT8_TYPE__                 i8_t      ; // Signed 8-bit integer type.
@@ -97,6 +97,27 @@ volatile i32_t Ticy_Exit_Code_Failure = 1;
 
 // Buffer size of various operations of TicyDB.
 volatile sz_t Ticy_Buffer_Size = 128;
+
+// TicyDB format of %hi
+#define TICY_FMT_HI "%hi hi"
+// TicyDB format of %d
+#define TICY_FMT_D "%d d"
+// TicyDB format of %lld
+#define TICY_FMT_LLD "%lld lld"
+// TicyDB format of %hu
+#define TICY_FMT_HU "%hu hu"
+// TicyDB format of %u
+#define TICY_FMT_U "%u u"
+// TicyDB format of %llu
+#define TICY_FMT_LLU "%llu llu"
+// TicyDB format of %f
+#define TICY_FMT_F "%f f"
+// TicyDB format of %lf
+#define TICY_FMT_LF "%lf lf"
+// TicyDB format of %s
+#define TICY_FMT_S "\"%s\""
+// TicyDB format of %c
+#define TICY_FMT_C "'%c'"
 
 // Returns specified any_t as string (heap-allocated) with i8_t type format.
 //
@@ -180,7 +201,7 @@ const str_t ticy_his(const any_t _Hi) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "%hi", _Hi);
+  sprintf(_str, TICY_FMT_HI, _Hi);
   return _str;
 }
 
@@ -195,7 +216,7 @@ const str_t ticy_ds(const any_t _D) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "%d", _D);
+  sprintf(_str, TICY_FMT_D, _D);
   return _str;
 }
 
@@ -210,7 +231,7 @@ const str_t ticy_llds(const any_t _Lld) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "%lld", _Lld);
+  sprintf(_str, TICY_FMT_LLD, _Lld);
   return _str;
 }
 
@@ -225,7 +246,7 @@ const str_t ticy_hus(const any_t _Hu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "%hu", _Hu);
+  sprintf(_str, TICY_FMT_HU, _Hu);
   return _str;
 }
 
@@ -240,7 +261,7 @@ const str_t ticy_us(const any_t _U) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "%u", _U);
+  sprintf(_str, TICY_FMT_U, _U);
   return _str;
 }
 
@@ -255,7 +276,7 @@ const str_t ticy_llus(const any_t _Llu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "%llu", _Llu);
+  sprintf(_str, TICY_FMT_LLU, _Llu);
   return _str;
 }
 
@@ -270,7 +291,7 @@ const str_t ticy_fs(const any_t _F) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "%f", _F);
+  sprintf(_str, TICY_FMT_F, _F);
   return _str;
 }
 
@@ -285,7 +306,7 @@ const str_t ticy_lfs(const any_t _Lf) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "%lf", _Lf);
+  sprintf(_str, TICY_FMT_LF, _Lf);
   return _str;
 }
 
@@ -301,7 +322,7 @@ const str_t ticy_ss(const any_t _S) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "\"%s\"", _data_str);
+  sprintf(_str, TICY_FMT_S, _data_str);
   return _str;
 }
 
@@ -316,7 +337,7 @@ const str_t ticy_cs(const any_t _C) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "'%c'", _C);
+  sprintf(_str, TICY_FMT_C, _C);
   return _str;
 }
 
