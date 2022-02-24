@@ -1416,8 +1416,8 @@ const bool_t ticydata_eqs(const struct TicyData _Ticyd1,
 }
 
 struct TicyDB *ticydb_new(const str_t _Path) {
-  struct TicyDB *_Ticydb = (struct TicyDB*)(malloc(sizeof(struct TicyDB)));
-  if (!_Ticydb) {
+  struct TicyDB *_ticydb = (struct TicyDB*)(malloc(sizeof(struct TicyDB)));
+  if (!_ticydb) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
     exit(Ticy_Exit_Code_Failure);
@@ -1425,12 +1425,23 @@ struct TicyDB *ticydb_new(const str_t _Path) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  _Ticydb->_path = _Path;
-  _Ticydb->_Store = ticystore_new();
+  _ticydb->_path = _Path;
+  struct TicyFile *_ticyf = ticyfile_open(_Path);
 #ifndef TICY_FAILURE_ALLOC
-  if (!_Ticydb->_Store) { return NULL; }
-#endif // #ifdef TICY_FAILURE_ALLOC
-  return _Ticydb;
+  if (!_ticyf) {
+    ticydb_free(_ticydb);
+    return NULL;
+  }
+#endif // #ifndef TICY_FAILURE_ALLOC
+  _ticydb->_Store = ticystore_deserialize(_ticyf->_text);
+  ticyfile_close(_ticyf);
+#ifndef TICY_FAILURE_ALLOC
+  if (!_ticydb->_Store) {
+    ticystore_free(_ticydb);
+    return NULL;
+  }
+#endif // #ifndef TICY_FAILURE_ALLOC
+  return _ticydb;
 }
 
 void ticydb_free(struct TicyDB *_Ticydb) {
