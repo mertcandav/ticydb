@@ -318,28 +318,6 @@ const str_t ticystore_serialize(const struct TicyStore *_Ticys);
 //  ticystore_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 struct TicyStore *ticystore_deserialize(const str_t _Str);
 
-struct TicyStore *ticystore_deserialize(const str_t _Str) {
-  struct TicyStore *_ticys = ticystore_new();
-#ifndef TICY_FAILURE_ALLOC
-  if (!_ticys) { return NULL; }
-#endif // #ifndef TICY_FAILURE_ALLOC
-  if (!_Str) { return _ticys; }
-  str_t _str = strdup(_Str);
-  str_t _line_delim = "\n";
-  str_t _line = strtok_r(_str, _line_delim, &_str);
-  if (!_line) { return NULL; }
-  do {
-    const str_t _key_str = strtok_r(_line, " ", &_line);
-    const str_t _value_str = _line;
-    const TicyData *_key = ticydata_deserialize(_key_str);
-    const TicyData *_value = ticydata_deserialize(_value_str);
-    ticystore_set(_ticys, _key, _value);
-  } while((_line = strtok_r(NULL, _line_delim, &_str)));
-  free(_str);
-  _str = NULL;
-  return _ticys;
-}
-
 // TicyDB connection instance.
 typedef struct TicyDB {
   // Content of TicyDB.
@@ -933,6 +911,28 @@ const str_t ticystore_serialize(const struct TicyStore *_Ticys) {
     strcat(_str, "\n\0");
   }
   return _str;
+}
+
+struct TicyStore *ticystore_deserialize(const str_t _Str) {
+  struct TicyStore *_ticys = ticystore_new();
+#ifndef TICY_FAILURE_ALLOC
+  if (!_ticys) { return NULL; }
+#endif // #ifndef TICY_FAILURE_ALLOC
+  if (!_Str) { return _ticys; }
+  str_t _str = strdup(_Str);
+  str_t _line_delim = "\n";
+  str_t _line = strtok_r(_str, _line_delim, &_str);
+  if (!_line) { return NULL; }
+  do {
+    const str_t _key_str = strtok_r(_line, " ", &_line);
+    const str_t _value_str = _line;
+    const TicyData *_key = ticydata_deserialize(_key_str);
+    const TicyData *_value = ticydata_deserialize(_value_str);
+    ticystore_set(_ticys, _key, _value);
+  } while((_line = strtok_r(NULL, _line_delim, &_str)));
+  free(_str);
+  _str = NULL;
+  return _ticys;
 }
 
 const TicyData *ticydata_deserialize(const str_t _Str) {
