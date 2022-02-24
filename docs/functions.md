@@ -89,20 +89,19 @@ const str_t ticy_lfs(const any_t _Lf);
 // Returns specified any_t as serialized string (heap-allocated) with char_t type format.
 //
 // Special cases are;
-//  ticy_lfs(_Lf) -> NULL if _C is NULL
-//  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_cs(const any_t _C);
+//  ticy_cs(_Char) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_cs(_Char) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_cs(const char_t _Char);
 ```
 
 ```c
 // Returns specified any_t as serialized string (heap-allocated) with str_t type format.
 //
 // Special cases are;
-//  ticy_lfs(_Lf) -> default if _S is NULL
-//  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_ss(const any_t _S);
+//  ticy_ss(_Str) -> NULL if _Str is NULL
+//  ticy_ss(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_ss(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_ss(const str_t _Str);
 ```
 
 ```c

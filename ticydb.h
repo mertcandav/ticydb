@@ -181,17 +181,17 @@ const str_t ticy_lfs(const any_t _Lf);
 // Returns specified any_t as serialized string (heap-allocated) with char_t type format.
 //
 // Special cases are;
-//  ticy_lfs(_Lf) -> NULL if _C is NULL
-//  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_cs(const any_t _C);
+//  ticy_cs(_Char) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_cs(_Char) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_cs(const char_t _Char);
 // Returns specified any_t as serialized string (heap-allocated) with str_t type format.
 //
 // Special cases are;
-//  ticy_lfs(_Lf) -> NULL if _S is NULL
-//  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_ss(const any_t _S);
+//  ticy_ss(_Str) -> NULL if _Str is NULL
+//  ticy_ss(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_ss(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_ss(const str_t _Str);
+
 // Returns deserialized i8_t from specified serialized string.
 //
 // Special case is;
@@ -646,8 +646,7 @@ const str_t ticy_lfs(const any_t _Lf) {
   return _str;
 }
 
-const str_t ticy_cs(const any_t _C) {
-  if (!_C) { return NULL; }
+const str_t ticy_cs(const char_t _Char) {
   str_t _str = (str_t)(malloc(4*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -657,7 +656,7 @@ const str_t ticy_cs(const any_t _C) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  switch ((intptr_t)(_C)) {
+  switch (_Char) {
   case 0:
     sprintf(_str, "'\\%c'", 48);
     break;
@@ -692,15 +691,14 @@ const str_t ticy_cs(const any_t _C) {
     sprintf(_str, "'\\%c'", 92);
     break;
   default:
-    sprintf(_str, TICY_FMT_C, _C);
+    sprintf(_str, TICY_FMT_C, _Char);
     break;
   }
   return _str;
 }
 
-const str_t ticy_ss(const any_t _S) {
-  if (!_S) { return NULL; }
-  const str_t _data_str = (str_t)(_S);
+const str_t ticy_ss(const str_t _Str) {
+  if (!_Str) { return NULL; }
   sz_t _str_size = Ticy_Buffer_Size;
   str_t _str = (str_t)(malloc(_str_size*sizeof(char_t)));
   if (!_str) {
@@ -713,9 +711,9 @@ const str_t ticy_ss(const any_t _S) {
   }
   _str[0] = 34;
   _str[1] = 0;
-  const sz_t _data_length = strlen(_data_str);
-  for (sz_t _index = 0; _index < _data_length; ++_index) {
-    str_t _cstr = ticy_cs((any_t)((intptr_t)(_data_str[_index])));
+  const sz_t _Str_length = strlen(_Str);
+  for (sz_t _index = 0; _index < _Str_length; ++_index) {
+    str_t _cstr = ticy_cs(_Str[_index]);
     const sz_t _cstr_length = strlen(_cstr);
     if (strlen(_str)+_cstr_length-2 >= _str_size) {
       _str = (str_t)(realloc(_str, (_str_size*=2)*sizeof(char_t)));
@@ -1045,10 +1043,10 @@ const str_t ticydata_serialize(const struct TicyData *_Ticyd) {
     _str = ticy_lfs(_Ticyd->_data);
     break;
   case STR_T:
-    _str = ticy_ss(_Ticyd->_data);
+    _str = ticy_ss((str_t)(_Ticyd->_data));
     break;
   case CHAR_T:
-    _str = ticy_cs(_Ticyd->_data);
+    _str = ticy_cs((char_t)((intptr_t)(_Ticyd->_data)));
     break;
   default:     break;
   }
