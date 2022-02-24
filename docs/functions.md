@@ -104,100 +104,118 @@ const str_t ticy_ss(const any_t _S);
 // Returns deserialized i8_t from specified serialized string.
 //
 // Special case is;
-//  ticy_hids(_Str) -> 0 if _Str is NULL
-//  ticy_hids(_Str) -> 0 if _Str length is 0
-//  ticy_hids(_Str) -> 0 if any parse error
-const i8_t ticy_hids(const str_t _Str);
+//  ticy_hids(_Str) -> NULL if _Str is NULL
+//  ticy_hids(_Str) -> NULL if _Str length is 0
+//  ticy_hids(_Str) -> NULL if any parse error
+//  ticy_hids(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_hids(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_hids(const str_t _Str);
 ```
 
 ```c
 // Returns deserialized i16_t, i32_t, bool_t from specified serialized string.
 //
 // Special case is;
-//  ticy_dds(_Str) -> 0 if _Str is NULL
-//  ticy_dds(_Str) -> 0 if _Str length is 0
-//  ticy_dds(_Str) -> 0 if any parse error
-const i32_t ticy_dds(const str_t _Str);
+//  ticy_dds(_Str) -> NULL if _Str is NULL
+//  ticy_dds(_Str) -> NULL if _Str length is 0
+//  ticy_dds(_Str) -> NULL if any parse error
+//  ticy_dds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_dds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_dds(const str_t _Str);
 ```
 
 ```c
-// Returns deserialized i64_t from specified serialized string.
+// Returns deserialized i64_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
-//  ticy_lldds(_Str) -> 0 if _Str is NULL
-//  ticy_lldds(_Str) -> 0 if _Str length is 0
-//  ticy_lldds(_Str) -> 0 if any parse error
-const i64_t ticy_lldds(const str_t _Str);
+//  ticy_lldds(_Str) -> NULL if _Str is NULL
+//  ticy_lldds(_Str) -> NULL if _Str length is 0
+//  ticy_lldds(_Str) -> NULL if any parse error
+//  ticy_lldds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_lldds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_lldds(const str_t _Str);
 ```
 
 ```c
 // Returns deserialized u8_t from specified serialized string.
 //
 // Special case is;
-//  ticy_huds(_Str) -> 0 if _Str is NULL
-//  ticy_huds(_Str) -> 0 if _Str length is 0
-//  ticy_huds(_Str) -> 0 if any parse error
-const u8_t ticy_huds(const str_t _Str);
+//  ticy_huds(_Str) -> NULL if _Str is NULL
+//  ticy_huds(_Str) -> NULL if _Str length is 0
+//  ticy_huds(_Str) -> NULL if any parse error
+//  ticy_huds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_huds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_huds(const str_t _Str);
 ```
 
 ```c
 // Returns deserialized u16_t, u32_t, sz_t from specified serialized string.
 //
 // Special case is;
-//  ticy_uds(_Str) -> 0 if _Str is NULL
-//  ticy_uds(_Str) -> 0 if _Str length is 0
-//  ticy_uds(_Str) -> 0 if any parse error
-const u32_t ticy_uds(const str_t _Str);
+//  ticy_uds(_Str) -> NULL if _Str is NULL
+//  ticy_uds(_Str) -> NULL if _Str length is 0
+//  ticy_uds(_Str) -> NULL if any parse error
+//  ticy_uds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_uds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_uds(const str_t _Str);
 ```
 
 ```c
-// Returns deserialized u64_t from specified serialized string.
+// Returns deserialized u64_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
-//  ticy_lluds(_Str) -> 0 if _Str is NULL
-//  ticy_lluds(_Str) -> 0 if _Str length is 0
-//  ticy_lluds(_Str) -> 0 if any parse error
-const u64_t ticy_lluds(const str_t _Str);
+//  ticy_lluds(_Str) -> NULL if _Str is NULL
+//  ticy_lluds(_Str) -> NULL if _Str length is 0
+//  ticy_lluds(_Str) -> NULL if any parse error
+//  ticy_lluds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_lluds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_lluds(const str_t _Str);
 ```
 
 ```c
-// Returns deserialized f32_t from specified serialized string.
+// Returns deserialized f32_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
-//  ticy_fds(_Str) -> 0. if _Str is NULL
-//  ticy_fds(_Str) -> 0. if _Str length is 0
-//  ticy_fds(_Str) -> 0. if any parse error
-const f32_t ticy_fds(const str_t _Str);
+//  ticy_fds(_Str) -> NULL if _Str is NULL
+//  ticy_fds(_Str) -> NULL if _Str length is 0
+//  ticy_fds(_Str) -> NULL if any parse error
+//  ticy_fds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_fds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_fds(const str_t _Str);
 ```
 
 ```c
-// Returns deserialized f64_t from specified serialized string.
+// Returns deserialized f64_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
-//  ticy_lfds(_Str) -> 0. if _Str is NULL
-//  ticy_lfds(_Str) -> 0. if _Str length is 0
-//  ticy_lfds(_Str) -> 0. if any parse error
-const f64_t ticy_lfds(const str_t _Str);
+//  ticy_lfds(_Str) -> NULL if _Str is NULL
+//  ticy_lfds(_Str) -> NULL if _Str length is 0
+//  ticy_lfds(_Str) -> NULL if any parse error
+//  ticy_lfds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_lfds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_lfds(const str_t _Str);
 ```
 
 ```c
-// Returns deserialized str_t from specified serialized string.
+// Returns deserialized str_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
 //  ticy_sds(_Str) -> NULL if _Str is NULL
-//  ticy_sds(_Str) -> "" if _Str length is 0
-//  ticy_sds(_Str) -> "" if any parse error
+//  ticy_sds(_Str) -> NULL if _Str length is 0
+//  ticy_sds(_Str) -> NULL if any parse error
 //  ticy_sds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_sds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_sds(const str_t _Str);
+const struct TicyData *ticy_sds(const str_t _Str);
 ```
 
 ```c
 // Returns deserialized char_t from specified serialized string.
 //
 // Special case is;
-//  ticy_cds(_Str) -> 0 if _Str is NULL
-//  ticy_cds(_Str) -> 0 if _Str length is 0
-//  ticy_cds(_Str) -> 0 if any parse error
-const char_t ticy_cds(const str_t _Str);
+//  ticy_cds(_Str) -> NULL if _Str is NULL
+//  ticy_cds(_Str) -> NULL if _Str length is 0
+//  ticy_cds(_Str) -> NULL if any parse error
+//  ticy_cds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_cds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_cds(const str_t _Str);
 ```

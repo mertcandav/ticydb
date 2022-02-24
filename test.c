@@ -23,18 +23,27 @@ void test_lf_serialize() {
   const struct TicyData *data = ticydata_new((any_t)(&_lf), F64_T);
   const str_t serialized_data = ticydata_serialize(data);
   printf("%s\n", serialized_data);
-  const f64_t lf = ticy_lfds(serialized_data);
-  printf(TICY_FMT_LF, lf);
+  const struct TicyData *_data = ticy_lfds(serialized_data);
+  printf(TICY_FMT_LF, *(f64_t*)_data->_data);
 }
 
 void test_ticystore_serialize() {
-  struct TicyStore *store = ticystore_new();
+  struct TicyStore *store = (TicyStore*)(ticystore_new());
   ticystore_set(store, ticydata_new("Message", STR_T), ticydata_new("Hello World", STR_T));
-  ticystore_set(store, ticydata_new("Code", STR_T), ticydata_new((i32_t)(0), I32_T));
-  printf("%s", ticystore_serialize(store));
+  ticystore_set(store, ticydata_new("Code", STR_T), ticydata_new((intptr_t)(0), I32_T));
+  const str_t serialize_str = ticystore_serialize(store);
+  printf("%s", serialize_str);
+}
+
+void test_ticydata_serialize() {
+  struct TicyData *data = ticydata_new("Hello\tTicyDB", STR_T);
+  const str_t serialized_str = ticydata_serialize(data);
+  printf("%s\n", serialized_str);
+  struct TicyData *_data = (TicyData*)(ticydata_deserialize(serialized_str));
+  printf("%s\n", _data->_data);
 }
 
 int main() {
-  test_ticystore_serialize();
+  test_ticydata_serialize();
   return EXIT_SUCCESS;
 }

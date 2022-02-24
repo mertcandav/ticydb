@@ -119,6 +119,9 @@ volatile sz_t Ticy_Buffer_Size = 128;
 // TicyDB format of %c
 #define TICY_FMT_C "'%c'"
 
+// Returns true if _Str is starts with _Sub, returns false if not.
+const bool_t strprefix(const str_t _Str, const str_t _Sub);
+
 // Returns specified any_t as serialized string (heap-allocated) with i8_t type format.
 //
 // Special cases are;
@@ -192,75 +195,307 @@ const str_t ticy_ss(const any_t _S);
 // Returns deserialized i8_t from specified serialized string.
 //
 // Special case is;
-//  ticy_hids(_Str) -> 0 if _Str is NULL
-//  ticy_hids(_Str) -> 0 if _Str length is 0
-//  ticy_hids(_Str) -> 0 if any parse error
-const i8_t ticy_hids(const str_t _Str);
+//  ticy_hids(_Str) -> NULL if _Str is NULL
+//  ticy_hids(_Str) -> NULL if _Str length is 0
+//  ticy_hids(_Str) -> NULL if any parse error
+//  ticy_hids(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_hids(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_hids(const str_t _Str);
 // Returns deserialized i16_t, i32_t, bool_t from specified serialized string.
 //
 // Special case is;
-//  ticy_dds(_Str) -> 0 if _Str is NULL
-//  ticy_dds(_Str) -> 0 if _Str length is 0
-//  ticy_dds(_Str) -> 0 if any parse error
-const i32_t ticy_dds(const str_t _Str);
-// Returns deserialized i64_t from specified serialized string.
+//  ticy_dds(_Str) -> NULL if _Str is NULL
+//  ticy_dds(_Str) -> NULL if _Str length is 0
+//  ticy_dds(_Str) -> NULL if any parse error
+//  ticy_dds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_dds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_dds(const str_t _Str);
+// Returns deserialized i64_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
-//  ticy_lldds(_Str) -> 0 if _Str is NULL
-//  ticy_lldds(_Str) -> 0 if _Str length is 0
-//  ticy_lldds(_Str) -> 0 if any parse error
-const i64_t ticy_lldds(const str_t _Str);
+//  ticy_lldds(_Str) -> NULL if _Str is NULL
+//  ticy_lldds(_Str) -> NULL if _Str length is 0
+//  ticy_lldds(_Str) -> NULL if any parse error
+//  ticy_lldds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_lldds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_lldds(const str_t _Str);
 // Returns deserialized u8_t from specified serialized string.
 //
 // Special case is;
-//  ticy_huds(_Str) -> 0 if _Str is NULL
-//  ticy_huds(_Str) -> 0 if _Str length is 0
-//  ticy_huds(_Str) -> 0 if any parse error
-const u8_t ticy_huds(const str_t _Str);
+//  ticy_huds(_Str) -> NULL if _Str is NULL
+//  ticy_huds(_Str) -> NULL if _Str length is 0
+//  ticy_huds(_Str) -> NULL if any parse error
+//  ticy_huds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_huds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_huds(const str_t _Str);
 // Returns deserialized u16_t, u32_t, sz_t from specified serialized string.
 //
 // Special case is;
-//  ticy_uds(_Str) -> 0 if _Str is NULL
-//  ticy_uds(_Str) -> 0 if _Str length is 0
-//  ticy_uds(_Str) -> 0 if any parse error
-const u32_t ticy_uds(const str_t _Str);
-// Returns deserialized u64_t from specified serialized string.
+//  ticy_uds(_Str) -> NULL if _Str is NULL
+//  ticy_uds(_Str) -> NULL if _Str length is 0
+//  ticy_uds(_Str) -> NULL if any parse error
+//  ticy_uds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_uds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_uds(const str_t _Str);
+// Returns deserialized u64_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
-//  ticy_lluds(_Str) -> 0 if _Str is NULL
-//  ticy_lluds(_Str) -> 0 if _Str length is 0
-//  ticy_lluds(_Str) -> 0 if any parse error
-const u64_t ticy_lluds(const str_t _Str);
-// Returns deserialized f32_t from specified serialized string.
+//  ticy_lluds(_Str) -> NULL if _Str is NULL
+//  ticy_lluds(_Str) -> NULL if _Str length is 0
+//  ticy_lluds(_Str) -> NULL if any parse error
+//  ticy_lluds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_lluds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_lluds(const str_t _Str);
+// Returns deserialized f32_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
-//  ticy_fds(_Str) -> 0. if _Str is NULL
-//  ticy_fds(_Str) -> 0. if _Str length is 0
-//  ticy_fds(_Str) -> 0. if any parse error
-const f32_t ticy_fds(const str_t _Str);
-// Returns deserialized f64_t from specified serialized string.
+//  ticy_fds(_Str) -> NULL if _Str is NULL
+//  ticy_fds(_Str) -> NULL if _Str length is 0
+//  ticy_fds(_Str) -> NULL if any parse error
+//  ticy_fds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_fds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_fds(const str_t _Str);
+// Returns deserialized f64_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
-//  ticy_lfds(_Str) -> 0. if _Str is NULL
-//  ticy_lfds(_Str) -> 0. if _Str length is 0
-//  ticy_lfds(_Str) -> 0. if any parse error
-const f64_t ticy_lfds(const str_t _Str);
-// Returns deserialized str_t from specified serialized string.
+//  ticy_lfds(_Str) -> NULL if _Str is NULL
+//  ticy_lfds(_Str) -> NULL if _Str length is 0
+//  ticy_lfds(_Str) -> NULL if any parse error
+//  ticy_lfds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_lfds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_lfds(const str_t _Str);
+// Returns deserialized str_t (heap-allocated) from specified serialized string.
 //
 // Special case is;
 //  ticy_sds(_Str) -> NULL if _Str is NULL
-//  ticy_sds(_Str) -> "" if _Str length is 0
-//  ticy_sds(_Str) -> "" if any parse error
+//  ticy_sds(_Str) -> NULL if _Str length is 0
+//  ticy_sds(_Str) -> NULL if any parse error
 //  ticy_sds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_sds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_sds(const str_t _Str);
+const struct TicyData *ticy_sds(const str_t _Str);
 // Returns deserialized char_t from specified serialized string.
 //
 // Special case is;
-//  ticy_cds(_Str) -> 0 if _Str is NULL
-//  ticy_cds(_Str) -> 0 if _Str length is 0
-//  ticy_cds(_Str) -> 0 if any parse error
-const char_t ticy_cds(const str_t _Str);
+//  ticy_cds(_Str) -> NULL if _Str is NULL
+//  ticy_cds(_Str) -> NULL if _Str length is 0
+//  ticy_cds(_Str) -> NULL if any parse error
+//  ticy_cds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_cds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_cds(const str_t _Str);
+
+// Dynamic list implementation of TicyDB.
+typedef struct TicyList {
+  // Element buffer.
+  // Don't change if you not sure that.
+  any_t *_buffer;
+  // Allocated element count.
+  // Don't change if you not sure that.
+  sz_t  _used;
+  // Total element count.
+  // Don't change if you not sure that.
+  sz_t  _size;
+} TicyList;
+
+// Returns new TicyList instance heap-allocated by specified size.
+//
+// Special case is:
+//  ticylist_new(_Size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticylist_new(_Size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+//  ticylist_new(_Size) -> accept size as 1 if size < 1
+struct TicyList *ticylist_new(sz_t _Size);
+// Frees TicyList instance allocated from heap.
+void ticylist_free(struct TicyList *_Ticyl);
+// Appends item to TicyList.
+// Returns true if success, returns false if failed.
+//
+// Special case is;
+//  ticylist_push(_Ticyl, _Item) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const bool_t ticylist_push(struct TicyList *_Ticyl, const any_t _Item);
+// Removes n elements starts at specified index.
+// If n greater than size, uses size instead of n.
+// Returns true if success, returns false is not.
+//
+// Special cases are:
+//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if n < 1
+//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if start < 0
+//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if start > size
+//  ticylist_remrange(_Ticyl, _Start, _Count) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const bool_t ticylist_remrange(struct TicyList* _Ticyl,
+                               const sz_t _Start,
+                               sz_t _Count);
+// Returns new TicyList from source list by specified index and n.
+// If n greater than size, uses size instead of n.
+//
+// Special cases are:
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if failed
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if list == NULL
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if n < 1
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if start < 0
+//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if start > size
+//  ticylist_slice(_Ticyl, _Start, _Count) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyList *ticylist_slice(const struct TicyList *_List,
+                                sz_t _Start,
+                                sz_t _Count);
+
+// Data representation of TicyDB.
+typedef struct TicyData {
+  // Type code of data.
+  // This type code is important because
+  // TicyDB process datas by this type code.
+  TicyTypeCode _type;
+  // Data.
+  // If you change here, you must chage the "type" field for success operations.
+  any_t        _data;
+} TicyData;
+
+// Returns new TicyData instance heap-allocated by data and type code.
+//
+// Special case is:
+//  ticydata_new(_Data, _Ticytc) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_new(_Data, _Ticytc) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc);
+// Frees TicyData instance allocated from heap.
+// This is not frees data.
+void ticydata_free(struct TicyData *_Ticyd);
+// Returns serialized string (heap-allocated) value of specified TicyData.
+//
+// Special cases are;
+//  ticydata_serialize(_Ticyd) -> "" if data is NULL
+//  ticydata_serialize(_Ticyd) -> "" if type code is not supported
+//  ticydata_serialize(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_serialize(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticydata_serialize(const struct TicyData *_Ticyd);
+
+// Length of TicyFile's lines.
+volatile sz_t TicyFile_Line_Length = 1024;
+
+// File instance of TicyDB.
+typedef struct TicyFile {
+  // Path of file.
+  // Don't change if you not sure that.
+  str_t           _path;
+  // File content line-by-line.
+  // Lines are heap-allocated.
+  // Don't change if you not sure that.
+  struct TicyList *_lines;
+  // Text content of file.
+  // This field is heap-allocated.
+  // Don't change if you not sure that.
+  str_t           _text;
+} TicyFile;
+
+// Returns heap-allocated TicyFile instance by specified path.
+//
+// Special cases are;
+//  ticyfile_open(_Path) -> NULL if path == NULL
+//  ticyfile_open(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticyfile_open(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyFile *ticyfile_open(const str_t _Path);
+// Closes and frees heap-allocated TicyFile instance.
+void ticyfile_close(struct TicyFile * _Ticyf);
+
+// Key-Value store of TicyDB.
+// Don't touch fields if you not sure that.
+typedef struct TicyStore {
+  // Keys of store, stores any_t type.
+  // Don't change if you not sure that.
+  struct TicyList *_keys;
+  // Values of keys, stores TicyData* type.
+  // Don't change if you not sure that.
+  struct TicyList *_values;
+} TicyStore;
+
+// Returns heap-allocated TicyStore instance.
+//
+// Special case is;
+//  ticystore_new(void) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticystore_new(void) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyStore *ticystore_new(void);
+// Frees heap-allocated TicyStore instance.
+// It's frees key and value lists but not frees these elements.
+void ticystore_free(struct TicyStore *_Ticys);
+// Set value o specified key.
+// Creates a new key-value node if key is not exist.
+// Returns true if created a new key-value node, returns false if not.
+//
+// Special cases are;
+//  ticystore_set(_Ticys, _Key, _Value) -> F if key is can't pushed
+//  ticystore_set(_Ticys, _Key, _Value) -> F if value is can't pushed
+//  ticystore_set(_Ticys, _Key, _Value) -> F if store is NULL
+const bool_t ticystore_set(struct TicyStore *_Ticys,
+                           const TicyData *_Key,
+                           const TicyData *_Value);
+// Returns value o specified key value.
+//
+// Special case is;
+//  ticystore_get(_Ticys, _Key) -> NULL if store is NULL
+//  ticystore_get(_Ticys, _Key) -> NULL if key is not exist
+const TicyData *ticystore_get(const struct TicyStore *_Ticys, const any_t *_Key);
+// Reports specified TicyStore is have any key-value node or not.
+//
+// Special case is;
+//  ticystore_any(_Ticys) -> F if store is NULL
+const bool_t ticystore_any(const struct TicyStore *_Ticys);
+// Returns index of key value if key value is exist, returns -1 if not in specified TicyStore.
+//
+// Special case is;
+//  ticystore_existk(_Ticys, _Key) -> -1 if store is NULL
+const sz_t ticystore_findk(const struct TicyStore *_Ticys, const any_t *_Key);
+// Returns index of key of value if value is exist, returns -1 if not in specified TicyStore.
+//
+// Special case is;
+//  ticystore_existk(_Ticys, _Key) -> -1 if store is NULL
+const sz_t ticystore_findv(const struct TicyStore *_Ticys,
+                           const any_t _Value);
+// Returns serialize TicyStore as string (heap-allocated).
+//
+// Special cases are;
+//  ticystore_serialize(_Ticys) -> NULL if store is NULL
+//  ticystore_serialize(_Ticys) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticystore_serialize(_Ticys) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticystore_serialize(const struct TicyStore *_Ticys);
+// Returns deserialized TicyData by specified serialized string.
+//
+// Special cases are;
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if _Str is NULL
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if _Str length is 0
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if any parse error
+//  ticydata_deserialize(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const TicyData *ticydata_deserialize(const str_t _Str);
+
+// TicyDB connection instance.
+typedef struct TicyDB {
+  // Content of TicyDB.
+  TicyStore *_Store;
+  // This is a path of your TicyDB store file.
+  // Don't touch this if you not sure that.
+  str_t _path;
+} TicyDB;
+
+// Returns heap-allocated TicyDB instance.
+//
+// Special case is;
+//  ticydb_new(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydb_new(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyDB *ticydb_new(const str_t _Path);
+// Frees heap-allocated TicyDB instance.
+void ticydb_free(struct TicyDB *_Ticydb);
+// Save TicyDB content to local disk storage.
+// Returns true if keeping success, returns false if not.
+//
+// Special cases are;
+//  ticydb_keep(_Ticydb) -> false if _Ticydb is NULL
+//  ticydb_keep(_Ticydb) -> false if _Ticydb->_Store is NULL
+//  ticydb_keep(_Ticydb) -> false if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydb_keep(_Ticydb) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const bool_t ticydb_keep(const struct TicyDB *_Ticydb);
+
+const bool_t strprefix(const str_t _Str, const str_t _Sub) {
+  const sz_t _str_length = strlen(_Str);
+  const sz_t _sub_length = strlen(_Sub);
+  return (const bool_t)(_str_length < _sub_length ? F : memcmp(_Sub, _Str, _sub_length) == 0);
+}
 
 const str_t ticy_his(const any_t _Hi) {
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
@@ -466,79 +701,123 @@ const str_t ticy_ss(const any_t _S) {
   return _str;
 }
 
-const i8_t ticy_hids(const str_t _Str) {
-  if (!_Str) { return 0; }
+const struct TicyData *ticy_hids(const str_t _Str) {
+  if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0; }
-  u8_t _hi = 0;
+  if (_Str_length == 0) { return NULL; }
+  i8_t _hi = 0;
   sscanf(_Str+strlen(TICY_FMT_HI), TICY_FMT_HI, &_hi);
-  return _hi;
+  const struct TicyData *_ticyd = ticydata_new((any_t)((uintptr_t)(_hi)), I8_T);
+  return _ticyd;
 }
 
-const i32_t ticy_dds(const str_t _Str) {
-if (!_Str) { return 0; }
+const struct TicyData *ticy_dds(const str_t _Str) {
+if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0; }
+  if (_Str_length == 0) { return NULL; }
   i32_t _d = 0;
   sscanf(_Str+strlen(TICY_FMT_D), TICY_FMT_D, &_d);
-  return _d;
+  const struct TicyData *_ticyd = ticydata_new((any_t)(_d), I32_T);
+  return _ticyd;
 }
 
-const i64_t ticy_lldds(const str_t _Str) {
-  if (!_Str) { return 0; }
+const struct TicyData *ticy_lldds(const str_t _Str) {
+  if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0; }
-  i64_t _lld = 0;
+  if (_Str_length == 0) { return NULL; }
+  i64_t *_lld = (i64_t*)(malloc(sizeof(i64_t)));
+  if (!_lld) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(Ticy_Exit_Code_Failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  *_lld = 0;
   sscanf(_Str+strlen(TICY_FMT_LLD), TICY_FMT_LLD, &_lld);
-  return _lld;
+  const struct TicyData *_ticyd = ticydata_new((any_t)(&_lld), I64_T);
+  return _ticyd;
 }
 
-const u8_t ticy_huds(const str_t _Str) {
-  if (!_Str) { return 0; }
+const struct TicyData *ticy_huds(const str_t _Str) {
+  if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0; }
+  if (_Str_length == 0) { return NULL; }
   u8_t _hu = 0;
   sscanf(_Str+strlen(TICY_FMT_HU), TICY_FMT_HU, &_hu);
-  return _hu;
+  const struct TicyData *_ticyd = ticydata_new((any_t)((uintptr_t)(_hu)), U8_T);
+  return _ticyd;
 }
 
-const u32_t ticy_uds(const str_t _Str) {
-  if (!_Str) { return 0; }
+const struct TicyData *ticy_uds(const str_t _Str) {
+  if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0; }
+  if (_Str_length == 0) { return NULL; }
   u32_t _u = 0;
   sscanf(_Str+strlen(TICY_FMT_U), TICY_FMT_U, &_u);
-  return _u;
+  const struct TicyData *_ticyd = ticydata_new((any_t)(_u), U32_T);
+  return _ticyd;
 }
 
-const u64_t ticy_lluds(const str_t _Str) {
-  if (!_Str) { return 0; }
+const struct TicyData *ticy_lluds(const str_t _Str) {
+  if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0; }
-  u64_t _llu = 0;
+  if (_Str_length == 0) { return NULL; }
+  u64_t *_llu = (u64_t*)(malloc(sizeof(u64_t)));
+  if (!_llu) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(Ticy_Exit_Code_Failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  *_llu = 0;
   sscanf(_Str+strlen(TICY_FMT_LLU), TICY_FMT_LLU, &_llu);
-  return _llu;
+  const struct TicyData *_ticyd = ticydata_new((any_t)(&_llu), U64_T);
+  return _ticyd;
 }
 
-const f32_t ticy_fds(const str_t _Str) {
-  if (!_Str) { return 0; }
+const struct TicyData *ticy_fds(const str_t _Str) {
+  if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0; }
-  f32_t _f = 0.;
-  sscanf(_Str+strlen(TICY_FMT_F), TICY_FMT_F, &_f);
-  return _f;
+  if (_Str_length == 0) { return NULL; }
+  f32_t *_f = (f32_t*)(malloc(sizeof(f32_t)));
+  if (!_f) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(Ticy_Exit_Code_Failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  *_f = 0.;
+  sscanf(_Str+strlen(TICY_FMT_F), TICY_FMT_F, _f);
+  const struct TicyData *_ticyd = ticydata_new(_f, F32_T);
+  return _ticyd;
 }
 
-const f64_t ticy_lfds(const str_t _Str) {
-  if (!_Str) { return 0.; }
+const struct TicyData *ticy_lfds(const str_t _Str) {
+  if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0.; }
-  f64_t _lf = 0.;
-  sscanf(_Str+strlen(TICY_FMT_LF), TICY_FMT_LF, &_lf);
-  return _lf;
+  if (_Str_length == 0) { return NULL; }
+  f64_t *_lf = (f64_t*)(malloc(sizeof(f64_t)));
+  if (!_lf) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(Ticy_Exit_Code_Failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  *_lf = 0.;
+  sscanf(_Str+strlen(TICY_FMT_LF), TICY_FMT_LF, _lf);
+  const struct TicyData *_ticyd = ticydata_new(_lf, F64_T);
+  return _ticyd;
 }
 
-const str_t ticy_sds(const str_t _Str) {
+const struct TicyData *ticy_sds(const str_t _Str) {
   if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
   str_t _str;
@@ -589,16 +868,18 @@ const str_t ticy_sds(const str_t _Str) {
       }
       _char_str[0] = 0;
       sprintf(_char_str, "'%c%c'", _char, _Str[++_Str_index]);
-      _str[_str_index++] = ticy_cds(_char_str);
+      struct TicyData *_char_ticyd = (TicyData*)(ticy_cds(_char_str));
+      _str[_str_index++] = (char_t)((uintptr_t)(_char_ticyd->_data));
+      ticydata_free(_char_ticyd);
       free(_char_str);
       _char_str = NULL;
     } else {
       _str[_str_index++] = _char;
     }
   }
-  _str[strlen(_str)-1] = 0;
-  if (_str) { return _str; }
-err:
+  _str[strlen(_str)] = 0;
+  if (_str) { goto ret; }
+err:;
   _str = (str_t)(malloc(sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -609,61 +890,62 @@ err:
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
   _str[0] = 0;
-  return _str;
+ret:;
+  const struct TicyData *_ticyd = ticydata_new(_str, STR_T);
+  return _ticyd;
 }
 
-const char_t ticy_cds(const str_t _Str) {
-  if (!_Str) { return 0; }
+const struct TicyData *ticy_cds(const str_t _Str) {
+  if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
-  if (_Str_length == 0) { return 0; }
+  if (_Str_length == 0) { return NULL; }
+  char_t _char = 0;
   if (_Str[1] == 92) {
-    if (_Str_length != 4) { return 0; }
+    if (_Str_length != 4) { return NULL; }
     switch (_Str[2]) {
-    case 48 : return 0;
-    case 97 : return 7;
-    case 98 : return 8;
-    case 116: return 9;
-    case 110: return 10;
-    case 118: return 11;
-    case 102: return 12;
-    case 114: return 13;
-    case 34 : return 34;
-    case 39 : return 39;
-    case 92 : return 92;
+    case 48 :
+      _char = 0;
+      break;
+    case 97 :
+      _char = 7;
+      break;
+    case 98 :
+      _char = 8;
+      break;
+    case 116:
+      _char = 9;
+      break;
+    case 110:
+      _char = 10;
+      break;
+    case 118:
+      _char = 11;
+      break;
+    case 102:
+      _char = 12;
+      break;
+    case 114:
+      _char = 13;
+      break;
+    case 34 :
+      _char = 34;
+      break;
+    case 39 :
+      _char = 39;
+      break;
+    case 92 :
+      _char = 92;
+      break;
+    default:
+      return NULL;
     }
-    return 0;
+  } else {
+    if (_Str_length != 3) { return NULL; }
+    _char = _Str[1];
   }
-  return _Str_length != 3 ? 0 : _Str[1];
+  const struct TicyData *_ticyd = ticydata_new((any_t)((uintptr_t)(_char)), CHAR_T);
+  return _ticyd;
 }
-
-// Data representation of TicyDB.
-typedef struct TicyData {
-  // Type code of data.
-  // This type code is important because
-  // TicyDB process datas by this type code.
-  TicyTypeCode _type;
-  // Data.
-  // If you change here, you must chage the "type" field for success operations.
-  any_t        _data;
-} TicyData;
-
-// Returns new TicyData instance heap-allocated by data and type code.
-//
-// Special case is:
-//  ticydata_new(_Data, _Ticytc) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_new(_Data, _Ticytc) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc);
-// Frees TicyData instance allocated from heap.
-// This is not frees data.
-void ticydata_free(struct TicyData *_Ticyd);
-// Returns serialized string (heap-allocated) value of specified TicyData.
-//
-// Special cases are;
-//  ticydata_serialize(_Ticyd) -> "" if data is NULL
-//  ticydata_serialize(_Ticyd) -> "" if type code is not supported
-//  ticydata_serialize(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_serialize(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticydata_serialize(const struct TicyData *_Ticyd);
 
 struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc) {
   struct TicyData *_ticyd = (struct TicyData*)(malloc(sizeof(struct TicyData)));
@@ -742,60 +1024,6 @@ const str_t ticydata_serialize(const struct TicyData *_Ticyd) {
   _str[2] = '\0';
   return _str;
 }
-
-// Dynamic list implementation of TicyDB.
-typedef struct TicyList {
-  // Element buffer.
-  // Don't change if you not sure that.
-  any_t *_buffer;
-  // Allocated element count.
-  // Don't change if you not sure that.
-  sz_t  _used;
-  // Total element count.
-  // Don't change if you not sure that.
-  sz_t  _size;
-} TicyList;
-
-// Returns new TicyList instance heap-allocated by specified size.
-//
-// Special case is:
-//  ticylist_new(_Size) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticylist_new(_Size) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-//  ticylist_new(_Size) -> accept size as 1 if size < 1
-struct TicyList *ticylist_new(sz_t _Size);
-// Frees TicyList instance allocated from heap.
-void ticylist_free(struct TicyList *_Ticyl);
-// Appends item to TicyList.
-// Returns true if success, returns false if failed.
-//
-// Special case is;
-//  ticylist_push(_Ticyl, _Item) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const bool_t ticylist_push(struct TicyList *_Ticyl, const any_t _Item);
-// Removes n elements starts at specified index.
-// If n greater than size, uses size instead of n.
-// Returns true if success, returns false is not.
-//
-// Special cases are:
-//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if n < 1
-//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if start < 0
-//  ticylist_remrange(_Ticyl, _Start, _Count) -> F if start > size
-//  ticylist_remrange(_Ticyl, _Start, _Count) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const bool_t ticylist_remrange(struct TicyList* _Ticyl,
-                               const sz_t _Start,
-                               sz_t _Count);
-// Returns new TicyList from source list by specified index and n.
-// If n greater than size, uses size instead of n.
-//
-// Special cases are:
-//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if failed
-//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if list == NULL
-//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if n < 1
-//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if start < 0
-//  ticylist_slice(_Ticyl, _Start, _Count) -> NULL if start > size
-//  ticylist_slice(_Ticyl, _Start, _Count) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyList *ticylist_slice(const struct TicyList *_List,
-                                sz_t _Start,
-                                sz_t _Count);
 
 struct TicyList *ticylist_new(sz_t _Size) {
   struct TicyList *_ticyl = (struct TicyList*)(malloc(sizeof(struct TicyList)));
@@ -893,34 +1121,6 @@ struct TicyList *ticylist_slice(const struct TicyList *_Ticyl,
   return _slice;
 }
 
-// Length of TicyFile's lines.
-volatile sz_t TicyFile_Line_Length = 1024;
-
-// File instance of TicyDB.
-typedef struct TicyFile {
-  // Path of file.
-  // Don't change if you not sure that.
-  str_t           _path;
-  // File content line-by-line.
-  // Lines are heap-allocated.
-  // Don't change if you not sure that.
-  struct TicyList *_lines;
-  // Text content of file.
-  // This field is heap-allocated.
-  // Don't change if you not sure that.
-  str_t           _text;
-} TicyFile;
-
-// Returns heap-allocated TicyFile instance by specified path.
-//
-// Special cases are;
-//  ticyfile_open(_Path) -> NULL if path == NULL
-//  ticyfile_open(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticyfile_open(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyFile *ticyfile_open(const str_t _Path);
-// Closes and frees heap-allocated TicyFile instance.
-void ticyfile_close(struct TicyFile * _Ticyf);
-
 struct TicyFile *ticyfile_open(const str_t _Path) {
   if (!_Path) { return NULL; }
   FILE *_file = fopen(_Path, "r");
@@ -1011,67 +1211,6 @@ void ticyfile_close(struct TicyFile *_Ticyf) {
   free(_Ticyf);
   _Ticyf = NULL;
 }
-
-// Key-Value store of TicyDB.
-// Don't touch fields if you not sure that.
-typedef struct TicyStore {
-  // Keys of store, stores any_t type.
-  // Don't change if you not sure that.
-  struct TicyList *_keys;
-  // Values of keys, stores TicyData* type.
-  // Don't change if you not sure that.
-  struct TicyList *_values;
-} TicyStore;
-
-// Returns heap-allocated TicyStore instance.
-//
-// Special case is;
-//  ticystore_new(void) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticystore_new(void) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyStore *ticystore_new(void);
-// Frees heap-allocated TicyStore instance.
-// It's frees key and value lists but not frees these elements.
-void ticystore_free(struct TicyStore *_Ticys);
-// Set value o specified key.
-// Creates a new key-value node if key is not exist.
-// Returns true if created a new key-value node, returns false if not.
-//
-// Special cases are;
-//  ticystore_set(_Ticys, _Key, _Value) -> F if key is can't pushed
-//  ticystore_set(_Ticys, _Key, _Value) -> F if value is can't pushed
-//  ticystore_set(_Ticys, _Key, _Value) -> F if store is NULL
-const bool_t ticystore_set(struct TicyStore *_Ticys,
-                           const TicyData *_Key,
-                           const TicyData *_Value);
-// Returns value o specified key value.
-//
-// Special case is;
-//  ticystore_get(_Ticys, _Key) -> NULL if store is NULL
-//  ticystore_get(_Ticys, _Key) -> NULL if key is not exist
-const TicyData *ticystore_get(const struct TicyStore *_Ticys, const any_t *_Key);
-// Reports specified TicyStore is have any key-value node or not.
-//
-// Special case is;
-//  ticystore_any(_Ticys) -> F if store is NULL
-const bool_t ticystore_any(const struct TicyStore *_Ticys);
-// Returns index of key value if key value is exist, returns -1 if not in specified TicyStore.
-//
-// Special case is;
-//  ticystore_existk(_Ticys, _Key) -> -1 if store is NULL
-const sz_t ticystore_findk(const struct TicyStore *_Ticys, const any_t *_Key);
-// Returns index of key of value if value is exist, returns -1 if not in specified TicyStore.
-//
-// Special case is;
-//  ticystore_existk(_Ticys, _Key) -> -1 if store is NULL
-const sz_t ticystore_findv(const struct TicyStore *_Ticys,
-                           const any_t _Value);
-// Returns serialize TicyStore as string (heap-allocated).
-//
-// Special cases are;
-//  ticystore_serialize(_Ticys) -> NULL if store is NULL
-//  ticystore_serialize(_Ticys) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticystore_serialize(_Ticys) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticystore_serialize(const struct TicyStore *_Ticys);
 
 struct TicyStore *ticystore_new(void) {
   struct TicyStore *_ticys = (struct TicyStore*)(malloc(sizeof(struct TicyStore)));
@@ -1199,32 +1338,29 @@ const str_t ticystore_serialize(const struct TicyStore *_Ticys) {
   return _str;
 }
 
-// TicyDB connection instance.
-typedef struct TicyDB {
-  // Content of TicyDB.
-  TicyStore *_Store;
-  // This is a path of your TicyDB store file.
-  // Don't touch this if you not sure that.
-  str_t _path;
-} TicyDB;
-
-// Returns heap-allocated TicyDB instance.
-//
-// Special case is;
-//  ticydb_new(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydb_new(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyDB *ticydb_new(const str_t _Path);
-// Frees heap-allocated TicyDB instance.
-void ticydb_free(struct TicyDB *_Ticydb);
-// Save TicyDB content to local disk storage.
-// Returns true if keeping success, returns false if not.
-//
-// Special cases are;
-//  ticydb_keep(_Ticydb) -> false if _Ticydb is NULL
-//  ticydb_keep(_Ticydb) -> false if _Ticydb->_Store is NULL
-//  ticydb_keep(_Ticydb) -> false if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydb_keep(_Ticydb) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const bool_t ticydb_keep(const struct TicyDB *_Ticydb);
+const TicyData *ticydata_deserialize(const str_t _Str) {
+  TicyData *_ticyd;
+  if (!_Str) { goto err; }
+  const sz_t _str_length = strlen(_Str);
+  if (_str_length == 0) { goto err; }
+       if (strprefix(_Str, "hi"))  { _ticyd = (TicyData*)(ticy_hids(_Str));  }
+  else if (strprefix(_Str, "d"))   { _ticyd = (TicyData*)(ticy_dds(_Str));   }
+  else if (strprefix(_Str, "lld")) { _ticyd = (TicyData*)(ticy_lldds(_Str)); }
+  else if (strprefix(_Str, "hu"))  { _ticyd = (TicyData*)(ticy_huds(_Str));  }
+  else if (strprefix(_Str, "u"))   { _ticyd = (TicyData*)(ticy_uds(_Str));   }
+  else if (strprefix(_Str, "llu")) { _ticyd = (TicyData*)(ticy_lluds(_Str)); }
+  else if (strprefix(_Str, "f"))   { _ticyd = (TicyData*)(ticy_fds(_Str));   }
+  else if (strprefix(_Str, "lf"))  { _ticyd = (TicyData*)(ticy_lfds(_Str));  }
+  else if (strprefix(_Str, "\""))  { _ticyd = (TicyData*)(ticy_sds(_Str));   }
+  else if (strprefix(_Str, "'"))   { _ticyd = (TicyData*)(ticy_cds(_Str));   }
+  if (_ticyd) { return _ticyd; }
+err:
+  _ticyd = ticydata_new(NULL, OTHER_T);
+#ifndef TICY_FAILURE_ALLOC
+  if (!_ticyd) { return NULL; }
+#endif // #ifdef TICY_FAILURE_ALLOC
+  return _ticyd;
+}
 
 struct TicyDB *ticydb_new(const str_t _Path) {
   struct TicyDB *_Ticydb = (struct TicyDB*)(malloc(sizeof(struct TicyDB)));

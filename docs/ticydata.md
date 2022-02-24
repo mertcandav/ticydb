@@ -42,3 +42,15 @@ void ticydata_free(struct TicyData *_Ticyd);
 //  ticydata_serialize(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticydata_serialize(const struct TicyData *_Ticyd);
 ```
+
+```c
+// Returns deserialized TicyData by specified serialized string.
+//
+// Special cases are;
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if _Str is NULL
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if _Str length is 0
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if any parse error
+//  ticydata_deserialize(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const TicyData *ticydata_deserialize(const str_t _Str);
+```
