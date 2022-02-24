@@ -27,12 +27,14 @@ void test_lf_serialize() {
   printf(TICY_FMT_LF, lf);
 }
 
+void test_ticystore_serialize() {
+  struct TicyStore *store = ticystore_new();
+  ticystore_set(store, ticydata_new("Message", STR_T), ticydata_new("Hello World", STR_T));
+  ticystore_set(store, ticydata_new("Code", STR_T), ticydata_new((i32_t)(0), I32_T));
+  printf("%s", ticystore_serialize(store));
+}
+
 int main() {
-  test_lf_serialize();
-  //struct TicyDB *db = ticydb_new("db.tcy");
-  //ticystore_set(db->_Store, ticydata_new("Message", STR_T), ticydata_new("Hello World", STR_T));
-  //ticystore_set(db->_Store, ticydata_new("Code", STR_T), ticydata_new((i32_t)(0), I32_T));
-  //printf("%s", ticystore_serialize(db->_Store));
-  //return 0x0;
+  test_ticystore_serialize();
   return EXIT_SUCCESS;
 }

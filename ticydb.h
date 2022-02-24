@@ -122,66 +122,59 @@ volatile sz_t Ticy_Buffer_Size = 128;
 // Returns specified any_t as serialized string (heap-allocated) with i8_t type format.
 //
 // Special cases are;
-//  ticy_his(_Hi) -> NULL if _Hi is NULL
+//  ticy_his(_Hi) -> default if _Hi is NULL
 //  ticy_his(_Hi) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_his(_Hi) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_his(const any_t _Hi);
 // Returns specified any_t as serialized string (heap-allocated) with i16_t, i32_t, bool_t type formats.
 //
 // Special cases are;
-//  ticy_ds(_D) -> NULL if _D is NULL
+//  ticy_ds(_D) -> default if _D is NULL
 //  ticy_ds(_D) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_ds(_D) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_ds(const any_t _D);
 // Returns specified any_t as serialized string (heap-allocated) with i64_t type format.
 //
 // Special cases are;
-//  ticy_llds(_Lld) -> NULL if _Lld is NULL
+//  ticy_llds(_Lld) -> default if _Lld is NULL
 //  ticy_llds(_Lld) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_llds(_Lld) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_llds(const any_t _Lld);
 // Returns specified any_t as serialized string (heap-allocated) with u8_t type format.
 //
 // Special cases are;
-//  ticy_hus(_Hu) -> NULL if _Hu is NULL
+//  ticy_hus(_Hu) -> default if _Hu is NULL
 //  ticy_hus(_Hu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_hus(_Hu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_hus(const any_t _Hu);
 // Returns specified any_t as serialized string (heap-allocated) with u16_t, u32_t, sz_t type format.
 //
 // Special cases are;
-//  ticy_us(_U) -> NULL if _U is NULL
+//  ticy_us(_U) -> default if _U is NULL
 //  ticy_us(_U) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_us(_U) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_us(const any_t _U);
 // Returns specified any_t as serialized string (heap-allocated) with u64_t type format.
 //
 // Special cases are;
-//  ticy_llus(_Llu) -> NULL if _Llu is NULL
+//  ticy_llus(_Llu) -> default if _Llu is NULL
 //  ticy_llus(_Llu) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_llus(_Llu) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_llus(const any_t _Llu);
 // Returns specified any_t as serialized string (heap-allocated) with f32_t type format.
 //
 // Special cases are;
-//  ticy_fs(_F) -> NULL if _F is NULL
+//  ticy_fs(_F) -> default if _F is NULL
 //  ticy_fs(_F) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_fs(_F) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_fs(const any_t _F);
 // Returns specified any_t as serialized string (heap-allocated) with f64_t type format.
 //
 // Special cases are;
-//  ticy_lfs(_Lf) -> NULL if _Lf is NULL
+//  ticy_lfs(_Lf) -> default if _Lf is NULL
 //  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_lfs(const any_t _Lf);
-// Returns specified any_t as serialized string (heap-allocated) with str_t type format.
-//
-// Special cases are;
-//  ticy_lfs(_Lf) -> NULL if _S is NULL
-//  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_ss(const any_t _S);
 // Returns specified any_t as serialized string (heap-allocated) with char_t type format.
 //
 // Special cases are;
@@ -189,6 +182,13 @@ const str_t ticy_ss(const any_t _S);
 //  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_cs(const any_t _C);
+// Returns specified any_t as serialized string (heap-allocated) with str_t type format.
+//
+// Special cases are;
+//  ticy_lfs(_Lf) -> NULL if _S is NULL
+//  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_ss(const any_t _S);
 // Returns deserialized i8_t from specified serialized string.
 //
 // Special case is;
@@ -263,7 +263,6 @@ const str_t ticy_sds(const str_t _Str);
 const char_t ticy_cds(const str_t _Str);
 
 const str_t ticy_his(const any_t _Hi) {
-  if (!_Hi) { return NULL; }
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -278,7 +277,6 @@ const str_t ticy_his(const any_t _Hi) {
 }
 
 const str_t ticy_ds(const any_t _D) {
-  if (!_D) { return NULL; }
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -293,7 +291,6 @@ const str_t ticy_ds(const any_t _D) {
 }
 
 const str_t ticy_llds(const any_t _Lld) {
-  if (!_Lld) { return NULL; }
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -308,7 +305,6 @@ const str_t ticy_llds(const any_t _Lld) {
 }
 
 const str_t ticy_hus(const any_t _Hu) {
-  if (!_Hu) { return NULL; }
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -323,7 +319,6 @@ const str_t ticy_hus(const any_t _Hu) {
 }
 
 const str_t ticy_us(const any_t _U) {
-  if (!_U) { return NULL; }
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -338,7 +333,6 @@ const str_t ticy_us(const any_t _U) {
 }
 
 const str_t ticy_llus(const any_t _Llu) {
-  if (!_Llu) { return NULL; }
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -353,7 +347,6 @@ const str_t ticy_llus(const any_t _Llu) {
 }
 
 const str_t ticy_fs(const any_t _F) {
-  if (!_F) { return NULL; }
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -368,7 +361,6 @@ const str_t ticy_fs(const any_t _F) {
 }
 
 const str_t ticy_lfs(const any_t _Lf) {
-  if (!_Lf) { return NULL; }
   str_t _str = (str_t)(malloc(Ticy_Buffer_Size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -379,46 +371,6 @@ const str_t ticy_lfs(const any_t _Lf) {
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
   sprintf(_str, "lf " TICY_FMT_LF, *(f64_t*)(_Lf));
-  return _str;
-}
-
-const str_t ticy_ss(const any_t _S) {
-  if (!_S) { return NULL; }
-  const str_t _data_str = (str_t)(_S);
-  sz_t _str_size = Ticy_Buffer_Size;
-  str_t _str = (str_t)(malloc(_str_size*sizeof(char_t)));
-  if (!_str) {
-#ifdef TICY_FAILURE_ALLOC
-    printf(TICY_ERROR_FAIL_ALLOC "\n");
-    exit(Ticy_Exit_Code_Failure);
-#else
-    return NULL;
-#endif // #ifdef TICY_FAILURE_ALLOC
-  }
-  _str[0] = 34;
-  _str[1] = 0;
-  const sz_t _data_length = strlen(_data_str);
-  for (sz_t _index = 0; _index < _data_length; ++_index) {
-    str_t _cstr = ticy_cs((any_t)((intptr_t)(_data_str[_index])));
-    const sz_t _cstr_length = strlen(_cstr);
-    if (strlen(_str)+_cstr_length-2 >= _str_size) {
-      _str = (str_t)(realloc(_str, (_str_size*=2)*sizeof(char_t)));
-      if (!_str) {
-#ifdef TICY_FAILURE_ALLOC
-        printf(TICY_ERROR_FAIL_ALLOC "\n");
-        exit(Ticy_Exit_Code_Failure);
-#else
-        free(_cstr);
-        _cstr = NULL;
-        return NULL;
-#endif // #ifdef TICY_FAILURE_ALLOC
-      }
-    }
-    strncat(_str, ++_cstr, _cstr_length-2);
-    free(_cstr);
-    _cstr = NULL;
-  }
-  strcat(_str, "\"");
   return _str;
 }
 
@@ -471,6 +423,46 @@ const str_t ticy_cs(const any_t _C) {
     sprintf(_str, TICY_FMT_C, _C);
     break;
   }
+  return _str;
+}
+
+const str_t ticy_ss(const any_t _S) {
+  if (!_S) { return NULL; }
+  const str_t _data_str = (str_t)(_S);
+  sz_t _str_size = Ticy_Buffer_Size;
+  str_t _str = (str_t)(malloc(_str_size*sizeof(char_t)));
+  if (!_str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(Ticy_Exit_Code_Failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  _str[0] = 34;
+  _str[1] = 0;
+  const sz_t _data_length = strlen(_data_str);
+  for (sz_t _index = 0; _index < _data_length; ++_index) {
+    str_t _cstr = ticy_cs((any_t)((intptr_t)(_data_str[_index])));
+    const sz_t _cstr_length = strlen(_cstr);
+    if (strlen(_str)+_cstr_length-2 >= _str_size) {
+      _str = (str_t)(realloc(_str, (_str_size*=2)*sizeof(char_t)));
+      if (!_str) {
+#ifdef TICY_FAILURE_ALLOC
+        printf(TICY_ERROR_FAIL_ALLOC "\n");
+        exit(Ticy_Exit_Code_Failure);
+#else
+        free(_cstr);
+        _cstr = NULL;
+        return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+      }
+    }
+    strncat(_str, ++_cstr, _cstr_length-2);
+    free(_cstr);
+    _cstr = NULL;
+  }
+  strcat(_str, "\"");
   return _str;
 }
 
@@ -702,8 +694,6 @@ const str_t ticydata_serialize(const struct TicyData *_Ticyd) {
     _str = ticy_his(_Ticyd->_data);
     break;
   case I16_T:
-    _str = ticy_ds(_Ticyd->_data);
-    break;
   case I32_T:
     _str = ticy_ds(_Ticyd->_data);
     break;
@@ -714,10 +704,8 @@ const str_t ticydata_serialize(const struct TicyData *_Ticyd) {
   case U8_T:
     _str = ticy_hus(_Ticyd->_data);
     break;
-  case U16_T:
-    _str = ticy_us(_Ticyd->_data);
-    break;
   // case BOOL_T:
+  case U16_T:
   case SZ_T:
   case U32_T:
     _str = ticy_us(_Ticyd->_data);
