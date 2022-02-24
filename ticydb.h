@@ -933,7 +933,7 @@ const str_t ticystore_serialize(const struct TicyStore *_Ticys) {
   _str[0] = '\0';
   for (sz_t _index = 0; _index < _Ticys->_keys->_used; ++_index) {
     const TicyData *_key = (TicyData*)(_Ticys->_keys->_buffer[_index]);
-    const str_t _key_str = ticydata_serialize(_key);
+    str_t _key_str = ticydata_serialize(_key);
 #ifndef TICY_FAILURE_ALLOC
     if (!_key_str) {
       free(_str);
@@ -1003,7 +1003,7 @@ struct TicyDB *ticydb_new(const str_t _Path) {
   ticyfile_close(_ticyf);
 #ifndef TICY_FAILURE_ALLOC
   if (!_ticydb->_Store) {
-    ticystore_free(_ticydb);
+    ticydb_free(_ticydb);
     return NULL;
   }
 #endif // #ifndef TICY_FAILURE_ALLOC
@@ -1011,6 +1011,9 @@ struct TicyDB *ticydb_new(const str_t _Path) {
 }
 
 void ticydb_free(struct TicyDB *_Ticydb) {
+  if (!_Ticydb) { return; }
+  if (_Ticydb->_Store)
+  { ticystore_free(_Ticydb->_Store); }
   free(_Ticydb);
   _Ticydb = NULL;
 }
@@ -1249,8 +1252,6 @@ const str_t ticy_tls(const struct TicyList _Ticyl) {
         printf(TICY_ERROR_FAIL_ALLOC "\n");
         exit(Ticy_Exit_Code_Failure);
 #else
-        free(_cstr);
-        _cstr = NULL;
         return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
       }
@@ -1386,7 +1387,7 @@ const struct TicyData *ticy_sds(const str_t _Str) {
   if (_Str_length == 0)           { goto err; }
   if (_Str[0] != 34)              { goto err; }
   if (_Str[strlen(_Str)-1] != 34) { goto err; }
-  sz_t _str_size = Ticy_Buffer_Size;
+  sz_t _str_size = 1;
   _str = (str_t)(malloc(_str_size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
@@ -1400,7 +1401,7 @@ const struct TicyData *ticy_sds(const str_t _Str) {
   for (sz_t _Str_index = 1, _str_index = 0;
       _Str_index < _Str_length-1; ++_Str_index) {
     if (strlen(_str) >= _str_size) {
-      _str = (str_t)(realloc(_str, (_str_size*=2)*sizeof(char_t)));
+      _str = (str_t)(realloc(_str, (++_str_size)*sizeof(char_t)));
       if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
         printf(TICY_ERROR_FAIL_ALLOC "\n");
@@ -1409,6 +1410,7 @@ const struct TicyData *ticy_sds(const str_t _Str) {
         return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
       }
+      _str[_str_size] = 0;
     }
     const char_t _char = _Str[_Str_index];
     if (_char == 92) {
@@ -1439,7 +1441,6 @@ const struct TicyData *ticy_sds(const str_t _Str) {
       _str[_str_index++] = _char;
     }
   }
-  _str[strlen(_str)] = 0;
   if (_str) { goto ret; }
 err:;
   _str = (str_t)(malloc(sizeof(char_t)));
@@ -1553,14 +1554,14 @@ const struct TicyData *ticy_tlds(const str_t _Str) {
         printf(TICY_ERROR_FAIL_ALLOC "\n");
         exit(Ticy_Exit_Code_Failure);
 #else
-        free(_ticly);
+        free(_ticyl);
         _ticyl = NULL;
         return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
       }
       _str[0] = 0;
       strncpy(_str, _Str+_last, _index-_last);
-      _str[strlen(_str)] = 0;
+      _str[_index-_last] = 0;
       _last = _index+1;
       ticylist_push(_ticyl, (struct TicyData*)(ticydata_deserialize(_str)));
       free(_str);
@@ -1587,14 +1588,14 @@ const struct TicyData *ticy_tlds(const str_t _Str) {
       printf(TICY_ERROR_FAIL_ALLOC "\n");
       exit(Ticy_Exit_Code_Failure);
 #else
-      free(_ticly);
+      free(_ticyl);
       _ticyl = NULL;
       return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
     }
     _str[0] = 0;
     strncpy(_str, _Str+_last, _Str_length-_last);
-    _str[strlen(_str)] = 0;
+    _str[_Str_length-_last] = 0;
     ticylist_push(_ticyl, (struct TicyData*)(ticydata_deserialize(_str)));
     free(_str);
     _str = NULL;
