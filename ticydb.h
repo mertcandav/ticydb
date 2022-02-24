@@ -376,6 +376,9 @@ const str_t ticydata_serialize(const struct TicyData *_Ticyd);
 //  ticydata_deserialize(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticydata_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const TicyData *ticydata_deserialize(const str_t _Str);
+// Returns true if equals datas of specified TicyDatas.
+const bool_t ticydata_eqs(const struct TicyData _Ticyd1,
+                          const struct TicyData _Ticyd2);
 
 // Length of TicyFile's lines.
 volatile sz_t TicyFile_Line_Length = 1024;
@@ -1322,15 +1325,7 @@ const sz_t ticystore_findk(const struct TicyStore *_Ticys,
   if (!_Ticys) { return -1; }
   for (sz_t _index = 0; _index < _Ticys->_keys->_used; ++_index) {
     const TicyData *_key = (TicyData*)(_Ticys->_keys->_buffer[_index]);
-    if (_Key._type != _key->_type) { continue; }
-    switch (_key->_type) {
-    case STR_T:
-      if (strcmp((str_t)(_Key._data), (str_t)(_key->_data)) == 0) { return _index; }
-      break;
-    default:
-      if (_Key._data == _key->_data) { return _index; }
-      break;
-    }
+    if (ticydata_eqs(_Key, *_key)) { return _index; }
   }
   return -1;
 }
@@ -1339,14 +1334,7 @@ const sz_t ticystore_findv(const struct TicyStore *_Ticys,
                            const struct TicyData _Value) {
   for (sz_t _index = 0; _index < _Ticys->_values->_used; ++_index) {
     const TicyData *_value = (TicyData*)(_Ticys->_values->_buffer[_index]);
-    switch (_value->_type) {
-    case STR_T:
-      if (strcmp((str_t)(_Value._data), (str_t)(_value->_data)) == 0) { return _index; }
-      break;
-    default:
-      if (_Value._data == _value->_data) { return _index; }
-      break;
-    }
+    if (ticydata_eqs(_Value, *_value)) { return _index; }
   }
   return -1;
 }
@@ -1414,6 +1402,17 @@ err:
   if (!_ticyd) { return NULL; }
 #endif // #ifdef TICY_FAILURE_ALLOC
   return _ticyd;
+}
+
+const bool_t ticydata_eqs(const struct TicyData _Ticyd1,
+                          const struct TicyData _Ticyd2) {
+  if (_Ticyd1._type != _Ticyd2._type) { return F; }
+  switch (_Ticyd1._type) {
+  case STR_T:
+    return (bool_t)(strcmp((str_t)(_Ticyd1._data), (str_t)(_Ticyd2._data)) == 0);
+  default   :
+    return (bool_t)(_Ticyd1._data == _Ticyd2._data);
+  }
 }
 
 struct TicyDB *ticydb_new(const str_t _Path) {

@@ -59,3 +59,9 @@ const str_t ticydata_serialize(const struct TicyData *_Ticyd);
 //  ticydata_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const TicyData *ticydata_deserialize(const str_t _Str);
 ```
+
+```c
+// Returns true if equals datas of specified TicyDatas.
+const bool_t ticydata_eqs(const struct TicyData _Ticyd1,
+                          const struct TicyData _Ticyd2);
+```
