@@ -105,6 +105,15 @@ const str_t ticy_ss(const str_t _Str);
 ```
 
 ```c
+// Returns specified TicyList as serialized string (heap-allocated) with TicyData type format.
+//
+// Special cases are;
+//  ticy_ss(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_ss(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_tls(const TicyList _Ticyl);
+```
+
+```c
 // Returns deserialized i8_t from specified serialized string.
 //
 // Special case is;

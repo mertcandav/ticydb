@@ -52,7 +52,14 @@ void test_ticydb() {
   printf("%f\n", *(f32_t*)(ticystore_get(db->_Store, ticydata_ins("PI_Number", STR_T))->_data));
 }
 
+void test_ticylist_serialize() {
+  struct TicyList *list = ticylist_new(1);
+  ticylist_push(list, ticydata_new("Hello World", STR_T));
+  ticylist_push(list, ticydata_new((any_t)(89), I32_T));
+  printf("%s\n", ticy_tls(*list));
+}
+
 int main() {
-  test_ticydb();
+  test_ticylist_serialize();
   return EXIT_SUCCESS;
 }
