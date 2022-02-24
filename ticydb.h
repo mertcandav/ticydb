@@ -189,6 +189,15 @@ const str_t ticy_ss(const any_t _S);
 //  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_cs(const any_t _C);
+// Returns deserialized str_t from specified serialized string.
+//
+// Special case is;
+//  ticy_sds(_Str) -> NULL if _Str is NULL
+//  ticy_sds(_Str) -> "" if _Str length is 0
+//  ticy_sds(_Str) -> "" if any parse error
+//  ticy_sds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_sds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_sds(const str_t _Str);
 // Returns deserialized char_t from specified serialized string.
 //
 // Special case is;
@@ -320,8 +329,8 @@ const str_t ticy_lfs(const any_t _Lf) {
 const str_t ticy_ss(const any_t _S) {
   if (!_S) { return NULL; }
   const str_t _data_str = (str_t)(_S);
-  sz_t _str_length = 1;
-  str_t _str = (str_t)(malloc((_str_length*Ticy_Buffer_Size)*sizeof(char_t)));
+  sz_t _str_size = Ticy_Buffer_Size;
+  str_t _str = (str_t)(malloc(_str_size*sizeof(char_t)));
   if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
     printf(TICY_ERROR_FAIL_ALLOC "\n");
@@ -334,10 +343,10 @@ const str_t ticy_ss(const any_t _S) {
   _str[1] = 0;
   const sz_t _data_length = strlen(_data_str);
   for (sz_t _index = 0; _index < _data_length; ++_index) {
-    str_t _cstr = ticy_cs(_data_str[_index]);
+    str_t _cstr = ticy_cs((any_t)((intptr_t)(_data_str[_index])));
     const sz_t _cstr_length = strlen(_cstr);
-    if (_str_length < (_str_length += _cstr_length-2)) {
-      _str = (str_t)(realloc(_str, (_str_length*Ticy_Buffer_Size)*sizeof(char_t)));
+    if (strlen(_str)+_cstr_length-2 >= _str_size) {
+      _str = (str_t)(realloc(_str, (_str_size*=2)*sizeof(char_t)));
       if (!_str) {
 #ifdef TICY_FAILURE_ALLOC
         printf(TICY_ERROR_FAIL_ALLOC "\n");
@@ -368,7 +377,7 @@ const str_t ticy_cs(const any_t _C) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  switch ((char_t)(_C)) {
+  switch ((intptr_t)(_C)) {
   case 0:
     sprintf(_str, "'\\%c'", 48);
     break;
@@ -406,6 +415,80 @@ const str_t ticy_cs(const any_t _C) {
     sprintf(_str, TICY_FMT_C, _C);
     break;
   }
+  return _str;
+}
+
+const str_t ticy_sds(const str_t _Str) {
+  if (!_Str) { return NULL; }
+  const sz_t _Str_length = strlen(_Str);
+  str_t _str;
+  if (_Str_length == 0)           { goto err; }
+  if (_Str[0] != 34)              { goto err; }
+  if (_Str[strlen(_Str)-1] != 34) { goto err; }
+  sz_t _str_size = Ticy_Buffer_Size;
+  _str = (str_t)(malloc(_str_size*sizeof(char_t)));
+  if (!_str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(Ticy_Exit_Code_Failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  _str[0] = 0;
+  for (sz_t _Str_index = 1, _str_index = 0;
+      _Str_index < _Str_length-1; ++_Str_index) {
+    if (strlen(_str) >= _str_size) {
+      _str = (str_t)(realloc(_str, (_str_size*=2)*sizeof(char_t)));
+      if (!_str) {
+#ifdef TICY_FAILURE_ALLOC
+        printf(TICY_ERROR_FAIL_ALLOC "\n");
+        exit(Ticy_Exit_Code_Failure);
+#else
+        return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+      }
+    }
+    const char_t _char = _Str[_Str_index];
+    if (_char == 92) {
+      if (_Str_index+1 >= _Str_length) {
+        free(_str);
+        _str = NULL;
+        break;
+      }
+      str_t _char_str = (str_t)(malloc(4*sizeof(char_t)));
+      if (!_char_str) {
+#ifdef TICY_FAILURE_ALLOC
+        printf(TICY_ERROR_FAIL_ALLOC "\n");
+        exit(Ticy_Exit_Code_Failure);
+#else
+        free(_str);
+        _str = NULL;
+        return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+      }
+      _char_str[0] = 0;
+      sprintf(_char_str, "'%c%c'", _char, _Str[++_Str_index]);
+      _str[_str_index++] = ticy_cds(_char_str);
+      free(_char_str);
+      _char_str = NULL;
+    } else {
+      _str[_str_index++] = _char;
+    }
+  }
+  _str[strlen(_str)-1] = 0;
+  if (_str) { return _str; }
+err:
+  _str = (str_t)(malloc(sizeof(char_t)));
+  if (!_str) {
+#ifdef TICY_FAILURE_ALLOC
+    printf(TICY_ERROR_FAIL_ALLOC "\n");
+    exit(Ticy_Exit_Code_Failure);
+#else
+    return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+  }
+  _str[0] = 0;
   return _str;
 }
 

@@ -101,6 +101,18 @@ const str_t ticy_cs(const any_t _C);
 ```
 
 ```c
+// Returns deserialized str_t from specified serialized string.
+//
+// Special case is;
+//  ticy_sds(_Str) -> NULL if _Str is NULL
+//  ticy_sds(_Str) -> "" if _Str length is 0
+//  ticy_sds(_Str) -> "" if any parse error
+//  ticy_sds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_sds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_sds(const str_t _Str);
+```
+
+```c
 // Returns deserialized char_t from specified serialized string.
 //
 // Special case is;
