@@ -108,9 +108,9 @@ const str_t ticy_ss(const str_t _Str);
 // Returns specified TicyList as serialized string (heap-allocated) with TicyData type format.
 //
 // Special cases are;
-//  ticy_ss(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_ss(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_tls(const TicyList _Ticyl);
+//  ticy_tls(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_tls(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_tls(const struct TicyList _Ticyl);
 ```
 
 ```c
@@ -231,4 +231,16 @@ const struct TicyData *ticy_sds(const str_t _Str);
 //  ticy_cds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_cds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const struct TicyData *ticy_cds(const str_t _Str);
+```
+
+```c
+// Returns deserialized TicyList (elements are TicyData*) from specified serialized string.
+//
+// Special cases are;
+//  ticy_tlds(_Str) -> NULL if _Str is NULL
+//  ticy_tlds(_Str) -> NULL if _Str length is 0
+//  ticy_tlds(_Str) -> NULL if any parse error
+//  ticy_tlds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_tlds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_tlds(const str_t _Str);
 ```

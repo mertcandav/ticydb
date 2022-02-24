@@ -81,10 +81,9 @@ typedef enum TicyTypeCode {
   CHAR_T       = 10, // Character type code.
   STR_T        = 11, // String type code.
   ANY_T        = 12, // Any type code.
-  TICYLIST     = 13, // TicyList instance code.
-  TICYLIST_PTR = 14, // TicyList instance pointer code.
-  SZ_T         = 15, // Size type code.
-  OTHER_T      = 16  // Code of other data-types.
+  TICYLIST_PTR = 13, // TicyList instance pointer code.
+  SZ_T         = 14, // Size type code.
+  OTHER_T      = 15  // Code of other data-types.
 } TicyTypeCode;
 
 #ifdef TICY_FAILURE_ALLOC
@@ -417,9 +416,9 @@ const str_t ticy_ss(const str_t _Str);
 // Returns specified TicyList as serialized string (heap-allocated) with TicyData type format.
 //
 // Special cases are;
-//  ticy_ss(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticy_ss(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const str_t ticy_tls(const TicyList _Ticyl);
+//  ticy_tls(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_tls(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const str_t ticy_tls(const struct TicyList _Ticyl);
 // Returns deserialized i8_t from specified serialized string.
 //
 // Special case is;
@@ -510,6 +509,15 @@ const struct TicyData *ticy_sds(const str_t _Str);
 //  ticy_cds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_cds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const struct TicyData *ticy_cds(const str_t _Str);
+// Returns deserialized TicyList (elements are TicyData*) from specified serialized string.
+//
+// Special cases are;
+//  ticy_tlds(_Str) -> NULL if _Str is NULL
+//  ticy_tlds(_Str) -> NULL if _Str length is 0
+//  ticy_tlds(_Str) -> NULL if any parse error
+//  ticy_tlds(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticy_tlds(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const struct TicyData *ticy_tlds(const str_t _Str);
 
 const bool_t strprefix(const str_t _Str, const str_t _Sub) {
   const sz_t _str_length = strlen(_Str);
@@ -583,7 +591,10 @@ const str_t ticydata_serialize(const struct TicyData *_Ticyd) {
   case CHAR_T:
     _str = ticy_cs((char_t)((intptr_t)(_Ticyd->_data)));
     break;
-  default:     break;
+  case TICYLIST_PTR:
+    _str = ticy_tls(*(struct TicyList*)(_Ticyd->_data));
+    break;
+  default: break;
   }
   if (_str) { return _str; }
   _str = (str_t)(malloc(3*sizeof(char_t)));
@@ -599,6 +610,42 @@ const str_t ticydata_serialize(const struct TicyData *_Ticyd) {
   _str[1] = '"';
   _str[2] = '\0';
   return _str;
+}
+
+const TicyData *ticydata_deserialize(const str_t _Str) {
+  TicyData *_ticyd;
+  if (!_Str) { goto err; }
+  const sz_t _str_length = strlen(_Str);
+  if (_str_length == 0) { goto err; }
+       if (strprefix(_Str, "hi"))  { _ticyd = (TicyData*)(ticy_hids(_Str));  }
+  else if (strprefix(_Str, "d"))   { _ticyd = (TicyData*)(ticy_dds(_Str));   }
+  else if (strprefix(_Str, "lld")) { _ticyd = (TicyData*)(ticy_lldds(_Str)); }
+  else if (strprefix(_Str, "hu"))  { _ticyd = (TicyData*)(ticy_huds(_Str));  }
+  else if (strprefix(_Str, "u"))   { _ticyd = (TicyData*)(ticy_uds(_Str));   }
+  else if (strprefix(_Str, "llu")) { _ticyd = (TicyData*)(ticy_lluds(_Str)); }
+  else if (strprefix(_Str, "f"))   { _ticyd = (TicyData*)(ticy_fds(_Str));   }
+  else if (strprefix(_Str, "lf"))  { _ticyd = (TicyData*)(ticy_lfds(_Str));  }
+  else if (strprefix(_Str, "\""))  { _ticyd = (TicyData*)(ticy_sds(_Str));   }
+  else if (strprefix(_Str, "'"))   { _ticyd = (TicyData*)(ticy_cds(_Str));   }
+  else if (strprefix(_Str, "["))   { _ticyd = (TicyData*)(ticy_tlds(_Str)); }
+  if (_ticyd) { return _ticyd; }
+err:
+  _ticyd = ticydata_new(NULL, OTHER_T);
+#ifndef TICY_FAILURE_ALLOC
+  if (!_ticyd) { return NULL; }
+#endif // #ifdef TICY_FAILURE_ALLOC
+  return _ticyd;
+}
+
+const bool_t ticydata_eqs(const struct TicyData _Ticyd1,
+                          const struct TicyData _Ticyd2) {
+  if (_Ticyd1._type != _Ticyd2._type) { return F; }
+  switch (_Ticyd1._type) {
+  case STR_T:
+    return (bool_t)(strcmp((str_t)(_Ticyd1._data), (str_t)(_Ticyd2._data)) == 0);
+  default   :
+    return (bool_t)(_Ticyd1._data == _Ticyd2._data);
+  }
 }
 
 struct TicyList *ticylist_new(sz_t _Size) {
@@ -922,7 +969,6 @@ struct TicyStore *ticystore_deserialize(const str_t _Str) {
   str_t _str = strdup(_Str);
   str_t _line_delim = "\n";
   str_t _line = strtok_r(_str, _line_delim, &_str);
-  if (!_line) { return NULL; }
   do {
     const str_t _key_str = strtok_r(_line, " ", &_line);
     const str_t _value_str = _line;
@@ -933,41 +979,6 @@ struct TicyStore *ticystore_deserialize(const str_t _Str) {
   free(_str);
   _str = NULL;
   return _ticys;
-}
-
-const TicyData *ticydata_deserialize(const str_t _Str) {
-  TicyData *_ticyd;
-  if (!_Str) { goto err; }
-  const sz_t _str_length = strlen(_Str);
-  if (_str_length == 0) { goto err; }
-       if (strprefix(_Str, "hi"))  { _ticyd = (TicyData*)(ticy_hids(_Str));  }
-  else if (strprefix(_Str, "d"))   { _ticyd = (TicyData*)(ticy_dds(_Str));   }
-  else if (strprefix(_Str, "lld")) { _ticyd = (TicyData*)(ticy_lldds(_Str)); }
-  else if (strprefix(_Str, "hu"))  { _ticyd = (TicyData*)(ticy_huds(_Str));  }
-  else if (strprefix(_Str, "u"))   { _ticyd = (TicyData*)(ticy_uds(_Str));   }
-  else if (strprefix(_Str, "llu")) { _ticyd = (TicyData*)(ticy_lluds(_Str)); }
-  else if (strprefix(_Str, "f"))   { _ticyd = (TicyData*)(ticy_fds(_Str));   }
-  else if (strprefix(_Str, "lf"))  { _ticyd = (TicyData*)(ticy_lfds(_Str));  }
-  else if (strprefix(_Str, "\""))  { _ticyd = (TicyData*)(ticy_sds(_Str));   }
-  else if (strprefix(_Str, "'"))   { _ticyd = (TicyData*)(ticy_cds(_Str));   }
-  if (_ticyd) { return _ticyd; }
-err:
-  _ticyd = ticydata_new(NULL, OTHER_T);
-#ifndef TICY_FAILURE_ALLOC
-  if (!_ticyd) { return NULL; }
-#endif // #ifdef TICY_FAILURE_ALLOC
-  return _ticyd;
-}
-
-const bool_t ticydata_eqs(const struct TicyData _Ticyd1,
-                          const struct TicyData _Ticyd2) {
-  if (_Ticyd1._type != _Ticyd2._type) { return F; }
-  switch (_Ticyd1._type) {
-  case STR_T:
-    return (bool_t)(strcmp((str_t)(_Ticyd1._data), (str_t)(_Ticyd2._data)) == 0);
-  default   :
-    return (bool_t)(_Ticyd1._data == _Ticyd2._data);
-  }
 }
 
 struct TicyDB *ticydb_new(const str_t _Path) {
@@ -1217,7 +1228,7 @@ const str_t ticy_ss(const str_t _Str) {
   return _str;
 }
 
-const str_t ticy_tls(const TicyList _Ticyl) {
+const str_t ticy_tls(const struct TicyList _Ticyl) {
   sz_t _str_size = Ticy_Buffer_Size;
   str_t _str = (str_t)(malloc(_str_size*sizeof(char_t)));
   if (!_str) {
@@ -1495,6 +1506,107 @@ const struct TicyData *ticy_cds(const str_t _Str) {
     _char = _Str[1];
   }
   const struct TicyData *_ticyd = ticydata_new((any_t)((uintptr_t)(_char)), CHAR_T);
+  return _ticyd;
+}
+
+const struct TicyData *ticy_tlds(const str_t _Str) {
+  if (!_Str) { return NULL; }
+  sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0)          { return NULL; }
+  if (_Str[0] != 91)             { return NULL; }
+  if (_Str[_Str_length-1] != 93) { return NULL; }
+  struct TicyList *_ticyl = ticylist_new(1);
+#ifndef TICY_FAILURE_ALLOC
+  if (!_ticyl) { return NULL; }
+#endif // #ifndef TICY_FAILURE_ALLOC
+  --_Str_length;
+  sz_t _last = 1;
+  sz_t _braces = 0;
+  bool_t _quotes = F;
+  bool_t _double_quotes = F;
+  for (sz_t _index = 1; _index < _Str_length; ++_index) {
+    char_t _char = _Str[_index];
+    switch (_char) {
+    case 91:
+      if (_double_quotes) { break; }
+      if (_quotes)        { break; }
+      ++_braces;
+      break;
+    case 93:
+      if (_double_quotes) { break; }
+      if (_quotes)        { break; }
+      --_braces;
+      break;
+    case 34:
+      _double_quotes = !_double_quotes;
+      break;
+    case 39:
+      _quotes = !_quotes;
+      break;
+    case 32:
+      if (_braces > 0)    { break; }
+      if (_quotes)        { break; }
+      if (_double_quotes) { break; }
+      str_t _str = (str_t)(malloc((_Str_length-_last+1)*sizeof(char_t)));
+      if (!_str) {
+#ifdef TICY_FAILURE_ALLOC
+        printf(TICY_ERROR_FAIL_ALLOC "\n");
+        exit(Ticy_Exit_Code_Failure);
+#else
+        free(_ticly);
+        _ticyl = NULL;
+        return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+      }
+      _str[0] = 0;
+      strncpy(_str, _Str+_last, _index-_last);
+      _str[strlen(_str)] = 0;
+      _last = _index+1;
+      ticylist_push(_ticyl, (struct TicyData*)(ticydata_deserialize(_str)));
+      free(_str);
+      _str = NULL;
+      break;
+    case 92:
+      if (++_index >= _Str[_index] || (!_quotes && _double_quotes)) {
+        free(_ticyl);
+        _ticyl = NULL;
+        return NULL;
+      }
+      _char = _Str[_index];
+      switch (_char) {
+      case 34: break;
+      case 39: break;
+      }
+      break;
+    }
+  }
+  if (_last < _Str_length) {
+    str_t _str = (str_t)(malloc((_Str_length-_last+1)*sizeof(char_t)));
+    if (!_str) {
+#ifdef TICY_FAILURE_ALLOC
+      printf(TICY_ERROR_FAIL_ALLOC "\n");
+      exit(Ticy_Exit_Code_Failure);
+#else
+      free(_ticly);
+      _ticyl = NULL;
+      return NULL;
+#endif // #ifdef TICY_FAILURE_ALLOC
+    }
+    _str[0] = 0;
+    strncpy(_str, _Str+_last, _Str_length-_last);
+    _str[strlen(_str)] = 0;
+    ticylist_push(_ticyl, (struct TicyData*)(ticydata_deserialize(_str)));
+    free(_str);
+    _str = NULL;
+  }
+  const struct TicyData *_ticyd = ticydata_new(_ticyl, TICYLIST_PTR);
+#ifndef TICY_FAILURE_ALLOC
+  if (!_ticyd) {
+    free(_ticyl);
+    _ticyl = NULL;
+    return NULL;
+  }
+#endif // #ifndef TICY_FAILURE_ALLOC
   return _ticyd;
 }
 

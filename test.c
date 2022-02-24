@@ -56,7 +56,14 @@ void test_ticylist_serialize() {
   struct TicyList *list = ticylist_new(1);
   ticylist_push(list, ticydata_new("Hello World", STR_T));
   ticylist_push(list, ticydata_new((any_t)(89), I32_T));
-  printf("%s\n", ticy_tls(*list));
+  struct TicyList *_list = ticylist_new(1);
+  ticylist_push(_list, ticydata_new("Hello World 22", STR_T));
+  ticylist_push(_list, ticydata_new((any_t)(8989), I32_T));
+  ticylist_push(list, ticydata_new(_list, TICYLIST_PTR));
+  const str_t serialized_str = ticy_tls(*list);
+  printf("%s\n", serialized_str);
+  struct TicyData *_list_data = (struct TicyData*)(ticy_tlds(serialized_str));
+  printf("%s\n", ticy_tls(*(struct TicyList*)(_list_data->_data)));
 }
 
 int main() {

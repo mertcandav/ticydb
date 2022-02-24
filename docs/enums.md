@@ -19,7 +19,6 @@ typedef enum TicyTypeCode {
   CHAR_T,
   STR_T,
   ANY_T,
-  TICYLIST,
   TICYLIST_PTR,
   SZ_T,
   OTHER_T,
