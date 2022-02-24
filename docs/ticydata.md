@@ -18,6 +18,11 @@ typedef struct TicyData {
 ## Related Functions
 
 ```c
+// Returns new TicyData instance by data and type code.
+struct TicyData ticydata_ins(const any_t _Data, const TicyTypeCode _Ticytc);
+```
+
+```c
 // Returns new TicyData instance heap-allocated by data and type code.
 //
 // Special case is:

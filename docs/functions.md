@@ -1,6 +1,11 @@
 # TicyDB - Functions
 
 ```c
+// Returns true if _Str is starts with _Sub, returns false if not.
+const bool_t strprefix(const str_t _Str, const str_t _Sub);
+```
+
+```c
 // Returns specified any_t as serialized string (heap-allocated) with i8_t type format.
 //
 // Special cases are;

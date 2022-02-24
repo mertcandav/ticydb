@@ -348,6 +348,8 @@ typedef struct TicyData {
   any_t        _data;
 } TicyData;
 
+// Returns new TicyData instance by data and type code.
+struct TicyData ticydata_ins(const any_t _Data, const TicyTypeCode _Ticytc);
 // Returns new TicyData instance heap-allocated by data and type code.
 //
 // Special case is:
@@ -365,6 +367,15 @@ void ticydata_free(struct TicyData *_Ticyd);
 //  ticydata_serialize(_Ticyd) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticydata_serialize(_Ticyd) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticydata_serialize(const struct TicyData *_Ticyd);
+// Returns deserialized TicyData by specified serialized string.
+//
+// Special cases are;
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if _Str is NULL
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if _Str length is 0
+//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if any parse error
+//  ticydata_deserialize(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticydata_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+const TicyData *ticydata_deserialize(const str_t _Str);
 
 // Length of TicyFile's lines.
 volatile sz_t TicyFile_Line_Length = 1024;
@@ -430,7 +441,8 @@ const bool_t ticystore_set(struct TicyStore *_Ticys,
 // Special case is;
 //  ticystore_get(_Ticys, _Key) -> NULL if store is NULL
 //  ticystore_get(_Ticys, _Key) -> NULL if key is not exist
-const TicyData *ticystore_get(const struct TicyStore *_Ticys, const any_t *_Key);
+const TicyData *ticystore_get(const struct TicyStore *_Ticys,
+                              const struct TicyData _Key);
 // Reports specified TicyStore is have any key-value node or not.
 //
 // Special case is;
@@ -440,13 +452,14 @@ const bool_t ticystore_any(const struct TicyStore *_Ticys);
 //
 // Special case is;
 //  ticystore_existk(_Ticys, _Key) -> -1 if store is NULL
-const sz_t ticystore_findk(const struct TicyStore *_Ticys, const any_t *_Key);
+const sz_t ticystore_findk(const struct TicyStore *_Ticys,
+                           const struct TicyData _Key);
 // Returns index of key of value if value is exist, returns -1 if not in specified TicyStore.
 //
 // Special case is;
 //  ticystore_existk(_Ticys, _Key) -> -1 if store is NULL
 const sz_t ticystore_findv(const struct TicyStore *_Ticys,
-                           const any_t _Value);
+                           const struct TicyData _Value);
 // Returns serialize TicyStore as string (heap-allocated).
 //
 // Special cases are;
@@ -454,20 +467,41 @@ const sz_t ticystore_findv(const struct TicyStore *_Ticys,
 //  ticystore_serialize(_Ticys) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticystore_serialize(_Ticys) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticystore_serialize(const struct TicyStore *_Ticys);
-// Returns deserialized TicyData by specified serialized string.
+// Returns deserialized TicyStore by specified serialized string.
 //
 // Special cases are;
-//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if _Str is NULL
-//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if _Str length is 0
-//  ticydata_deserialize(_Str) -> TicyData{_data: NULL, _type: OTHER_T} if any parse error
-//  ticydata_deserialize(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
-//  ticydata_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-const TicyData *ticydata_deserialize(const str_t _Str);
+//  ticystore_deserialize(_Str) -> Empty TicyStore if _Str is NULL
+//  ticystore_deserialize(_Str) -> NULL if any parse error
+//  ticystore_deserialize(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticystore_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyStore *ticystore_deserialize(const str_t _Str);
+
+struct TicyStore *ticystore_deserialize(const str_t _Str) {
+  struct TicyStore *_ticys = ticystore_new();
+#ifndef TICY_FAILURE_ALLOC
+  if (!_ticys) { return NULL; }
+#endif // #ifndef TICY_FAILURE_ALLOC
+  if (!_Str) { return _ticys; }
+  str_t _str = strdup(_Str);
+  str_t _line_delim = "\n";
+  str_t _line = strtok_r(_str, _line_delim, &_str);
+  if (!_line) { return NULL; }
+  do {
+    const str_t _key_str = strtok_r(_line, " ", &_line);
+    const str_t _value_str = _line;
+    const TicyData *_key = ticydata_deserialize(_key_str);
+    const TicyData *_value = ticydata_deserialize(_value_str);
+    ticystore_set(_ticys, _key, _value);
+  } while((_line = strtok_r(NULL, _line_delim, &_str)));
+  free(_str);
+  _str = NULL;
+  return _ticys;
+}
 
 // TicyDB connection instance.
 typedef struct TicyDB {
   // Content of TicyDB.
-  TicyStore *_Store;
+  struct TicyStore *_Store;
   // This is a path of your TicyDB store file.
   // Don't touch this if you not sure that.
   str_t _path;
@@ -507,7 +541,7 @@ const str_t ticy_his(const any_t _Hi) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "hi " TICY_FMT_HI, _Hi);
+  sprintf(_str, "hi" TICY_FMT_HI, _Hi);
   return _str;
 }
 
@@ -521,7 +555,7 @@ const str_t ticy_ds(const any_t _D) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "d " TICY_FMT_D, _D);
+  sprintf(_str, "d" TICY_FMT_D, _D);
   return _str;
 }
 
@@ -535,7 +569,7 @@ const str_t ticy_llds(const any_t _Lld) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "lld " TICY_FMT_LLD, _Lld);
+  sprintf(_str, "lld" TICY_FMT_LLD, _Lld);
   return _str;
 }
 
@@ -549,7 +583,7 @@ const str_t ticy_hus(const any_t _Hu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "hu " TICY_FMT_HU, _Hu);
+  sprintf(_str, "hu" TICY_FMT_HU, _Hu);
   return _str;
 }
 
@@ -563,7 +597,7 @@ const str_t ticy_us(const any_t _U) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "u " TICY_FMT_U, _U);
+  sprintf(_str, "u" TICY_FMT_U, _U);
   return _str;
 }
 
@@ -577,7 +611,7 @@ const str_t ticy_llus(const any_t _Llu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "llu " TICY_FMT_LLU, _Llu);
+  sprintf(_str, "llu" TICY_FMT_LLU, _Llu);
   return _str;
 }
 
@@ -591,7 +625,7 @@ const str_t ticy_fs(const any_t _F) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "f " TICY_FMT_F, *(f32_t*)(_F));
+  sprintf(_str, "f" TICY_FMT_F, *(f32_t*)(_F));
   return _str;
 }
 
@@ -605,7 +639,7 @@ const str_t ticy_lfs(const any_t _Lf) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "lf " TICY_FMT_LF, *(f64_t*)(_Lf));
+  sprintf(_str, "lf" TICY_FMT_LF, *(f64_t*)(_Lf));
   return _str;
 }
 
@@ -706,7 +740,7 @@ const struct TicyData *ticy_hids(const str_t _Str) {
   const sz_t _Str_length = strlen(_Str);
   if (_Str_length == 0) { return NULL; }
   i8_t _hi = 0;
-  sscanf(_Str+strlen(TICY_FMT_HI), TICY_FMT_HI, &_hi);
+  sscanf(_Str+strlen(TICY_FMT_HI)-1, TICY_FMT_HI, &_hi);
   const struct TicyData *_ticyd = ticydata_new((any_t)((uintptr_t)(_hi)), I8_T);
   return _ticyd;
 }
@@ -716,7 +750,7 @@ if (!_Str) { return NULL; }
   const sz_t _Str_length = strlen(_Str);
   if (_Str_length == 0) { return NULL; }
   i32_t _d = 0;
-  sscanf(_Str+strlen(TICY_FMT_D), TICY_FMT_D, &_d);
+  sscanf(_Str+strlen(TICY_FMT_D)-1, TICY_FMT_D, &_d);
   const struct TicyData *_ticyd = ticydata_new((any_t)(_d), I32_T);
   return _ticyd;
 }
@@ -735,7 +769,7 @@ const struct TicyData *ticy_lldds(const str_t _Str) {
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
   *_lld = 0;
-  sscanf(_Str+strlen(TICY_FMT_LLD), TICY_FMT_LLD, &_lld);
+  sscanf(_Str+strlen(TICY_FMT_LLD)-1, TICY_FMT_LLD, &_lld);
   const struct TicyData *_ticyd = ticydata_new((any_t)(&_lld), I64_T);
   return _ticyd;
 }
@@ -745,7 +779,7 @@ const struct TicyData *ticy_huds(const str_t _Str) {
   const sz_t _Str_length = strlen(_Str);
   if (_Str_length == 0) { return NULL; }
   u8_t _hu = 0;
-  sscanf(_Str+strlen(TICY_FMT_HU), TICY_FMT_HU, &_hu);
+  sscanf(_Str+strlen(TICY_FMT_HU)-1, TICY_FMT_HU, &_hu);
   const struct TicyData *_ticyd = ticydata_new((any_t)((uintptr_t)(_hu)), U8_T);
   return _ticyd;
 }
@@ -755,7 +789,7 @@ const struct TicyData *ticy_uds(const str_t _Str) {
   const sz_t _Str_length = strlen(_Str);
   if (_Str_length == 0) { return NULL; }
   u32_t _u = 0;
-  sscanf(_Str+strlen(TICY_FMT_U), TICY_FMT_U, &_u);
+  sscanf(_Str+strlen(TICY_FMT_U)-1, TICY_FMT_U, &_u);
   const struct TicyData *_ticyd = ticydata_new((any_t)(_u), U32_T);
   return _ticyd;
 }
@@ -774,7 +808,7 @@ const struct TicyData *ticy_lluds(const str_t _Str) {
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
   *_llu = 0;
-  sscanf(_Str+strlen(TICY_FMT_LLU), TICY_FMT_LLU, &_llu);
+  sscanf(_Str+strlen(TICY_FMT_LLU)-1, TICY_FMT_LLU, &_llu);
   const struct TicyData *_ticyd = ticydata_new((any_t)(&_llu), U64_T);
   return _ticyd;
 }
@@ -793,7 +827,7 @@ const struct TicyData *ticy_fds(const str_t _Str) {
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
   *_f = 0.;
-  sscanf(_Str+strlen(TICY_FMT_F), TICY_FMT_F, _f);
+  sscanf(_Str+strlen(TICY_FMT_F)-1, TICY_FMT_F, _f);
   const struct TicyData *_ticyd = ticydata_new(_f, F32_T);
   return _ticyd;
 }
@@ -812,7 +846,7 @@ const struct TicyData *ticy_lfds(const str_t _Str) {
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
   *_lf = 0.;
-  sscanf(_Str+strlen(TICY_FMT_LF), TICY_FMT_LF, _lf);
+  sscanf(_Str+strlen(TICY_FMT_LF)-1, TICY_FMT_LF, _lf);
   const struct TicyData *_ticyd = ticydata_new(_lf, F64_T);
   return _ticyd;
 }
@@ -947,6 +981,13 @@ const struct TicyData *ticy_cds(const str_t _Str) {
   return _ticyd;
 }
 
+struct TicyData ticydata_ins(const any_t _Data, const TicyTypeCode _Ticytc) {
+  struct TicyData _ticyd;
+  _ticyd._data = _Data;
+  _ticyd._type = _Ticytc;
+  return _ticyd;
+}
+
 struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc) {
   struct TicyData *_ticyd = (struct TicyData*)(malloc(sizeof(struct TicyData)));
   if (!_ticyd) {
@@ -957,8 +998,7 @@ struct TicyData *ticydata_new(const any_t _Data, const TicyTypeCode _Ticytc) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  _ticyd->_data = _Data;
-  _ticyd->_type = _Ticytc;
+  *_ticyd = ticydata_ins(_Data, _Ticytc);
   return _ticyd;
 }
 
@@ -1255,7 +1295,7 @@ const bool_t ticystore_set(struct TicyStore *_Ticys,
                            const TicyData *_Key,
                            const TicyData *_Value) {
   if (!_Ticys) { return F; }
-  const sz_t _index = ticystore_findk(_Ticys, _Key->_data);
+  const sz_t _index = ticystore_findk(_Ticys, *_Key);
   if (_index != -1) {
     _Ticys->_values->_buffer[_index] = (any_t)(_Value);
     return F;
@@ -1269,7 +1309,7 @@ const bool_t ticystore_set(struct TicyStore *_Ticys,
 }
 
 const TicyData *ticystore_get(const struct TicyStore *_Ticys,
-                              const any_t *_Key) {
+                              const struct TicyData _Key) {
   const sz_t _index = ticystore_findk(_Ticys, _Key);
   return _index == -1 ? NULL : (TicyData*)(_Ticys->_values->_buffer[_index]);
 }
@@ -1278,21 +1318,35 @@ const bool_t ticystore_any(const struct TicyStore *_Ticys)
 { return (const bool_t)(_Ticys && _Ticys->_keys->_used > 0); }
 
 const sz_t ticystore_findk(const struct TicyStore *_Ticys,
-                           const any_t *_Key) {
+                           const TicyData _Key) {
   if (!_Ticys) { return -1; }
   for (sz_t _index = 0; _index < _Ticys->_keys->_used; ++_index) {
     const TicyData *_key = (TicyData*)(_Ticys->_keys->_buffer[_index]);
-    if (_Key == _key->_data) { return _index; }
+    if (_Key._type != _key->_type) { continue; }
+    switch (_key->_type) {
+    case STR_T:
+      if (strcmp((str_t)(_Key._data), (str_t)(_key->_data)) == 0) { return _index; }
+      break;
+    default:
+      if (_Key._data == _key->_data) { return _index; }
+      break;
+    }
   }
   return -1;
 }
 
 const sz_t ticystore_findv(const struct TicyStore *_Ticys,
-                           const any_t _Value) {
-  if (!_Value) { return -1; }
+                           const struct TicyData _Value) {
   for (sz_t _index = 0; _index < _Ticys->_values->_used; ++_index) {
     const TicyData *_value = (TicyData*)(_Ticys->_values->_buffer[_index]);
-    if (_Value == _value->_data) { return _index; }
+    switch (_value->_type) {
+    case STR_T:
+      if (strcmp((str_t)(_Value._data), (str_t)(_value->_data)) == 0) { return _index; }
+      break;
+    default:
+      if (_Value._data == _value->_data) { return _index; }
+      break;
+    }
   }
   return -1;
 }

@@ -28,11 +28,14 @@ void test_lf_serialize() {
 }
 
 void test_ticystore_serialize() {
-  struct TicyStore *store = (TicyStore*)(ticystore_new());
+  struct TicyStore *store = ticystore_new();
   ticystore_set(store, ticydata_new("Message", STR_T), ticydata_new("Hello World", STR_T));
-  ticystore_set(store, ticydata_new("Code", STR_T), ticydata_new((intptr_t)(0), I32_T));
+  ticystore_set(store, ticydata_new((any_t)((i32_t)5), I32_T), ticydata_new("PI Number", STR_T));
   const str_t serialize_str = ticystore_serialize(store);
   printf("%s", serialize_str);
+  struct TicyStore *_store = ticystore_deserialize(serialize_str);
+  printf("%s\n", ticystore_get(_store, ticydata_ins("Message", STR_T))->_data);
+  printf("%s\n", ticystore_get(_store, ticydata_ins((any_t)(5), I32_T))->_data);
 }
 
 void test_ticydata_serialize() {
@@ -44,6 +47,6 @@ void test_ticydata_serialize() {
 }
 
 int main() {
-  test_ticydata_serialize();
+  test_ticystore_serialize();
   return EXIT_SUCCESS;
 }

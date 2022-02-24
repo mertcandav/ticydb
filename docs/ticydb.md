@@ -5,7 +5,7 @@
 // TicyDB connection instance.
 typedef struct TicyDB {
   // Content of TicyDB.
-  TicyStore *_Store;
+  struct TicyStore *_Store;
   // This is a path of your TicyDB store file.
   // Don't touch this if you not sure that.
   str_t _path;

@@ -89,3 +89,14 @@ const sz_t ticystore_findv(const struct TicyStore *_Ticys,
 //  ticystore_serialize(_Ticys) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticystore_serialize(const struct TicyStore *_Ticys);
 ```
+
+```c
+// Returns deserialized TicyStore by specified serialized string.
+//
+// Special cases are;
+//  ticystore_deserialize(_Str) -> Empty TicyStore if _Str is NULL
+//  ticystore_deserialize(_Str) -> NULL if any parse error
+//  ticystore_deserialize(_Str) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
+//  ticystore_deserialize(_Str) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
+struct TicyStore *ticystore_deserialize(const str_t _Str);
+```
