@@ -99,21 +99,21 @@ volatile i32_t Ticy_Exit_Code_Failure = 1;
 volatile sz_t Ticy_Buffer_Size = 128;
 
 // TicyDB format of %hi
-#define TICY_FMT_HI "hi %hi"
+#define TICY_FMT_HI "%hi"
 // TicyDB format of %d
-#define TICY_FMT_D "d %d"
+#define TICY_FMT_D "%d"
 // TicyDB format of %lld
-#define TICY_FMT_LLD "lld %lld"
+#define TICY_FMT_LLD "%lld"
 // TicyDB format of %hu
-#define TICY_FMT_HU "hu %hu"
+#define TICY_FMT_HU "%hu"
 // TicyDB format of %u
-#define TICY_FMT_U "u %u"
+#define TICY_FMT_U "%u"
 // TicyDB format of %llu
-#define TICY_FMT_LLU "llu %llu"
+#define TICY_FMT_LLU "%llu"
 // TicyDB format of %f
-#define TICY_FMT_F "f %f"
+#define TICY_FMT_F "%f"
 // TicyDB format of %lf
-#define TICY_FMT_LF "lf %lf"
+#define TICY_FMT_LF "%lf"
 // TicyDB format of %s
 #define TICY_FMT_S "\"%s\""
 // TicyDB format of %c
@@ -189,6 +189,13 @@ const str_t ticy_ss(const any_t _S);
 //  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_cs(const any_t _C);
+// Returns deserialized f64_t from specified serialized string.
+//
+// Special case is;
+//  ticy_lfds(_Str) -> 0. if _Str is NULL
+//  ticy_lfds(_Str) -> 0. if _Str length is 0
+//  ticy_lfds(_Str) -> 0. if any parse error
+const f64_t ticy_lfds(const str_t _Str);
 // Returns deserialized str_t from specified serialized string.
 //
 // Special case is;
@@ -217,7 +224,7 @@ const str_t ticy_his(const any_t _Hi) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_HI, _Hi);
+  sprintf(_str, "hi " TICY_FMT_HI, _Hi);
   return _str;
 }
 
@@ -232,7 +239,7 @@ const str_t ticy_ds(const any_t _D) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_D, _D);
+  sprintf(_str, "d " TICY_FMT_D, _D);
   return _str;
 }
 
@@ -247,7 +254,7 @@ const str_t ticy_llds(const any_t _Lld) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_LLD, _Lld);
+  sprintf(_str, "lld " TICY_FMT_LLD, _Lld);
   return _str;
 }
 
@@ -262,7 +269,7 @@ const str_t ticy_hus(const any_t _Hu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_HU, _Hu);
+  sprintf(_str, "hu " TICY_FMT_HU, _Hu);
   return _str;
 }
 
@@ -277,7 +284,7 @@ const str_t ticy_us(const any_t _U) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_U, _U);
+  sprintf(_str, "u " TICY_FMT_U, _U);
   return _str;
 }
 
@@ -292,7 +299,7 @@ const str_t ticy_llus(const any_t _Llu) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_LLU, _Llu);
+  sprintf(_str, "llu " TICY_FMT_LLU, _Llu);
   return _str;
 }
 
@@ -307,7 +314,7 @@ const str_t ticy_fs(const any_t _F) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_F, _F);
+  sprintf(_str, "f " TICY_FMT_F, _F);
   return _str;
 }
 
@@ -322,7 +329,7 @@ const str_t ticy_lfs(const any_t _Lf) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, TICY_FMT_LF, _Lf);
+  sprintf(_str, "lf " TICY_FMT_LF, _Lf);
   return _str;
 }
 
@@ -416,6 +423,15 @@ const str_t ticy_cs(const any_t _C) {
     break;
   }
   return _str;
+}
+
+const f64_t ticy_lfds(const str_t _Str) {
+  if (!_Str) { return 0.; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0.; }
+  f64_t _lf = 0.;
+  sscanf(_Str+strlen(TICY_FMT_LF), TICY_FMT_LF, &_lf);
+  return _lf;
 }
 
 const str_t ticy_sds(const str_t _Str) {

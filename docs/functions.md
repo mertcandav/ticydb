@@ -101,6 +101,16 @@ const str_t ticy_cs(const any_t _C);
 ```
 
 ```c
+// Returns deserialized f64_t from specified serialized string.
+//
+// Special case is;
+//  ticy_lfds(_Str) -> 0. if _Str is NULL
+//  ticy_lfds(_Str) -> 0. if _Str length is 0
+//  ticy_lfds(_Str) -> 0. if any parse error
+const f64_t ticy_lfds(const str_t _Str);
+```
+
+```c
 // Returns deserialized str_t from specified serialized string.
 //
 // Special case is;
