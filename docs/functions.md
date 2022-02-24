@@ -101,6 +101,76 @@ const str_t ticy_cs(const any_t _C);
 ```
 
 ```c
+// Returns deserialized i8_t from specified serialized string.
+//
+// Special case is;
+//  ticy_hids(_Str) -> 0 if _Str is NULL
+//  ticy_hids(_Str) -> 0 if _Str length is 0
+//  ticy_hids(_Str) -> 0 if any parse error
+const i8_t ticy_hids(const str_t _Str);
+```
+
+```c
+// Returns deserialized i16_t, i32_t, bool_t from specified serialized string.
+//
+// Special case is;
+//  ticy_dds(_Str) -> 0 if _Str is NULL
+//  ticy_dds(_Str) -> 0 if _Str length is 0
+//  ticy_dds(_Str) -> 0 if any parse error
+const i32_t ticy_dds(const str_t _Str);
+```
+
+```c
+// Returns deserialized i64_t from specified serialized string.
+//
+// Special case is;
+//  ticy_lldds(_Str) -> 0 if _Str is NULL
+//  ticy_lldds(_Str) -> 0 if _Str length is 0
+//  ticy_lldds(_Str) -> 0 if any parse error
+const i64_t ticy_lldds(const str_t _Str);
+```
+
+```c
+// Returns deserialized u8_t from specified serialized string.
+//
+// Special case is;
+//  ticy_huds(_Str) -> 0 if _Str is NULL
+//  ticy_huds(_Str) -> 0 if _Str length is 0
+//  ticy_huds(_Str) -> 0 if any parse error
+const u8_t ticy_huds(const str_t _Str);
+```
+
+```c
+// Returns deserialized u16_t, u32_t, sz_t from specified serialized string.
+//
+// Special case is;
+//  ticy_uds(_Str) -> 0 if _Str is NULL
+//  ticy_uds(_Str) -> 0 if _Str length is 0
+//  ticy_uds(_Str) -> 0 if any parse error
+const u32_t ticy_uds(const str_t _Str);
+```
+
+```c
+// Returns deserialized u64_t from specified serialized string.
+//
+// Special case is;
+//  ticy_lluds(_Str) -> 0 if _Str is NULL
+//  ticy_lluds(_Str) -> 0 if _Str length is 0
+//  ticy_lluds(_Str) -> 0 if any parse error
+const u64_t ticy_lluds(const str_t _Str);
+```
+
+```c
+// Returns deserialized f32_t from specified serialized string.
+//
+// Special case is;
+//  ticy_fds(_Str) -> 0. if _Str is NULL
+//  ticy_fds(_Str) -> 0. if _Str length is 0
+//  ticy_fds(_Str) -> 0. if any parse error
+const f32_t ticy_fds(const str_t _Str);
+```
+
+```c
 // Returns deserialized f64_t from specified serialized string.
 //
 // Special case is;

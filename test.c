@@ -18,14 +18,17 @@ void test_ticyfile() {
   ticyfile_close((TicyFile*)tf);
 }
 
-void test_lf_deserialize() {
-  const str_t lf_str = "lf 90.5";
-  const f64_t lf = ticy_lfds(lf_str);
+void test_lf_serialize() {
+  const f64_t _lf = 90.5;
+  const struct TicyData *data = ticydata_new((any_t)(&_lf), F64_T);
+  const str_t serialized_data = ticydata_serialize(data);
+  printf("%s\n", serialized_data);
+  const f64_t lf = ticy_lfds(serialized_data);
   printf(TICY_FMT_LF, lf);
 }
 
 int main() {
-  test_lf_deserialize();
+  test_lf_serialize();
   //struct TicyDB *db = ticydb_new("db.tcy");
   //ticystore_set(db->_Store, ticydata_new("Message", STR_T), ticydata_new("Hello World", STR_T));
   //ticystore_set(db->_Store, ticydata_new("Code", STR_T), ticydata_new((i32_t)(0), I32_T));

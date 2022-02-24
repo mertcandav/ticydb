@@ -189,6 +189,55 @@ const str_t ticy_ss(const any_t _S);
 //  ticy_lfs(_Lf) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticy_lfs(_Lf) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
 const str_t ticy_cs(const any_t _C);
+// Returns deserialized i8_t from specified serialized string.
+//
+// Special case is;
+//  ticy_hids(_Str) -> 0 if _Str is NULL
+//  ticy_hids(_Str) -> 0 if _Str length is 0
+//  ticy_hids(_Str) -> 0 if any parse error
+const i8_t ticy_hids(const str_t _Str);
+// Returns deserialized i16_t, i32_t, bool_t from specified serialized string.
+//
+// Special case is;
+//  ticy_dds(_Str) -> 0 if _Str is NULL
+//  ticy_dds(_Str) -> 0 if _Str length is 0
+//  ticy_dds(_Str) -> 0 if any parse error
+const i32_t ticy_dds(const str_t _Str);
+// Returns deserialized i64_t from specified serialized string.
+//
+// Special case is;
+//  ticy_lldds(_Str) -> 0 if _Str is NULL
+//  ticy_lldds(_Str) -> 0 if _Str length is 0
+//  ticy_lldds(_Str) -> 0 if any parse error
+const i64_t ticy_lldds(const str_t _Str);
+// Returns deserialized u8_t from specified serialized string.
+//
+// Special case is;
+//  ticy_huds(_Str) -> 0 if _Str is NULL
+//  ticy_huds(_Str) -> 0 if _Str length is 0
+//  ticy_huds(_Str) -> 0 if any parse error
+const u8_t ticy_huds(const str_t _Str);
+// Returns deserialized u16_t, u32_t, sz_t from specified serialized string.
+//
+// Special case is;
+//  ticy_uds(_Str) -> 0 if _Str is NULL
+//  ticy_uds(_Str) -> 0 if _Str length is 0
+//  ticy_uds(_Str) -> 0 if any parse error
+const u32_t ticy_uds(const str_t _Str);
+// Returns deserialized u64_t from specified serialized string.
+//
+// Special case is;
+//  ticy_lluds(_Str) -> 0 if _Str is NULL
+//  ticy_lluds(_Str) -> 0 if _Str length is 0
+//  ticy_lluds(_Str) -> 0 if any parse error
+const u64_t ticy_lluds(const str_t _Str);
+// Returns deserialized f32_t from specified serialized string.
+//
+// Special case is;
+//  ticy_fds(_Str) -> 0. if _Str is NULL
+//  ticy_fds(_Str) -> 0. if _Str length is 0
+//  ticy_fds(_Str) -> 0. if any parse error
+const f32_t ticy_fds(const str_t _Str);
 // Returns deserialized f64_t from specified serialized string.
 //
 // Special case is;
@@ -314,7 +363,7 @@ const str_t ticy_fs(const any_t _F) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "f " TICY_FMT_F, _F);
+  sprintf(_str, "f " TICY_FMT_F, *(f32_t*)(_F));
   return _str;
 }
 
@@ -329,7 +378,7 @@ const str_t ticy_lfs(const any_t _Lf) {
     return NULL;
 #endif // #ifdef TICY_FAILURE_ALLOC
   }
-  sprintf(_str, "lf " TICY_FMT_LF, _Lf);
+  sprintf(_str, "lf " TICY_FMT_LF, *(f64_t*)(_Lf));
   return _str;
 }
 
@@ -423,6 +472,69 @@ const str_t ticy_cs(const any_t _C) {
     break;
   }
   return _str;
+}
+
+const i8_t ticy_hids(const str_t _Str) {
+  if (!_Str) { return 0; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0; }
+  u8_t _hi = 0;
+  sscanf(_Str+strlen(TICY_FMT_HI), TICY_FMT_HI, &_hi);
+  return _hi;
+}
+
+const i32_t ticy_dds(const str_t _Str) {
+if (!_Str) { return 0; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0; }
+  i32_t _d = 0;
+  sscanf(_Str+strlen(TICY_FMT_D), TICY_FMT_D, &_d);
+  return _d;
+}
+
+const i64_t ticy_lldds(const str_t _Str) {
+  if (!_Str) { return 0; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0; }
+  i64_t _lld = 0;
+  sscanf(_Str+strlen(TICY_FMT_LLD), TICY_FMT_LLD, &_lld);
+  return _lld;
+}
+
+const u8_t ticy_huds(const str_t _Str) {
+  if (!_Str) { return 0; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0; }
+  u8_t _hu = 0;
+  sscanf(_Str+strlen(TICY_FMT_HU), TICY_FMT_HU, &_hu);
+  return _hu;
+}
+
+const u32_t ticy_uds(const str_t _Str) {
+  if (!_Str) { return 0; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0; }
+  u32_t _u = 0;
+  sscanf(_Str+strlen(TICY_FMT_U), TICY_FMT_U, &_u);
+  return _u;
+}
+
+const u64_t ticy_lluds(const str_t _Str) {
+  if (!_Str) { return 0; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0; }
+  u64_t _llu = 0;
+  sscanf(_Str+strlen(TICY_FMT_LLU), TICY_FMT_LLU, &_llu);
+  return _llu;
+}
+
+const f32_t ticy_fds(const str_t _Str) {
+  if (!_Str) { return 0; }
+  const sz_t _Str_length = strlen(_Str);
+  if (_Str_length == 0) { return 0; }
+  f32_t _f = 0.;
+  sscanf(_Str+strlen(TICY_FMT_F), TICY_FMT_F, &_f);
+  return _f;
 }
 
 const f64_t ticy_lfds(const str_t _Str) {
