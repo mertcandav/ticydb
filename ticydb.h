@@ -326,14 +326,14 @@ typedef struct TicyDB {
   str_t _path;
 } TicyDB;
 
-// Returns heap-allocated TicyDB instance.
+// Returns heap-allocated TicyDB instance by specified path.
 //
 // Special case is;
 //  ticydb_new(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticydb_new(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyDB *ticydb_new(const str_t _Path);
-// Frees heap-allocated TicyDB instance.
-void ticydb_free(struct TicyDB *_Ticydb);
+struct TicyDB *ticydb_open(const str_t _Path);
+// Frees and closes heap-allocated TicyDB instance.
+void ticydb_close(struct TicyDB *_Ticydb);
 // Save TicyDB content to local disk storage.
 // Returns true if keeping success, returns false if not.
 //
@@ -981,7 +981,7 @@ struct TicyStore *ticystore_deserialize(const str_t _Str) {
   return _ticys;
 }
 
-struct TicyDB *ticydb_new(const str_t _Path) {
+struct TicyDB *ticydb_open(const str_t _Path) {
   struct TicyDB *_ticydb = (struct TicyDB*)(malloc(sizeof(struct TicyDB)));
   if (!_ticydb) {
 #ifdef TICY_FAILURE_ALLOC
@@ -995,7 +995,7 @@ struct TicyDB *ticydb_new(const str_t _Path) {
   struct TicyFile *_ticyf = ticyfile_open(_Path);
 #ifndef TICY_FAILURE_ALLOC
   if (!_ticyf) {
-    ticydb_free(_ticydb);
+    ticydb_close(_ticydb);
     return NULL;
   }
 #endif // #ifndef TICY_FAILURE_ALLOC
@@ -1003,14 +1003,14 @@ struct TicyDB *ticydb_new(const str_t _Path) {
   ticyfile_close(_ticyf);
 #ifndef TICY_FAILURE_ALLOC
   if (!_ticydb->_Store) {
-    ticydb_free(_ticydb);
+    ticydb_close(_ticydb);
     return NULL;
   }
 #endif // #ifndef TICY_FAILURE_ALLOC
   return _ticydb;
 }
 
-void ticydb_free(struct TicyDB *_Ticydb) {
+void ticydb_close(struct TicyDB *_Ticydb) {
   if (!_Ticydb) { return; }
   if (_Ticydb->_Store)
   { ticystore_free(_Ticydb->_Store); }

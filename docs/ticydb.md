@@ -15,17 +15,17 @@ typedef struct TicyDB {
 ## Related Functions
 
 ```c
-// Returns heap-allocated TicyDB instance.
+// Returns heap-allocated TicyDB instance by specified path.
 //
 // Special case is;
 //  ticydb_new(_Path) -> NULL if allocation is failed and #ifndef TICY_FAILURE_ALLOC
 //  ticydb_new(_Path) -> exit if allocation is failed and #ifdef TICY_FAILURE_ALLOC
-struct TicyDB *ticydb_new(const str_t _Path);
+struct TicyDB *ticydb_open(const str_t _Path);
 ```
 
 ```c
-// Frees heap-allocated TicyDB instance.
-void ticydb_free(struct TicyDB *_Ticydb);
+// Frees and closes heap-allocated TicyDB instance.
+void ticydb_close(struct TicyDB *_Ticydb);
 ```
 
 ```c

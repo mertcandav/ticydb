@@ -47,7 +47,7 @@ void test_ticydata_serialize() {
 }
 
 void test_ticydb() {
-  struct TicyDB *db = ticydb_new("db.tcy");
+  struct TicyDB *db = ticydb_open("db.tcy");
   printf("%s\n", ticystore_get(db->_Store, ticydata_ins("Message", STR_T))->_data);
   printf("%f\n", *(f32_t*)(ticystore_get(db->_Store, ticydata_ins("PI_Number", STR_T))->_data));
 }
