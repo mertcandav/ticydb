@@ -25,9 +25,8 @@ const i32_t find_admin(const str_t username) {
 void login() {
   char_t username[Ticy_Buffer_Size];
   char_t password[Ticy_Buffer_Size];
-  bool_t logined = F;
   printf("Login to admin terminal;\n");
-  while (!logined) {
+  while (T) {
     printf("Username: ");
     scanf(" %s", &username);
     printf("Password: ");
