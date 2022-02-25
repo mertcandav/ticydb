@@ -40,7 +40,7 @@ void login() {
     printf("Successful login\n\n");
     break;
   wrong:
-    printf("Username or password is wrong\n\n");
+    printf("Username or password is wrong\n");
   }
 }
 

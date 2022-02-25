@@ -88,7 +88,7 @@ typedef enum TicyTypeCode {
 
 #ifdef TICY_FAILURE_ALLOC
 // Exit code of TicyDB for failures.
-volatile i32_t Ticy_Exit_Code_Failure = 1;
+volatile i32_t Ticy_Exit_Code_Failure = EXIT_FAILURE;
 
 // Error message of allocation failures.
 #define TICY_ERROR_FAIL_ALLOC "allocation is failed"
