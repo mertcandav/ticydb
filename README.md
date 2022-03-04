@@ -15,7 +15,6 @@ TicyDB offers all its root functions, so you can develop a custom custom applica
 + Simple and Strong
 + Lightweight
 + Efficient
-+ Supports ACID
 + Performance
 
 ## Simple Data Representation
